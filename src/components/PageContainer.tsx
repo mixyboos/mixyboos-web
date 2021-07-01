@@ -23,7 +23,7 @@ const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
             <TopNavbar />
           </header>
         )}
-        <main className="flex-1 overflow-y-hidden">
+        <main className="flex-1 ">
           <React.Fragment>{children}</React.Fragment>
         </main>
         {playState !== PlayState.stopped && (

@@ -1,5 +1,5 @@
 interface ShowModel {
-  showId: string;
-  showTitle: string;
+  id: string;
+  title: string;
 }
 export default ShowModel;

@@ -1,7 +1,7 @@
-import "tailwindcss/tailwind.css";
-import { PageContainer } from "../src/components";
-import { AudioProvider } from "../src/services/audio";
-import { AuthProvider } from "../src/services/auth";
+import { PageContainer } from '../src/components'
+import { AudioProvider } from '../src/services/audio'
+import { AuthProvider } from '../src/services/auth'
+import './index.css'
 
 function MixyBoosApp({ Component, pageProps }) {
   return (
@@ -12,7 +12,7 @@ function MixyBoosApp({ Component, pageProps }) {
         </PageContainer>
       </AudioProvider>
     </AuthProvider>
-  );
+  )
 }
 
-export default MixyBoosApp;
+export default MixyBoosApp

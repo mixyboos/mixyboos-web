@@ -79,7 +79,7 @@ function VideoPlayer({
     }
   }, [autoPlay, hlsConfig, playerRef, src])
   return (
-    <video height="100%" className="videoCentered" ref={playerRef} {...props} />
+    <video className="videoCentered" ref={playerRef} {...props} />
   );
 }
 
