@@ -161,8 +161,9 @@ const Chat = ({ showId }: IChatProps) => {
           <input
             type="text"
             value={message}
+            disabled={user && user.id}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Say hello?"
+            placeholder={user && user.id ? 'Say hello!' : 'Login to say hello!'}
             className="w-full py-3 pl-2 text-gray-600 placeholder-gray-600 bg-gray-200 rounded-full focus:outline-none focus:ring-2 focus:border-transparent focus:placeholder-gray-400"
           />
           <div className="absolute inset-y-0 right-0 items-center">

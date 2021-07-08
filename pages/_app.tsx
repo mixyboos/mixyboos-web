@@ -1,18 +1,19 @@
-import { PageContainer } from '../src/components'
-import { AudioProvider } from '../src/services/audio'
-import { AuthProvider } from '../src/services/auth'
-import './index.css'
+import { Provider as AuthProvider } from 'next-auth/client';
+import React from 'react';
+import { PageContainer } from '../src/components';
+import { AudioProvider } from '../src/services/audio';
+import './index.css';
 
-function MixyBoosApp({ Component, pageProps }) {
+const App = ({ Component, pageProps }) => {
   return (
-    <AuthProvider>
+    <AuthProvider session={pageProps.session}>
       <AudioProvider>
         <PageContainer>
           <Component {...pageProps} />
         </PageContainer>
       </AudioProvider>
     </AuthProvider>
-  )
-}
+  );
+};
 
-export default MixyBoosApp
+export default App;
