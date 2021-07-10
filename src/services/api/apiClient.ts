@@ -41,7 +41,6 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     let tokens = await _getTokens();
-    debugger
     if (
       tokens &&
       tokens.refreshToken &&

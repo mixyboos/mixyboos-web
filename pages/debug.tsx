@@ -13,16 +13,6 @@ const DebugPage = () => {
     const [data, setData] = useState<IDebugData>();
     const [session, loading] = useSession();
 
-    React.useEffect(() => {
-      console.log('debug.tsx', 'session', session);
-      if (session) {
-        debugService.getDebugInfo().then((info) => {
-          setData(info);
-        });
-      }
-      return () => {
-      };
-    }, [session]);
     return (
       <>
         {session ? (
@@ -30,7 +20,6 @@ const DebugPage = () => {
             <div>
               <JsonDisplay>{session}</JsonDisplay>
             </div>
-            Signed in as {session.user.email} <br />
             <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                     onClick={() => signOut()}>Sign out
             </button>

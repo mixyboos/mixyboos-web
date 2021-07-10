@@ -14,23 +14,17 @@ interface ISignIn {
   password: string
 }
 
-interface IAuthResult {
-  status: string
-  profile: UserModel
-  token: AuthTokenModel
-}
-
-const _refreshAccessToken = async (prevToken) => {
-  const token = await refreshAuthToken(prevToken);
-
-  return {
-    accessToken: token.accessToken,
-    accessTokenExpires: Date.now() + token.expiresIn * 1000
-  };
-};
-
 const options = {
+  session: {
+    jwt: true,
+    maxAge: 30 * 24 * 60 * 60, //30 days
+    updateAge: 24 * 60 * 60 // 24 hours
+  },
   providers: [
+    Providers.Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
     Providers.Credentials({
       name: 'Email and Password',
       credentials: {
@@ -44,12 +38,14 @@ const options = {
             return null;
           }
           const user = await getUserProfile(token.access_token);
+
           if (user) {
-            return Promise.resolve({
-              status: 'success',
-              profile: user,
-              token: token
-            } as IAuthResult);
+            user.accessToken = token.access_token;
+            return {
+              name: user.displayName,
+              email: user.userName,
+              image: user.image
+            };
           } else {
             return null;
           }
@@ -61,26 +57,13 @@ const options = {
     })
   ],
   callbacks: {
-    async session(session, token) {
-      session.accessToken = token.accessToken;
+    async session(session, user) {
       return session;
-    },
-    async jwt(token, user, account, profile, isNewUser) {
-      if (user) {
-        token.name = profile.profile.displayName;
-        token.email = profile.profile.userName;
-        token.image = profile.profile.image;
-        token.accessToken = user.token.access_token;
-        // token.refreshToken = user.token.refresh_token;
-        user = profile.profile;
-      }
-      return token;
     }
   },
   pages: {
     signIn: '/login'
   }
 };
-
 export default (req, res) => NextAuth(req, res, options)
 

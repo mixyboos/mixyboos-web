@@ -1,14 +1,10 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import useUiStore from '../services/ui/uiStore';
-import { signOut, useSession } from 'next-auth/client';
+import { signIn, signOut, useSession } from 'next-auth/client';
 
 const TopNavbar = () => {
   const [session, loading] = useSession();
-
-  useEffect(() => {
-    console.log('TopNavbar', 'SESSION', session);
-  }, [session]);
 
   return (
     <nav
@@ -184,26 +180,26 @@ const TopNavbar = () => {
                     </a>
                   </Link>
                 ) : (
-                  <Link href='/login'>
-                    <a
-                      className='px-4 py-2 mb-3 ml-3 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-blue-500 rounded shadow outline-none active:bg-blue-600 hover:shadow-lg focus:outline-none lg:mr-1 lg:mb-0'>
-                      <svg
-                        className='inline-block w-3 h-3 mr-1 mb-0.5'
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        stroke='currentColor'
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1'
-                        />
-                      </svg>
-                      Login
-                    </a>
-                  </Link>
+                  <button
+                    type='button'
+                    onClick={() => signIn()}
+                    className='px-4 py-2 mb-3 ml-3 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-blue-500 rounded shadow outline-none active:bg-blue-600 hover:shadow-lg focus:outline-none lg:mr-1 lg:mb-0'>
+                    <svg
+                      className='inline-block w-3 h-3 mr-1 mb-0.5'
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1'
+                      />
+                    </svg>
+                    Login
+                  </button>
                 )}
               </li>
             </ul>

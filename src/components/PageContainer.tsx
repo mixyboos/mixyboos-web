@@ -12,9 +12,7 @@ export interface IPageContainerProps {
 const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
   const showHeader = useUiStore((state) => state.hasHeader)
   const playState = useAudioStore((state: AudioState) => state.playState)
-  React.useEffect(() => {
-    console.log('PageContainer', 'showHeader', showHeader)
-  }, [])
+
   return (
     <React.Fragment>
       <div className="flex flex-col h-screen">

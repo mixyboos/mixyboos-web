@@ -4,5 +4,7 @@ interface UserModel {
   displayName: string
   userName: string
   image: string
+  accessToken: string;
 }
-export default UserModel
+
+export default UserModel;
