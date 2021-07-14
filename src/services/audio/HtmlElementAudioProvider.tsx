@@ -43,7 +43,6 @@ const AudioProvider: React.FC<IAudioProviderProps> = ({ children }) => {
   }, [url])
 
   React.useEffect(() => {
-    console.log('AudioProvider', 'useEffect_position', seekPosition)
     player.current?.seek(seekPosition)
   }, [seekPosition])
 

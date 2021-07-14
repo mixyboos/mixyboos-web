@@ -55,7 +55,6 @@ const AudioProvider: React.FC<IAudioProviderProps> = ({ children }) => {
   }, [url])
 
   useEffect(() => {
-    console.log('AudioProvider', 'useEffect_position', seekPosition)
     if (audio.current) {
       audio.current.currentTime = seekPosition
     }

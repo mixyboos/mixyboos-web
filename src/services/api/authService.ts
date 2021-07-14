@@ -1,30 +1,19 @@
 import { AuthTokenModel, UserModel } from '../../data/models';
-import apiClient, { TKKEY } from './apiClient';
+import ApiClient from './apiClient';
+import https from 'https';
 
-const _storeToken = (token: AuthTokenModel): void => {
-  const previousTokens = _retrieveTokens();
-  if (previousTokens != null && token.refresh_token == null) {
-    token.refresh_token = previousTokens.refresh_token;
-  }
+class AuthService extends ApiClient {
+  noauthConfig = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    //TODO: MAKE SURE THIS IS TRUE IN DEV
+    httpsAgent: new https.Agent({ rejectUnauthorized: !process.env.DEVELOPMENT as boolean })
+  };
 
-  console.log('AUTHSERVICE', 'SETTING KEY', token)
-  localStorage.setItem(TKKEY, JSON.stringify(token));
-};
-
-const _retrieveTokens = (): AuthTokenModel => {
-  const tokensString = localStorage.getItem(TKKEY);
-  const tokensModel: AuthTokenModel =
-    tokensString == null ? null : JSON.parse(tokensString);
-  return tokensModel;
-};
-
-class AuthFailed extends Error {
-}
-
-const authService = {
-  getUser: async (): Promise<UserModel> => {
+  getUser = async (): Promise<UserModel> => {
     try {
-      const result = await apiClient.get('/profile/me');
+      const result = await this._client.get('/profile/me');
       if (result.status === 200) {
         return result.data;
       }
@@ -33,8 +22,42 @@ const authService = {
       if (![401, 400].includes(err.response.status)) throw new Error(err);
     }
     throw new AuthFailed('Authentication failed');
-  },
-  loginUser: async (username: string, password: string): Promise<UserModel> => {
+  };
+
+  getAuthToken = async (user: string, password: string): Promise<AuthTokenModel> => {
+    const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/connect/token`;
+
+
+    const params = new URLSearchParams();
+    params.append('username', user);
+    params.append('password', password);
+    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_GRANT_TYPE);
+    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE);
+    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID);
+    const response = await this._client.post(authUrl, params, this.noauthConfig);
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject('Unable to log in');
+  };
+
+  refreshAuthToken = async (refreshToken: string) => {
+    const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/connect/token`;
+
+    const params = new URLSearchParams();
+    params.append('refresh_token', refreshToken);
+    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_REFRESH_GRANT_TYPE);
+    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE);
+    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID);
+
+    const response = await this._client.post(authUrl, params, this.noauthConfig);
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
+    }
+    return Promise.reject('Unable to log in');
+  };
+
+  loginUser = async (username: string, password: string): Promise<UserModel> => {
     const url = '/connect/token';
     const config = {
       headers: {
@@ -49,7 +72,7 @@ const authService = {
     params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string);
 
     try {
-      const result = await apiClient.post(url, params, config);
+      const result = await this._client.post(url, params, config);
       if (result.status === 200) {
         const model: AuthTokenModel = result.data.token;
         const user: UserModel = result.data.user;
@@ -61,7 +84,11 @@ const authService = {
       console.log('authService', 'Error logging in user', err);
     }
     return null;
-  }
-};
+  };
+}
+
+class AuthFailed extends Error {
+}
+
 export { AuthFailed };
-export default authService;
+export default AuthService;

@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
-import { getAuthToken, getUserProfile, refreshAuthToken } from '../../../src/services/auth/server/AuthHelpers';
 import * as https from 'https';
-import { AuthTokenModel, UserModel } from '../../../src/data/models';
+import AuthService from '../../../src/services/api/authService';
 
 if (process.env.DEVELOPMENT) {
   https.globalAgent.options.rejectUnauthorized = false;
@@ -14,23 +13,17 @@ interface ISignIn {
   password: string
 }
 
-interface IAuthResult {
-  status: string
-  profile: UserModel
-  token: AuthTokenModel
-}
-
-const _refreshAccessToken = async (prevToken) => {
-  const token = await refreshAuthToken(prevToken);
-
-  return {
-    accessToken: token.accessToken,
-    accessTokenExpires: Date.now() + token.expiresIn * 1000
-  };
-};
-
 const options = {
+  session: {
+    jwt: true,
+    maxAge: 30 * 24 * 60 * 60, //30 days
+    updateAge: 24 * 60 * 60 // 24 hours
+  },
   providers: [
+    Providers.Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
     Providers.Credentials({
       name: 'Email and Password',
       credentials: {
@@ -39,19 +32,22 @@ const options = {
       },
       authorize: async (credentials: ISignIn): Promise<any> => {
         try {
-          const token = await getAuthToken(credentials.userName, credentials.password);
+          const authService = new AuthService(null);
+          const token = await authService.getAuthToken(credentials.userName, credentials.password);
           if (!token) {
             return null;
           }
-          const user = await getUserProfile(token.access_token);
+
+          const user = await new AuthService(token.access_token).getUser();
           if (user) {
-            return Promise.resolve({
-              status: 'success',
-              profile: user,
-              token: token
-            } as IAuthResult);
+            return {
+              name: user.displayName,
+              email: user.userName,
+              image: user.image,
+              accessToken: token.access_token
+            };
           } else {
-            return null;
+            return false;
           }
         } catch (err) {
           console.error('NEXT', 'authorize', err);
@@ -61,18 +57,15 @@ const options = {
     })
   ],
   callbacks: {
-    async session(session, token) {
-      session.accessToken = token.accessToken;
-      return session;
+    async session(session, user) {
+      if (user?.accessToken) {
+        session.accessToken = user.accessToken;
+      }
+      return session; //.accessToken = user.accessToken;
     },
     async jwt(token, user, account, profile, isNewUser) {
-      if (user) {
-        token.name = profile.profile.displayName;
-        token.email = profile.profile.userName;
-        token.image = profile.profile.image;
-        token.accessToken = user.token.access_token;
-        // token.refreshToken = user.token.refresh_token;
-        user = profile.profile;
+      if (profile?.accessToken) {
+        token.accessToken = profile.accessToken;
       }
       return token;
     }
@@ -81,6 +74,5 @@ const options = {
     signIn: '/login'
   }
 };
-
 export default (req, res) => NextAuth(req, res, options)
 

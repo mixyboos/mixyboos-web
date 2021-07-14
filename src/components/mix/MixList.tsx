@@ -1,21 +1,15 @@
-import React, { useState } from 'react'
-import { MixModel } from '../../data/models'
-import mixService from '../../services/api/mixService'
-import MixListItem from './MixListItem'
+import React, { useState } from 'react';
+import MixListItem from './MixListItem';
+import { MixModel } from '../../data/models';
 
-const MixList = () => {
-  const [loading, setLoading] = useState(true)
-  const [mixes, setMixes] = useState<Array<MixModel>>()
+interface IMixListProps {
+  mixes: MixModel[]
+}
 
-  React.useEffect(() => {
-    mixService.getMixes().then((m: Array<MixModel>) => {
-      setLoading(false)
-      setMixes(m)
-    })
-  }, [])
+const MixList = ({ mixes }: IMixListProps) => {
   return (
     <React.Fragment>
-      {loading ? (
+      {!mixes ? (
         <h1>Loading...</h1>
       ) : (
         <div>
@@ -25,6 +19,6 @@ const MixList = () => {
         </div>
       )}
     </React.Fragment>
-  )
-}
-export default MixList
+  );
+};
+export default MixList;
