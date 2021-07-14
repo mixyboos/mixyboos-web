@@ -1,24 +1,31 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateShow, Show, ShowStatus } from '../src/components/live';
-import liveService from '../src/services/api/liveService';
-import { useUser } from '../src/services/auth';
-import { getSession } from 'next-auth/client';
+import { getSession, useSession } from 'next-auth/client';
+import LiveService from '../src/services/api/liveService';
+import { withAuth } from '../src/services/auth/withAuth';
 
 export const LivePage = () => {
 
   //TODO: this should be a type, not separate vars
+  const service = React.useRef<LiveService>(null);
+  const [session, loading] = useSession();
+
   const [showId, setShowId] = React.useState(uuidv4());
   const [title, setTitle] = React.useState('');
   const [showStatus, setShowStatus] = React.useState<ShowStatus>(
     ShowStatus.setup
   );
-  const user = useUser();
+
+  React.useEffect(() => {
+    service.current = new LiveService(session.accessToken as string);
+  }, [session]);
 
   React.useEffect(() => {
     //check if show is in progress
     const checkForCurrentShow = async () => {
-      const inProgressShowId = await liveService.getCurrentShow();
+      debugger;
+      const inProgressShowId = await service.current.getCurrentShow();
       if (inProgressShowId) {
         setShowId(inProgressShowId.id);
         setTitle(inProgressShowId.title);
@@ -27,14 +34,14 @@ export const LivePage = () => {
         setShowStatus(ShowStatus.setup);
       }
     };
-    if (showStatus === ShowStatus.checking && user) {
+    if (showStatus === ShowStatus.checking && session) {
       checkForCurrentShow();
     }
-  }, [user]);
+  }, [service.current]);
 
   const startShow = async (title: string) => {
     if (title) {
-      await liveService.startShow(title);
+      await service.current.startShow(title);
       setTitle(title);
       setShowStatus(ShowStatus.awaitingStreamConnection);
     } else {
@@ -71,18 +78,18 @@ export const LivePage = () => {
   return <div className='p-5 mt-6 overflow-y-auto'>{_getPage(showStatus)}</div>;
 };
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps(ctx) {
   try {
-    const session = await getSession({ req });
-    const user = session?.user;
+    const session = await getSession(ctx);
+    if (session?.accessToken) {
+      return {
+        props: {
+          session
+        }
+      };
+    }
+    throw new Error('unauthorized');
 
-    if (!user) throw new Error('unauthorized');
-
-    return {
-      props: {
-        user
-      }
-    };
   } catch (err) {
     return {
       redirect: {
@@ -93,4 +100,4 @@ export async function getServerSideProps({ req, res }) {
   }
 }
 
-export default LivePage;
+export default withAuth(LivePage);

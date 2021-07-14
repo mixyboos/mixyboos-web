@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
-import { getAuthToken, getUserProfile, refreshAuthToken } from '../../../src/services/auth/server/AuthHelpers';
 import * as https from 'https';
-import { AuthTokenModel, UserModel } from '../../../src/data/models';
+import AuthService from '../../../src/services/api/authService';
 
 if (process.env.DEVELOPMENT) {
   https.globalAgent.options.rejectUnauthorized = false;
@@ -33,21 +32,22 @@ const options = {
       },
       authorize: async (credentials: ISignIn): Promise<any> => {
         try {
-          const token = await getAuthToken(credentials.userName, credentials.password);
+          const authService = new AuthService(null);
+          const token = await authService.getAuthToken(credentials.userName, credentials.password);
           if (!token) {
             return null;
           }
-          const user = await getUserProfile(token.access_token);
 
+          const user = await new AuthService(token.access_token).getUser();
           if (user) {
-            user.accessToken = token.access_token;
             return {
               name: user.displayName,
               email: user.userName,
-              image: user.image
+              image: user.image,
+              accessToken: token.access_token
             };
           } else {
-            return null;
+            return false;
           }
         } catch (err) {
           console.error('NEXT', 'authorize', err);
@@ -58,7 +58,16 @@ const options = {
   ],
   callbacks: {
     async session(session, user) {
-      return session;
+      if (user?.accessToken) {
+        session.accessToken = user.accessToken;
+      }
+      return session; //.accessToken = user.accessToken;
+    },
+    async jwt(token, user, account, profile, isNewUser) {
+      if (profile?.accessToken) {
+        token.accessToken = profile.accessToken;
+      }
+      return token;
     }
   },
   pages: {

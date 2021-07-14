@@ -1,11 +1,16 @@
-import apiClient from './apiClient'
+import ApiClient from './apiClient';
 
-const debugService = {
-  getDebugInfo: async () => {
-    const result = await apiClient.get('/debug')
-
-    return result.data
-  },
+export interface IDebugData {
+  netCoreVersion: string
+  osVersion: string
 }
 
-export { debugService }
+class DebugService extends ApiClient {
+  getDebugInfo = async (): Promise<IDebugData> => {
+    const result = await this._client.get('/debug');
+
+    return result.data as IDebugData;
+  };
+}
+
+export { DebugService };
