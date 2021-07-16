@@ -19,8 +19,6 @@ const MixCreate = () => {
   const [errors, setErrors] = useState('')
   const [percentageUploaded, setPercentageUploaded] = useState(0)
   const [mixId] = useState(uuidv4())
-  const setHasHeader = useUiStore((state) => state.setHasHeader)
-  const showHeader = useUiStore((state) => state.hasHeader)
 
   return (
     <React.Fragment>

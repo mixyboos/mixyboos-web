@@ -3,6 +3,7 @@ import ApiClient from './apiClient';
 
 class LiveService extends ApiClient {
   getStreamKey = async (): Promise<string> => {
+    debugger;
     const keyDetails = await this._client.get<ApiKeyModel>('/profile/apikey');
     return keyDetails.data.apiKey;
   };

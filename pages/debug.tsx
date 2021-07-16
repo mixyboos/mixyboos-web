@@ -42,13 +42,9 @@ const DebugPage = (debugData: IDebugData) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const session = await getSession(ctx);
-  if (session?.accessToken) {
-    const debugService = new DebugService(session.accessToken as string);
-    const debugData = await debugService.getDebugInfo();
-    return { props: debugData };
-  }
-  return { props: {} };
+  const debugService = new DebugService(ctx);
+  const debugData = await debugService.getDebugInfo();
+  return { props: debugData };
 }
 
 export default DebugPage;

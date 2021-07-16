@@ -1,11 +1,19 @@
 import axios, { AxiosInstance } from 'axios';
+import { CtxOrReq, getSession } from 'next-auth/client';
 
 class ApiClient {
   protected readonly _client: AxiosInstance;
-  private readonly _accessToken: string;
+  protected readonly _token: string;
+  protected readonly _context: CtxOrReq;
 
-  constructor(accessToken: string | null) {
-    this._accessToken = accessToken;
+
+  constructor(contextOrToken: CtxOrReq | string | null) {
+    if ((contextOrToken as string)) {
+      this._token = contextOrToken as string;
+    }
+    if ((contextOrToken as CtxOrReq)) {
+      this._context = contextOrToken as CtxOrReq;
+    }
     this._client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_API_URL as string
     });
@@ -15,13 +23,18 @@ class ApiClient {
       });
   }
 
+  private _getAccessToken = async () => (await getSession(this._context))?.accessToken;
+
   private _tokenRequestInterceptor =
     async (config) => {
-      if (this._accessToken) {
-        config.headers = {
-          Authorization: `Bearer ${this._accessToken}`,
-          Accept: 'application/json'
-        };
+      if (this._context || this._token) {
+        const token = this._token ? this._token : await this._getAccessToken();
+        if (token) {
+          config.headers = {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
+          };
+        }
       }
       return config;
     };

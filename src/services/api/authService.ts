@@ -27,7 +27,6 @@ class AuthService extends ApiClient {
   getAuthToken = async (user: string, password: string): Promise<AuthTokenModel> => {
     const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/connect/token`;
 
-
     const params = new URLSearchParams();
     params.append('username', user);
     params.append('password', password);

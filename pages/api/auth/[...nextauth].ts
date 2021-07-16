@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 import * as https from 'https';
 import AuthService from '../../../src/services/api/authService';
+import jwt_decode, { JwtPayload } from 'jwt-decode';
 
 if (process.env.DEVELOPMENT) {
   https.globalAgent.options.rejectUnauthorized = false;
@@ -11,6 +12,12 @@ interface ISignIn {
   csrfToken: string
   userName: string
   password: string
+}
+
+interface ITokenPayload {
+  'name': string
+  'image': string
+  'slug': string
 }
 
 const options = {
@@ -38,12 +45,14 @@ const options = {
             return null;
           }
 
-          const user = await new AuthService(token.access_token).getUser();
-          if (user) {
+          const decodedToken = jwt_decode<JwtPayload & ITokenPayload>(token.access_token);
+
+          if (decodedToken) {
             return {
-              name: user.displayName,
-              email: user.userName,
-              image: user.image,
+              name: decodedToken.sub,
+              email: decodedToken.name,
+              image: decodedToken.image,
+              slug: decodedToken.slug,
               accessToken: token.access_token
             };
           } else {

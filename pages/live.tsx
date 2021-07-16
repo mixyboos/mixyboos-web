@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateShow, Show, ShowStatus } from '../src/components/live';
 import { getSession, useSession } from 'next-auth/client';
 import LiveService from '../src/services/api/liveService';
-import { withAuth } from '../src/services/auth/withAuth';
 
 export const LivePage = () => {
 
@@ -100,4 +99,4 @@ export async function getServerSideProps(ctx) {
   }
 }
 
-export default withAuth(LivePage);
+export default LivePage;
