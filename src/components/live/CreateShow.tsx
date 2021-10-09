@@ -1,8 +1,7 @@
+import { useSession } from 'next-auth/client';
 import React from 'react';
-import { Button } from '../widgets';
-import { getSession, useSession } from 'next-auth/client';
 import LiveService from '../../services/api/liveService';
-import debug from '../../../pages/debug';
+import { Button } from '../widgets';
 
 interface ICreateShowProps {
   startShow: (title: string) => void

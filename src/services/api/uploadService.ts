@@ -16,12 +16,12 @@ class UploadService extends ApiClient {
           'content-type': 'multipart/form-data'
         }
       });
-      if (result.status === 201) {
-        return result.data;
+      if (result?.status === 201) {
+        return result.data
       }
     } catch (err) {
       console.log('authService', 'getUser_error', err);
-      if (err.response.status !== 401) throw new Error(err);
+      if (err?.response?.status !== 401) throw new Error(err)
     }
     throw new Error('Unable to load mixes');
   };

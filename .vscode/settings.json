@@ -1,4 +1,5 @@
 {
+  "workbench.colorTheme":"One Dark Pro" ,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -21,7 +22,13 @@
     "titleBar.activeBackground": "#5d9510",
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#5d951099",
-    "titleBar.inactiveForeground": "#e7e7e799"
+    "titleBar.inactiveForeground": "#e7e7e799",
+    "editorGroup.border": "#7ac315",
+    "panel.border": "#7ac315",
+    "sash.hoverBorder": "#7ac315",
+    "sideBar.border": "#7ac315",
+    "statusBarItem.remoteBackground": "#5d9510",
+    "statusBarItem.remoteForeground": "#e7e7e7"
 },
   "peacock.color": "#5d9510"
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "ssl": "node server.js",
     "dev": "next dev",
+    "debug": "NODE_OPTIONS='--inspect' node server.js",
     "build": "next build",
     "start": "next start"
   },
@@ -14,9 +15,12 @@
     "@heroicons/react": "^1.0.2",
     "@microsoft/signalr": "^5.0.7",
     "@tailwindcss/line-clamp": "^0.2.1",
+    "@types/ioredis": "^4.26.6",
+    "@types/redis": "^2.8.31",
     "axios": "^0.21.1",
     "formik": "^2.2.9",
     "hls.js": "^1.0.7",
+    "ioredis": "^4.27.6",
     "jwt-decode": "^3.1.2",
     "next": "latest",
     "next-auth": "latest",

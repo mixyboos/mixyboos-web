@@ -1,6 +1,6 @@
+import https from 'https';
 import { AuthTokenModel, UserModel } from '../../data/models';
 import ApiClient from './apiClient';
-import https from 'https';
 
 class AuthService extends ApiClient {
   noauthConfig = {
@@ -14,12 +14,12 @@ class AuthService extends ApiClient {
   getUser = async (): Promise<UserModel> => {
     try {
       const result = await this._client.get('/profile/me');
-      if (result.status === 200) {
+      if (result?.status === 200) {
         return result.data;
       }
     } catch (err) {
       console.log('authService', 'getUser_error', err);
-      if (![401, 400].includes(err.response.status)) throw new Error(err);
+      if (![401, 400].includes(err?.response?.status)) throw new Error(err);
     }
     throw new AuthFailed('Authentication failed');
   };
@@ -34,7 +34,7 @@ class AuthService extends ApiClient {
     params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE);
     params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID);
     const response = await this._client.post(authUrl, params, this.noauthConfig);
-    if (response.status === 200) {
+    if (response?.status === 200) {
       return Promise.resolve(response.data);
     }
     return Promise.reject('Unable to log in');
@@ -50,8 +50,8 @@ class AuthService extends ApiClient {
     params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID);
 
     const response = await this._client.post(authUrl, params, this.noauthConfig);
-    if (response.status === 200) {
-      return Promise.resolve(response.data);
+    if (response?.status === 200) {
+      return Promise.resolve(response.data)
     }
     return Promise.reject('Unable to log in');
   };
@@ -72,12 +72,12 @@ class AuthService extends ApiClient {
 
     try {
       const result = await this._client.post(url, params, config);
-      if (result.status === 200) {
-        const model: AuthTokenModel = result.data.token;
-        const user: UserModel = result.data.user;
-        console.log('authService', 'loginUser', result);
+      if (result?.status === 200) {
+        const model: AuthTokenModel = result.data.token
+        const user: UserModel = result.data.user
+        console.log('authService', 'loginUser', result)
         // _storeToken(model);
-        return user;
+        return user
       }
     } catch (err) {
       console.log('authService', 'Error logging in user', err);
