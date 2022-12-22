@@ -1,19 +1,17 @@
-import { Provider as AuthProvider } from 'next-auth/client';
-import React from 'react';
-import { PageContainer } from '../src/components';
-import { AudioProvider } from '../src/services/audio';
-import './index.css';
+import type { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
+import { PageContainer } from '@lib/components/layout';
+import { AudioProvider } from '@lib/services/audio';
+import '../styles/globals.css';
 
-const App = ({ Component, pageProps }) => {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <AuthProvider session={pageProps.session}>
+    <SessionProvider session={session}>
       <AudioProvider>
         <PageContainer>
           <Component {...pageProps} />
         </PageContainer>
       </AudioProvider>
-    </AuthProvider>
+    </SessionProvider>
   );
-};
-
-export default App;
+}

@@ -1,20 +1,22 @@
-const { createServer } = require("https");
-const { parse } = require("url");
+var https = require("https");
+var fs = require("fs");
+
 const next = require("next");
-const fs = require("fs");
+const port = 3000;
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
+const app = next({ dev, dir: __dirname });
 const handle = app.getRequestHandler();
-const httpsOptions = {
-  key: fs.readFileSync("../certs/dev.mixyboos.com.key"),
-  cert: fs.readFileSync("../certs/dev.mixyboos.com.crt"),
+
+const options = {
+  key: fs.readFileSync("/etc/letsencrypt/live/dev.fergl.ie/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/dev.fergl.ie/fullchain.pem"),
 };
+
 app.prepare().then(() => {
-  createServer(httpsOptions, (req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  }).listen(3000, (err) => {
-    if (err) throw err;
-    console.log("> Server started on https://dev.mixyboos.com:3000");
-  });
+  https
+    .createServer(options, (req, res) => handle(req, res))
+    .listen(port, (err) => {
+      if (err) throw err;
+      console.log(`> Ready on localhost:${port}`);
+    });
 });

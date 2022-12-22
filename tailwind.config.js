@@ -1,25 +1,23 @@
-const colors = require("tailwindcss/colors");
+const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
-const defaultTheme = require("tailwindcss/defaultTheme");
-
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: false, // or 'media' or 'class'
-  purge: {
-    enabled: process.env.NODE_ENV === "production",
-    safeList: [],
-    content: ["./index.html", "./src/**/*.tsx", "./src/**/*.ts"],
-  },
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './lib/components/**/*.{js,ts,jsx,tsx}'
+  ],
   theme: {
     colors: {
       ...colors,
-      mixyboos: "#E734AE",
-      mixyboosLight: "#de73bc",
+      mixyboos: '#E734AE',
+      mixyboosLight: '#de73bc'
     },
     extend: {
       fontFamily: {
-        sans: ["Lato", ...defaultTheme.fontFamily.sans],
-      },
-    },
+        sans: ['Lato', ...defaultTheme.fontFamily.sans]
+      }
+    }
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [require('@tailwindcss/line-clamp')]
 };
