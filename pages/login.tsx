@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { useSession, signIn, signOut, getCsrfToken } from 'next-auth/react';
 
-import { providers, signIn, getSession, csrfToken } from 'next-auth/react';
-
-const LoginPage = ({ providers, csrfToken }) => {
+const LoginPage = () => {
   const router = useRouter();
   const { redirectUri } = router.query as { redirectUri: string };
 
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState('fergal.moran+mixyboos@gmail.com');
+  const [password, setPassword] = useState('SVqVKJWZh5dIaM7JsNY1h0E/xbzPCD7y7Veedxa1Q/k=');
 
-  const handleLogin = async ($event) => {
+  const handleLogin = async ($event: FormEvent<HTMLFormElement>) => {
     $event.preventDefault();
     try {
-      await signIn('credentials',
-        {
-          userName,
-          password,
-          callbackUrl: redirectUri || '/',
-          redirect: true
-        }
-      );
+      await signIn('credentials', {
+        userName,
+        password,
+        callbackUrl: redirectUri || '/',
+        redirect: true
+      });
     } catch (err) {
+      debugger
       console.error('login', 'handleLogin', err);
     }
   };
@@ -43,10 +41,13 @@ const LoginPage = ({ providers, csrfToken }) => {
           </p>
           <button
             onClick={() => signIn('google')}
-            className='flex items-center justify-center mt-4 text-gray-600 rounded-lg shadow-md dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
+            className='flex items-center justify-center w-full mt-4 text-gray-600 rounded-lg shadow-md dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
           >
             <div className='px-4 py-3'>
-              <svg className='w-6 h-6' viewBox='0 0 40 40'>
+              <svg
+                className='w-6 h-6'
+                viewBox='0 0 40 40'
+              >
                 <path
                   d='M36.3425 16.7358H35V16.6667H20V23.3333H29.4192C28.045 27.2142 24.3525 30 20 30C14.4775 30 10 25.5225 10 20C10 14.4775 14.4775 9.99999 20 9.99999C22.5492 9.99999 24.8683 10.9617 26.6342 12.5325L31.3483 7.81833C28.3717 5.04416 24.39 3.33333 20 3.33333C10.7958 3.33333 3.33335 10.7958 3.33335 20C3.33335 29.2042 10.7958 36.6667 20 36.6667C29.2042 36.6667 36.6667 29.2042 36.6667 20C36.6667 18.8825 36.5517 17.7917 36.3425 16.7358Z'
                   fill='#FFC107'
@@ -80,7 +81,6 @@ const LoginPage = ({ providers, csrfToken }) => {
             <span className='w-1/5 border-b dark:border-gray-400 lg:w-1/4' />
           </div>
           <form onSubmit={(e) => handleLogin(e)}>
-            <input name='csrfToken' type='hidden' defaultValue={csrfToken} />
             <div className='mt-4'>
               <label
                 className='block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200'
@@ -95,6 +95,7 @@ const LoginPage = ({ providers, csrfToken }) => {
                 placeholder='Email address'
                 type='email'
                 autoComplete='username'
+                value={userName}
                 onChange={(e) => setUserName(e.target.value)}
               />
             </div>
@@ -118,6 +119,7 @@ const LoginPage = ({ providers, csrfToken }) => {
                 name='password'
                 className='block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring'
                 type='password'
+                value={password}
                 placeholder='Password'
                 autoComplete='current-password'
                 onChange={(e) => setPassword(e.target.value)}

@@ -5,7 +5,7 @@ import { MixList } from '@lib/components/mix';
 import { getSession } from 'next-auth/react';
 import MixService from '@lib/services/api/mixService';
 
-export default function Home() {
+export default function Home({ mixes }) {
   return (
     <div className='p-5 mt-6 overflow-y-auto'>
       <div className='mx-24 mt-6'>

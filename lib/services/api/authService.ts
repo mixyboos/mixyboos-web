@@ -30,9 +30,9 @@ class AuthService extends ApiClient {
     const params = new URLSearchParams();
     params.append('username', user);
     params.append('password', password);
-    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_GRANT_TYPE);
-    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE);
-    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID);
+    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_GRANT_TYPE as string);
+    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE as string);
+    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string);
     const response = await this._client.post(authUrl, params, this.noauthConfig);
     if (response?.status === 200) {
       return Promise.resolve(response.data);
@@ -45,9 +45,9 @@ class AuthService extends ApiClient {
 
     const params = new URLSearchParams();
     params.append('refresh_token', refreshToken);
-    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_REFRESH_GRANT_TYPE);
-    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE);
-    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID);
+    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_REFRESH_GRANT_TYPE as string);
+    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE as string);
+    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string);
 
     const response = await this._client.post(authUrl, params, this.noauthConfig);
     if (response?.status === 200) {
@@ -56,7 +56,7 @@ class AuthService extends ApiClient {
     return Promise.reject('Unable to log in');
   };
 
-  loginUser = async (username: string, password: string): Promise<UserModel> => {
+  loginUser = async (username: string, password: string): Promise<UserModel | null> => {
     const url = '/connect/token';
     const config = {
       headers: {

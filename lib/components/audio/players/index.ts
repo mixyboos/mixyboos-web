@@ -1,3 +1,4 @@
 import MiniPlayer from './MiniPlayer';
+import VideoPlayer from './VideoPlayer';
 
-export { MiniPlayer };
+export { MiniPlayer, VideoPlayer };

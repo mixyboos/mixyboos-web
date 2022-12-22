@@ -2,7 +2,7 @@ import React from 'react';
 
 interface IActionButtonProps {
   children: React.ReactNode;
-  count: number;
+  count?: number;
 }
 
 const ActionButton: React.FC<IActionButtonProps> = ({ children, count }) => {

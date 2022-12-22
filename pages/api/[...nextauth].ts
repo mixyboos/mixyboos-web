@@ -1,9 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
-import TwitterProvider from 'next-auth/providers/twitter';
-import FacebookProvider from 'next-auth/providers/facebook';
 
 import * as https from 'https';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
@@ -20,9 +17,9 @@ interface ISignIn {
 }
 
 interface ITokenPayload {
-  'name': string;
-  'image': string;
-  'slug': string;
+  name: string;
+  image: string;
+  slug: string;
 }
 
 const options = {
@@ -40,18 +37,34 @@ const options = {
     CredentialsProvider({
       name: 'Email and Password',
       credentials: {
-        userName: { label: 'Username', type: 'text', placeholder: 'Username or email address' },
-        password: { label: 'Password', type: 'password', placeholder: 'Password' }
+        userName: {
+          label: 'Username',
+          type: 'text',
+          placeholder: 'Username or email address'
+        },
+        password: {
+          label: 'Password',
+          type: 'password',
+          placeholder: 'Password'
+        }
       },
-      authorize: async (credentials: ISignIn): Promise<any> => {
+      authorize: async (credentials, req): Promise<any> => {
         try {
-          const authService = new AuthService(null);
-          const token = await authService.getAuthToken(credentials.userName, credentials.password);
+          if (!credentials) {
+            return false;
+          }
+          const authService = new AuthService();
+          const token = await authService.getAuthToken(
+            credentials.userName,
+            credentials.password
+          );
           if (!token) {
             return null;
           }
 
-          const decodedToken = jwt_decode<JwtPayload & ITokenPayload>(token.access_token);
+          const decodedToken = jwt_decode<JwtPayload & ITokenPayload>(
+            token.access_token
+          );
 
           if (decodedToken) {
             const profile = {
@@ -64,7 +77,9 @@ const options = {
               accessTokenExpires: token.expires_in
             };
 
-            const redisClient = new Redis(process.env.SESSION_DATABASE_URL as string);
+            const redisClient = new Redis(
+              process.env.SESSION_DATABASE_URL as string
+            );
             await redisClient.set(decodedToken.sub, JSON.stringify(profile));
 
             return profile;
@@ -79,9 +94,11 @@ const options = {
     })
   ],
   callbacks: {
-    async session(session, user) {
+    async session({ session, token, user }) {
       if (user?.id) {
-        const redisClient = new Redis(process.env.SESSION_DATABASE_URL as string);
+        const redisClient = new Redis(
+          process.env.SESSION_DATABASE_URL as string
+        );
         const storedSession = await redisClient.get(user.id);
         const profile = JSON.parse(storedSession);
 
@@ -93,7 +110,7 @@ const options = {
       }
       return session; //.accessToken = user.accessToken;
     },
-    async jwt(token, user, account, profile, isNewUser) {
+    async jwt({ token, user, account, profile, isNewUser }) {
       if (account && user) {
         if (user?.id) {
           token.id = user.id;
@@ -111,5 +128,4 @@ const options = {
     signIn: '/login'
   }
 };
-export default (req, res) => NextAuth(req, res, options)
-
+export default (req, res) => NextAuth(req, res, options);
