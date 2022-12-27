@@ -78,7 +78,7 @@ const options = {
             };
 
             const redisClient = new Redis(
-              process.env.SESSION_DATABASE_URL as string
+              process.env.DATABASE_URL as string
             );
             await redisClient.set(decodedToken.sub, JSON.stringify(profile));
 

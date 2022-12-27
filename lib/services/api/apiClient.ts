@@ -9,7 +9,7 @@ class ApiClient {
   constructor(token?: string) {
     this._token = token;
     this._client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL as string
+      baseURL: process.env.API_URL as string
     });
     this._client.interceptors.request.use(
       this._tokenRequestInterceptor,
