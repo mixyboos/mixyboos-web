@@ -1,6 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { getSession } from 'next-auth/react';
-import { CtxOrReq } from 'next-auth/client/_utils';
 
 class ApiClient {
   protected readonly _client: AxiosInstance;
