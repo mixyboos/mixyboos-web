@@ -75,5 +75,10 @@ export default NextAuth({
         }
         return null;
       }
-    })]
+    })],
+  callbacks: {
+    async session({ session, user, token }) {
+      return session;
+    }
+  }
 });
