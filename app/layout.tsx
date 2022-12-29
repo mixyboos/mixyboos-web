@@ -1,5 +1,6 @@
-import { SessionProvider } from 'next-auth/react';
 import Providers from './providers';
+import { PageContainer } from '@lib/components/layout';
+import './globals.css';
 
 export default function RootLayout({
   children,
@@ -10,7 +11,9 @@ export default function RootLayout({
     <html>
       <head />
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <PageContainer>{children}</PageContainer>
+        </Providers>
       </body>
     </html>
   );
