@@ -5,6 +5,7 @@ import MixModel from './MixModel';
 import ShowModel from './ShowModel';
 import UserModel from './UserModel';
 import TokenPayload from './TokenPayload';
+import OsInfoModel from './OsInfoModel';
 
 export type {
   AuthTokenModel,
@@ -13,6 +14,6 @@ export type {
   ChatModel,
   MixModel,
   ApiKeyModel,
-  TokenPayload
+  TokenPayload,
+  OsInfoModel,
 };
-

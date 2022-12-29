@@ -1,3 +1,4 @@
+'use client';
 import Hls from 'hls.js';
 import React, { useEffect, useRef } from 'react';
 import useAudioStore, { PlayState } from './audioStore';
@@ -37,7 +38,7 @@ const AudioProvider: React.FC<IAudioProviderProps> = ({ children }) => {
     if (url) {
       player.current = _createPlayer(url);
       player.current.loadSource(url);
-      player.current.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
+      player.current.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
         console.log(
           'manifest loaded, found ' + data.levels.length + ' quality level'
         );
@@ -62,10 +63,12 @@ const AudioProvider: React.FC<IAudioProviderProps> = ({ children }) => {
 
   const _createPlayer = (src: string): Hls => {
     const player = new Hls();
-    audio.current = document.getElementById('mb-audio-comp') as HTMLAudioElement;
+    audio.current = document.getElementById(
+      'mb-audio-comp'
+    ) as HTMLAudioElement;
     if (audio) {
       player.attachMedia(audio.current);
-      player.on(Hls.Events.MEDIA_ATTACHED, function() {
+      player.on(Hls.Events.MEDIA_ATTACHED, function () {
         console.log('Showtime!!!!');
       });
       return player;

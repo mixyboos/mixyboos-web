@@ -1,3 +1,4 @@
+'use client'
 import React, { MouseEvent, MouseEventHandler, useRef, useState } from 'react';
 import { PlayState, useAudioStore } from '@lib/services/audio';
 import toHHMMSS from '@lib/services/utils/formatTime';
