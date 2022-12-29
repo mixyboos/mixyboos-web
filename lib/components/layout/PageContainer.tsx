@@ -12,9 +12,6 @@ export interface IPageContainerProps {
 const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
   const showHeader = useUiStore((state: IUiState) => state.hasHeader);
   const playState = useAudioStore((state: IAudioState) => state.playState);
-  React.useEffect(() => {
-    console.log('PageContainer', 'hasHeader', showHeader);
-  }, []);
   return (
     <React.Fragment>
       <div className='flex flex-col h-screen'>
@@ -22,7 +19,7 @@ const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
           <title>Mixy|Boos</title>
         </Head>
         {showHeader && <TopNavbar />}
-        <main className='flex-1 '>
+        <main className='flex-1 m-4'>
           <React.Fragment>{children}</React.Fragment>
         </main>
         {playState !== PlayState.stopped && (
