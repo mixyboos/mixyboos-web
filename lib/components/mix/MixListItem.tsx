@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { MixModel } from '../../data/models';
 import useAudioStore, { PlayState } from '../../services/audio/audioStore';

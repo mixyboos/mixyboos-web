@@ -7,7 +7,7 @@ async function getData() {
   console.log('page', 'ServerSession', session);
   const res = await fetch(`${process.env.API_URL}/debug`, {
     headers: {
-      Authorization: `Bearer ${session?.user.accessToken}`,
+      Authorization: `Bearer ${session?.user?.accessToken}`,
     },
   });
   if (res.status === 200) {

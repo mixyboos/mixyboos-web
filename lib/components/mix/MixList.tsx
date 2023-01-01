@@ -14,7 +14,10 @@ const MixList = ({ mixes }: IMixListProps) => {
       ) : (
         <div>
           {mixes?.map((r) => (
-            <MixListItem key={r.id} mix={r} />
+            <MixListItem
+              key={r.id}
+              mix={r}
+            />
           ))}
         </div>
       )}
