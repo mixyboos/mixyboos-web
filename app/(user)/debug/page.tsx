@@ -19,7 +19,7 @@ async function getData() {
   };
 }
 
-const Page = async () => {
+const DebugPage = async () => {
   const data = await getData();
   // return <main>{data ? JSON.stringify(data) : 'Not authenticated'}</main>;
   // const session = await unstable_getServerSession(authOptions);
@@ -30,4 +30,4 @@ const Page = async () => {
   );
 };
 
-export default Page;
+export default DebugPage;

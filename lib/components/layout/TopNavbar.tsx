@@ -5,13 +5,14 @@ import Link from 'next/link';
 import React from 'react';
 import { useUiStore } from '@lib/services/ui';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/20/solid';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Loading } from '../widgets';
 
 const TopNavbar = () => {
   const { data: session, status } = useSession();
   const setHasHeader = useUiStore((state) => state.setHasHeader);
   const router = useRouter();
+  const pathname = usePathname();
   React.useEffect(() => {
     setHasHeader(false);
   }, [setHasHeader]);
@@ -23,24 +24,22 @@ const TopNavbar = () => {
   const _getMenuItems = () => {
     return (
       <React.Fragment>
-        {session && (
-          <Link
-            href="/upload"
-            className={classNames(
-              router.pathname === '/upload'
-                ? 'bg-gray-900 text-white'
-                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-              'px-3 py-2 rounded-md text-sm font-medium'
-            )}
-          >
-            Upload
-          </Link>
-        )}
+        <Link
+          href={session ? '/upload' : '/auth/login'}
+          className={classNames(
+            pathname === '/upload'
+              ? 'bg-gray-900 text-white'
+              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+            'px-3 py-2 rounded-md text-sm font-medium'
+          )}
+        >
+          Upload
+        </Link>
         {session && (
           <Link
             href="/live"
             className={classNames(
-              router.pathname === '/live'
+              pathname === '/live'
                 ? 'bg-gray-900 text-white'
                 : 'text-gray-300 hover:bg-gray-700 hover:text-white',
               'px-3 py-2 rounded-md text-sm font-medium'
@@ -52,24 +51,13 @@ const TopNavbar = () => {
         <Link
           href="/discover"
           className={classNames(
-            router.pathname === '/discover'
+            pathname === '/discover'
               ? 'bg-gray-900 text-white'
               : 'text-gray-300 hover:bg-gray-700 hover:text-white',
             'px-3 py-2 rounded-md text-sm font-medium'
           )}
         >
           Discover
-        </Link>
-        <Link
-          href="/debug"
-          className={classNames(
-            router.pathname === '/debug'
-              ? 'bg-gray-900 text-white'
-              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-            'px-3 py-2 rounded-md text-sm font-medium'
-          )}
-        >
-          Debug
         </Link>
       </React.Fragment>
     );
