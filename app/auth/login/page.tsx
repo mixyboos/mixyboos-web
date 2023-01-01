@@ -1,11 +1,12 @@
+'use client';
 import React, { FormEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 
 import { useSession, signIn, signOut, getCsrfToken } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const LoginPage = () => {
   const router = useRouter();
-  const { redirectUri } = router.query as { redirectUri: string };
+  const searchParams = useSearchParams();
 
   const [userName, setUserName] = useState('fergal.moran+mixyboos@gmail.com');
   const [password, setPassword] = useState('SVqVKJWZh5dIaM7JsNY1h0E/xbzPCD7y7Veedxa1Q/k=');
@@ -16,7 +17,7 @@ const LoginPage = () => {
       await signIn('credentials', {
         userName,
         password,
-        callbackUrl: redirectUri || '/',
+        callbackUrl: searchParams.get('callbackUrl') as string,
         redirect: true
       });
     } catch (err) {

@@ -9,12 +9,14 @@ import useAudioStore, {
 import { TopNavbar } from '@lib/components/layout/index';
 import Footer from '@lib/components/layout/Footer';
 import Head from 'next/head';
+import { useSession } from 'next-auth/react';
 
 export interface IPageContainerProps {
   children: React.ReactNode;
 }
 
 const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
+  const { status } = useSession();
   const showHeader = useUiStore((state: IUiState) => state.hasHeader);
   const playState = useAudioStore((state: IAudioState) => state.playState);
   return (

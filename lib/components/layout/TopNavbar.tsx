@@ -6,6 +6,7 @@ import React from 'react';
 import { useUiStore } from '@lib/services/ui';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useRouter } from 'next/navigation';
+import { Loading } from '../widgets';
 
 const TopNavbar = () => {
   const { data: session, status } = useSession();
@@ -13,7 +14,7 @@ const TopNavbar = () => {
   const router = useRouter();
   React.useEffect(() => {
     setHasHeader(false);
-  }, []);
+  }, [setHasHeader]);
 
   const classNames = (...classes: any[]) => {
     return classes.filter(Boolean).join(' ');
@@ -73,7 +74,9 @@ const TopNavbar = () => {
       </React.Fragment>
     );
   };
-  return (
+  return status === 'loading' ? (
+    <Loading />
+  ) : (
     <Disclosure
       as="nav"
       className="bg-gray-800"
