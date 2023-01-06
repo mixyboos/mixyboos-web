@@ -17,11 +17,8 @@ class LiveService extends ApiClient {
     return result?.status === 200 ? result.data : null;
   };
 
-  startShow = async (title: string): Promise<boolean> => {
-    const result = await this._client.post('/live/start', {
-      title,
-    });
-
+  startShow = async (show: ShowModel): Promise<boolean> => {
+    const result = await this._client.post('/live/start', show);
     return result?.status === 201;
   };
 }

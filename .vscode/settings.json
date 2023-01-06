@@ -1,9 +1,31 @@
 {
   "search.exclude": {
+    "pages/_krud/*": true,
     "**/.yarn": true,
     "**/.pnp.*": true
   },
+  "workbench.colorTheme": "Nu Disco Dark",
   "eslint.nodePath": ".yarn/sdks",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#33cae9",
+    "activityBar.background": "#33cae9",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#e619c3",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#15202b99",
+    "sash.hoverBorder": "#33cae9",
+    "statusBar.background": "#17b2d2",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#128ba4",
+    "statusBarItem.remoteBackground": "#17b2d2",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#17b2d2",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#17b2d299",
+    "titleBar.inactiveForeground": "#15202b99"
+},
+  "peacock.color": "#17b2d2"
 }

@@ -80,7 +80,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
-      session.user.accessToken = token.accessToken;
+      session.user.accessToken = token.accessToken as string;
       // session.user.refreshToken = token.refreshToken;
       // session.user.accessTokenExpires = token.accessTokenExpires;
       return session;

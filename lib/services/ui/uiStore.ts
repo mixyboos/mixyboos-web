@@ -11,14 +11,13 @@ export interface IUiState {
 const useUiStore = create<IUiState>((set) => ({
   count: 0,
   hasHeader: true,
-  incrementCount: () => (set((state) => ({ count: state.count + 1 }))),
-  setCount: (count: number) => (set((state) => ({ count: count }))),
+  incrementCount: () => set((state) => ({ count: state.count + 1 })),
+  setCount: (count: number) => set((state) => ({ count: count })),
   setHasHeader: () => {
     set((newState) => {
-      console.log('uiStore', 'setHasHeader', newState);
       return { hasHeader: newState.hasHeader };
     });
-  }
+  },
 }));
 
 export default useUiStore;

@@ -1,71 +1,103 @@
-import { useSession } from 'next-auth/react';
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import LiveService from '../../services/api/liveService';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import ShowStatus from '@lib/components/live/status';
 
 interface IStreamConnectorProps {
-  showId: string;
-  setStreamId: (streamId: string) => void;
+  inProgressShowId?: string;
+  updateStreamStatus: (showId: string, status: ShowStatus) => void;
 }
-
-const exists = async (url: string): Promise<boolean> => {
-  const result = await fetch(url, {
-    method: 'HEAD'
-  });
-  return result.status === 200;
-};
 
 //Interstitial page between either
 //    1. Creating a live show
 //    2. Refreshing the page for an existing live show
 //ping the API and get the stream id for the live show
-const StreamConnector = ({ showId, setStreamId }: IStreamConnectorProps) => {
-  const [session, loading] = useSession();
-  const [messageTitle, setMessageTitle] = React.useState(
+const StreamConnector = ({
+  inProgressShowId,
+  updateStreamStatus,
+}: IStreamConnectorProps) => {
+  const { data: session, status } = useSession();
+  const [showId, setShowId] = React.useState(inProgressShowId);
+  const [messageTitle, _setMessageTitle] = React.useState(
     'Waiting for stream...'
   );
-  const [messageText, setMessageText] = React.useState(
+  const [messageText, _setMessageText] = React.useState(
     'Please start your streamulator (OBS??)!'
   );
-  // const [streamId, setStreamId] = React.useState('')
+  const [connection, setConnection] = React.useState<HubConnection>();
 
-  const waitForPlaylist = (
-    url: string,
-    timeout = 2000,
-    retries = 20
-  ): Promise<boolean> =>
-    new Promise<boolean>((resolve) => {
-      let retryCount = 0;
-      const timer = setInterval(async () => {
-        const result = await exists(url);
-        if (result || retryCount === retries) {
-          clearInterval(timer);
-          resolve(result);
-        }
-        retryCount++;
-      }, timeout);
-    });
-  const getStreamIdFromShowId = React.useCallback(async () => {
-    const show = await new LiveService(session.accessToken).getCurrentShow();
-    alert(show);
-  }, []);
-
-  // if (show){
-  //   const playlistId = show.
-  // }
-  // const __getPlaylistIdFromShowId = async () => {
-  // const streamId = waitForPlaylist(
-  //   `${process.env.NEXT_PUBLIC_LIVE_HOST}/hls/${streamId}/index.m3u8`
-  // )
-  //   .then((result: boolean) => {
-  //     setStreamId(streamId)
-  //   })
-  //   .catch(() => {})
   React.useEffect(() => {
-    if (!loading) {
-      getStreamIdFromShowId();
+    if (session && status === 'authenticated') {
+      console.log('StreamConnector', 'Session is authenticated');
+      const newConnection = new HubConnectionBuilder()
+        .withUrl(`${process.env.NEXT_PUBLIC_RT_HOST}/live`, {
+          accessTokenFactory: () => session?.user.accessToken as string,
+        })
+        .withAutomaticReconnect()
+        .build();
+      console.log('StreamConnector', 'Build the new connection');
+      setConnection(newConnection);
     }
-  }, [loading, getStreamIdFromShowId]);
+  }, [session]);
 
-  return <div></div>;
+  React.useEffect(() => {
+    if (connection) {
+      console.log('StreamConnector', 'Setting connection listeners');
+      connection
+        .start()
+        .then(() => {
+          console.log('LivePage', 'Connected');
+          connection.on('StreamStarted', (message) => {
+            console.log('LivePage', 'StreamStarted', message);
+            setShowId(message);
+            updateStreamStatus(message, ShowStatus.inProgress);
+          });
+          connection.on('StreamEnded', (message) => {
+            console.log('LivePage', 'StreamEnded', message);
+            updateStreamStatus(message, ShowStatus.ending);
+          });
+        })
+        .catch((e) => console.log('Connection failed: ', e));
+    }
+  }, [connection]);
+
+  return (
+    <>
+      {!inProgressShowId ? (
+        <>
+          <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+            {messageTitle}
+          </h2>
+          <ul className="max-w-md space-y-2 text-gray-500 list-inside dark:text-gray-400">
+            <li className="flex items-center">
+              <div role="status">
+                <svg
+                  aria-hidden="true"
+                  className="w-5 h-5 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentFill"
+                  />
+                </svg>
+                <span className="sr-only">{messageText}</span>
+              </div>
+              {messageText}
+            </li>
+          </ul>
+        </>
+      ) : (
+        <span></span>
+      )}
+    </>
+  );
 };
 export default StreamConnector;

@@ -10,6 +10,7 @@ import { TopNavbar } from '@lib/components/layout/index';
 import Footer from '@lib/components/layout/Footer';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
+import Script from 'next/script';
 
 export interface IPageContainerProps {
   children: React.ReactNode;
@@ -25,6 +26,7 @@ const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
         <Head>
           <title>Mixy|Boos</title>
         </Head>
+
         {showHeader && <TopNavbar />}
         <main className="flex-1 m-4">
           <React.Fragment>{children}</React.Fragment>

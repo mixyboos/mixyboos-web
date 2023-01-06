@@ -7,7 +7,6 @@ import { MixModel } from '@lib/data/models';
 
 const DiscoverPage = async () => {
   const session = await unstable_getServerSession(authOptions);
-  console.log('DiscoverPage', 'session', session);
   let mixes: MixModel[] = [];
   const mixService = new MixService(session?.user.accessToken);
   mixes = await mixService.getMixes();
