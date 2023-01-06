@@ -1,5 +1,6 @@
 import ApiClient from './apiClient';
 import { MixModel } from '@lib/data/models';
+import { AxiosError } from 'axios';
 
 class MixService extends ApiClient {
   getMixes = async (): Promise<Array<MixModel>> => {
@@ -10,7 +11,10 @@ class MixService extends ApiClient {
       }
     } catch (err) {
       console.log('authService', 'getMixes_error', err);
-      if (![401, 400].includes(err?.response?.status)) throw new Error(err);
+      if (err instanceof AxiosError) {
+        if (![401, 400].includes(err.status as number))
+          throw new Error(err as any);
+      }
     }
     throw new Error('Unable to load mixes');
   };
@@ -22,7 +26,10 @@ class MixService extends ApiClient {
       }
     } catch (err) {
       console.log('authService', 'getUser_error', err);
-      if (err?.response?.status !== 401) throw new Error(err);
+      if (err instanceof AxiosError) {
+        if (![401, 400].includes(err.status as number))
+          throw new Error(err as any);
+      }
     }
     throw new Error('Unable to create mix');
   };

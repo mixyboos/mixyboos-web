@@ -1,14 +1,17 @@
 import https from 'https';
 import ApiClient from './apiClient';
 import { AuthTokenModel, UserModel } from '@lib/data/models';
+import { AxiosError } from 'axios';
 
 class AuthService extends ApiClient {
   noauthConfig = {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
     //TODO: MAKE SURE THIS IS TRUE IN DEV
-    httpsAgent: new https.Agent({ rejectUnauthorized: !process.env.DEVELOPMENT as boolean })
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: !process.env.DEVELOPMENT as boolean,
+    }),
   };
 
   getUser = async (): Promise<UserModel> => {
@@ -18,13 +21,19 @@ class AuthService extends ApiClient {
         return result.data;
       }
     } catch (err) {
-      console.log('authService', 'getUser_error', err);
-      if (![401, 400].includes(err?.response?.status)) throw new Error(err);
+      if (err instanceof AxiosError) {
+        console.log('authService', 'getUser_error', err);
+        if (![401, 400].includes(err.status as number))
+          throw new Error(err as any);
+      }
     }
     throw new AuthFailed('Authentication failed');
   };
 
-  getAuthToken = async (user: string, password: string): Promise<AuthTokenModel> => {
+  getAuthToken = async (
+    user: string,
+    password: string
+  ): Promise<AuthTokenModel> => {
     const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/connect/token`;
 
     const params = new URLSearchParams();
@@ -33,7 +42,11 @@ class AuthService extends ApiClient {
     params.append('grant_type', process.env.API_AUTH_GRANT_TYPE as string);
     params.append('scope', process.env.API_AUTH_SCOPE as string);
     params.append('client_id', process.env.API_AUTH_CLIENT_ID as string);
-    const response = await this._client.post(authUrl, params, this.noauthConfig);
+    const response = await this._client.post(
+      authUrl,
+      params,
+      this.noauthConfig
+    );
     if (response?.status === 200) {
       return Promise.resolve(response.data);
     }
@@ -45,30 +58,49 @@ class AuthService extends ApiClient {
 
     const params = new URLSearchParams();
     params.append('refresh_token', refreshToken);
-    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_REFRESH_GRANT_TYPE as string);
+    params.append(
+      'grant_type',
+      process.env.NEXT_PUBLIC_AUTH_REFRESH_GRANT_TYPE as string
+    );
     params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE as string);
-    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string);
+    params.append(
+      'client_id',
+      process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string
+    );
 
-    const response = await this._client.post(authUrl, params, this.noauthConfig);
+    const response = await this._client.post(
+      authUrl,
+      params,
+      this.noauthConfig
+    );
     if (response?.status === 200) {
       return Promise.resolve(response.data);
     }
     return Promise.reject('Unable to log in');
   };
 
-  loginUser = async (username: string, password: string): Promise<UserModel | null> => {
+  loginUser = async (
+    username: string,
+    password: string
+  ): Promise<UserModel | null> => {
     const url = '/connect/token';
     const config = {
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
     };
     const params = new URLSearchParams();
     params.append('username', username);
     params.append('password', password);
-    params.append('grant_type', process.env.NEXT_PUBLIC_AUTH_GRANT_TYPE as string);
+    params.append(
+      'grant_type',
+      process.env.NEXT_PUBLIC_AUTH_GRANT_TYPE as string
+    );
     params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE as string);
-    params.append('client_id', process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string);
+    params.append(
+      'client_id',
+      process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string
+    );
 
     try {
       const result = await this._client.post(url, params, config);
@@ -86,8 +118,7 @@ class AuthService extends ApiClient {
   };
 }
 
-class AuthFailed extends Error {
-}
+class AuthFailed extends Error {}
 
 export { AuthFailed };
 export default AuthService;

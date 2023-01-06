@@ -28,6 +28,7 @@
   "devDependencies": {
     "@microsoft/signalr": "^7.0.0",
     "@tailwindcss/line-clamp": "^0.4.2",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/uuid": "^9.0.0",
     "autoprefixer": "^10.4.13",
     "classnames": "^2.3.2",

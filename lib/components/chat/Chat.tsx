@@ -7,12 +7,17 @@ import { Loading } from '../widgets';
 interface IChatProps {
   showId: string;
 }
-
+interface IUserMessage {
+  fromUser: string;
+  toUser: string;
+  timestamp: Date;
+  message: string;
+}
 const Chat = ({ showId }: IChatProps) => {
   const { data: session, status } = useSession();
   const [message, setMessage] = React.useState('');
   const [connection, setConnection] = React.useState<HubConnection>();
-  const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = React.useState<IUserMessage[]>([]);
   const [isJoined, setIsJoined] = React.useState(false);
 
   React.useEffect(() => {
@@ -35,8 +40,8 @@ const Chat = ({ showId }: IChatProps) => {
         connection
           .send(
             'SendMessage',
-            session.user.id,
-            `${session.user.id}__join__${showId}`,
+            'change_me_user_id',
+            `${'change_me_user_id'}__join__${showId}`,
             showId,
             true
           )
@@ -52,7 +57,7 @@ const Chat = ({ showId }: IChatProps) => {
           console.log('Chat', 'Current messages', messages);
           const newMessage = {
             fromUser: fromUser,
-            toUser: session.user.id,
+            toUser: 'change_me_to_user',
             timestamp: new Date(),
             message: message,
           };
@@ -64,10 +69,11 @@ const Chat = ({ showId }: IChatProps) => {
   }, [connection]);
 
   const sendMessage = () => {
+    if (!session || !connection) return;
     if (message) {
-      console.log('Chat', 'Sending message', session.user);
+      console.log('Chat', 'Sending message', session?.user);
       connection
-        .send('SendMessage', session.user.id, message, showId, false)
+        .send('SendMessage', 'change_me_user_id', message, showId, false)
         .then(() => setMessage(''));
     }
   };
@@ -101,6 +107,7 @@ const Chat = ({ showId }: IChatProps) => {
         <div className="flex items-center space-x-0">
           <button
             type="button"
+            title="Settings"
             className="inline-flex items-center justify-center w-10 h-10 text-gray-500 transition duration-500 ease-in-out rounded-full hover:bg-gray-300 focus:outline-none"
           >
             <svg
@@ -126,6 +133,7 @@ const Chat = ({ showId }: IChatProps) => {
           </button>
           <button
             type="button"
+            title="search"
             className="inline-flex items-center justify-center w-10 h-10 text-gray-500 transition duration-500 ease-in-out rounded-full hover:bg-gray-300 focus:outline-none"
           >
             <svg
@@ -186,7 +194,7 @@ const Chat = ({ showId }: IChatProps) => {
             disabled={session !== null}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={
-              session.user && session.user.id
+              session?.user && 'changeme_user_id'
                 ? 'Say hello!'
                 : 'Login to say hello!'
             }
@@ -195,6 +203,7 @@ const Chat = ({ showId }: IChatProps) => {
           <div className="absolute inset-y-0 right-0 items-center">
             <button
               type="button"
+              title="smiler"
               className="inline-flex items-center justify-center w-10 h-10 text-gray-500 transition duration-500 ease-in-out rounded-full hover:bg-gray-300 focus:outline-none"
             >
               <svg
@@ -214,6 +223,7 @@ const Chat = ({ showId }: IChatProps) => {
             </button>
             <button
               type="button"
+              title="Send Message"
               onClick={sendMessage}
               className="inline-flex items-center justify-center w-12 h-12 text-white transition duration-500 ease-in-out bg-blue-500 rounded-full hover:bg-blue-400 focus:outline-none"
             >

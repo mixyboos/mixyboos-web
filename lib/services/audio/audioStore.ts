@@ -1,5 +1,5 @@
 import create, { State } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 enum PlayState {
   stopped = 1,
@@ -22,32 +22,38 @@ interface IAudioState {
   togglePlayState: () => void;
 }
 
-const useAudioStore = create<IAudioState>(
+const useAudioStore = create<IAudioState>()(
   devtools(
-    (set: IAudioState): IAudioState => ({
-      id: '',
-      url: '',
-      position: -1,
-      seekPosition: -1,
-      duration: -1,
-      playState: PlayState.stopped,
+    persist(
+      (set) => ({
+        id: '',
+        url: '',
+        position: -1,
+        seekPosition: -1,
+        duration: -1,
+        playState: PlayState.stopped,
 
-      setPosition: (position: number) => set((state) => ({ position })),
-      setSeekPosition: (seekPosition: number) =>
-        set((state) => ({ seekPosition })),
-      setDuration: (duration: number) => set((state) => ({ duration })),
-      setNowPlaying: (id: string, url: string) => set((state) => ({ id, url })),
-      setPlayState: (playState: PlayState) => set((state) => ({ playState })),
-      togglePlayState: () =>
-        set((state) => {
-          return {
-            playState:
-              state.playState === PlayState.playing
-                ? PlayState.paused
-                : PlayState.playing
-          };
-        })
-    })
+        setPosition: (position: number) => set((state) => ({ position })),
+        setSeekPosition: (seekPosition: number) =>
+          set((state) => ({ seekPosition })),
+        setDuration: (duration: number) => set((state) => ({ duration })),
+        setNowPlaying: (id: string, url: string) =>
+          set((state) => ({ id, url })),
+        setPlayState: (playState: PlayState) => set((state) => ({ playState })),
+        togglePlayState: () =>
+          set((state) => {
+            return {
+              playState:
+                state.playState === PlayState.playing
+                  ? PlayState.paused
+                  : PlayState.playing,
+            };
+          }),
+      }),
+      {
+        name: 'mixyboos-audio-storage',
+      }
+    )
   )
 );
 
