@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -191,3 +192,30 @@ module.exports = {
   },
   plugins: [require('flowbite/plugin'), require('@tailwindcss/line-clamp')],
 };
+=======
+const colors = require('tailwindcss/colors')
+
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+  darkMode: false, // or 'media' or 'class'
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    safeList: [],
+    content: ['./index.html', './src/**/*.tsx', './src/**/*.ts'],
+  },
+  theme: {
+    colors: {
+      ...colors,
+      mixyboos: '#E734AE',
+    },
+    extend: {
+      fontFamily: {
+        sans: ['Lato', ...defaultTheme.fontFamily.sans],
+      },
+    },
+  },
+  variants: ['responsive', 'hover'],
+  plugins: [require('@tailwindcss/line-clamp')],
+}
+>>>>>>> Stashed changes

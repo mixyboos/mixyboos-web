@@ -35,8 +35,8 @@ const LoginPage = () => {
 
   return (
     <div className='flex flex-col items-center justify-center px-6 mx-auto md:h-screen pt:mt-0'>
-      <a
-        href='https://demos.creative-tim.com/soft-ui-flowbite-pro/'
+      <Link
+        href='/'
         className='flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10'
       >
         <img
@@ -47,7 +47,7 @@ const LoginPage = () => {
         <span className='self-center text-2xl font-bold whitespace-nowrap'>
           MixyBoos Music Machine
         </span>
-      </a>
+      </Link>
       <div className='w-full max-w-lg p-10 bg-white shadow-xl rounded-2xl shadow-gray-300'>
         <div className='space-y-8'>
           <h2 className='text-2xl font-bold text-center text-gray-900'>
@@ -179,7 +179,7 @@ const LoginPage = () => {
                 </label>
               </div>
               <Link
-                href='auth/forgot'
+                href='/auth/forgot'
                 className='ml-auto text-sm text-fuchsia-600 hover:underline'
               >
                 Lost Password?
@@ -194,7 +194,7 @@ const LoginPage = () => {
             <div className='text-sm font-medium text-gray-500'>
               Not registered?
               <Link
-                href='auth/register'
+                href='/auth/register'
                 className='ml-2 text-fuchsia-600 hover:underline'
               >
                 Create account

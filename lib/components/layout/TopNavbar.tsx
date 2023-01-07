@@ -47,9 +47,9 @@ const TopNavbar = () => {
           Upload
         </Link>
         <Link
-          href={session ? '/live' : '/auth/login'}
+          href={session ? `${session.user.slug}/live` : '/auth/login'}
           className={classNames(
-            pathname === '/live'
+            pathname === `${session?.user.slug}/`
               ? 'bg-gray-900 text-white'
               : 'text-gray-300 hover:bg-gray-700 hover:text-white',
             'px-3 py-2 rounded-md text-sm font-medium'
@@ -235,27 +235,27 @@ const TopNavbar = () => {
                   {session ? (
                     <>
                       <div className="flex flex-row mr-4 space-x-2">
-                        <a
+                        <Link
                           href="discover"
                           className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-gray-800 uppercase border border-gray-200 hover:bg-gray-200 hover:opacity-75"
                         >
                           <RiFindReplaceLine className="text-lg text-gray-800 opacity-75 leading-lg" />
                           <span className="ml-2 text-md">Discover</span>
-                        </a>
-                        <a
-                          href="live"
+                        </Link>
+                        <Link
+                          href={`${session?.user.slug}/live`}
                           className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-gray-800 uppercase border border-gray-200 hover:bg-gray-200 hover:opacity-75"
                         >
                           <GoBroadcast className="text-lg text-gray-800 opacity-75 leading-lg" />
                           <span className="ml-2">Go Live</span>
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="upload"
                           className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-gray-800 uppercase border border-gray-200 hover:bg-gray-200 hover:opacity-75"
                         >
                           <MdOutlineCloudUpload className="text-lg text-gray-800 opacity-75 leading-lg" />
                           <span className="ml-2">Upload</span>
-                        </a>
+                        </Link>
                       </div>
                       <button
                         type="button"
