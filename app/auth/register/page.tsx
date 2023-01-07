@@ -20,16 +20,18 @@ const RegisterPage = () => {
         confirmPassword,
         displayName
       );
+      debugger;
       if (result) {
-        await signIn('credentials', {
+        const response = await signIn('credentials', {
           userName,
           password,
           callbackUrl: '/',
           redirect: true,
         });
+        console.log('RegisterPage', 'signin_credentials', response);
       }
     } catch (err) {
-      console.error('login', 'handleLogin', err);
+      console.error('RegisterPage', 'handleLogin', err);
     }
   };
   return (
@@ -148,6 +150,7 @@ const RegisterPage = () => {
                 type="displayname"
                 name="displayname"
                 id="displayname"
+                maxLength={30}
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"

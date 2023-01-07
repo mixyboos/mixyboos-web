@@ -55,7 +55,7 @@ const TaggedInput = ({
     clearTimeout(timer);
     timer = setTimeout(async () => {
       try {
-        const service = new TagService(session?.user.accessToken);
+        const service = new TagService();
         setSearchResults(await service.searchTags(query));
       } catch (err) {
         console.log('TaggedInput', 'Error doing search', err);

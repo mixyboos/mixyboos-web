@@ -19,9 +19,7 @@ const CreateShow = ({ startShow }: ICreateShowProps) => {
 
   React.useEffect(() => {
     async function getStreamKey() {
-      const streamKey = await new LiveService(
-        session?.user?.accessToken
-      ).getStreamKey();
+      const streamKey = await new LiveService().getStreamKey();
       setStreamKey(streamKey);
     }
 

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import { MixModel } from '../../data/models';
 import useAudioStore, { PlayState } from '../../services/audio/audioStore';
@@ -47,7 +47,7 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
                     )}
                   </div>
                   <div className="px-2 text-gray-600">
-                    <span className="font-bold">Fergal Moran</span>
+                    <span className="font-bold">{mix.user?.displayName}</span>
                     <span className="text-gray-400"> listened</span>
                   </div>
                 </div>
@@ -107,7 +107,7 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
                     {mix.title}
                   </a>
                   <p className="mx-1 text-sm text-gray-500 leading-2 line-clamp-1">
-                    by {mix.user.displayName}
+                    by {mix.user?.displayName}
                   </p>
                 </div>
               </div>

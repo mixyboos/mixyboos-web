@@ -20,7 +20,7 @@ const LivePage = () => {
 
   React.useEffect(() => {
     const checkForCurrentShow = async () => {
-      const service = new LiveService(session?.user?.accessToken);
+      const service = new LiveService();
       const inProgressShow = await service.getCurrentShow();
       if (inProgressShow) {
         if (inProgressShow?.id) {
@@ -41,7 +41,7 @@ const LivePage = () => {
   }, [session, showStatus]);
 
   const startShow = async (show: ShowModel) => {
-    const service = new LiveService(session?.user?.accessToken);
+    const service = new LiveService();
     if (show && show.title) {
       await service.startShow(show);
       setTitle(title);

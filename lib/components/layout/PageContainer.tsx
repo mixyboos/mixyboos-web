@@ -26,7 +26,6 @@ const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
   const playState = useAudioStore((state: IAudioState) => state.playState);
 
   React.useEffect(() => {
-    console.log('PageContainer', 'status', status, session);
     setHasSidebar(status === 'authenticated');
   }, [status]);
   return (

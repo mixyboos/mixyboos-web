@@ -7,6 +7,6 @@ interface MixModel {
   description: string
   image?: string
   audioUrl?: string
-  user: UserModel
+  user?: UserModel
 }
 export default MixModel
