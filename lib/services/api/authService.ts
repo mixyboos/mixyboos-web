@@ -34,6 +34,16 @@ class AuthService extends ApiClient {
     user: string,
     password: string
   ): Promise<AuthTokenModel> => {
+    const logger = require('pino')();
+    logger.info({
+      getAuthToken: {
+        user,
+        password,
+        url: process.env.NEXT_PUBLIC_API_URL,
+      },
+      event: { type: 'request', tag: 'api' },
+    });
+
     const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/connect/token`;
 
     const params = new URLSearchParams();
@@ -47,6 +57,14 @@ class AuthService extends ApiClient {
       params,
       this.noauthConfig
     );
+    logger.info({
+      getAuthTokenResponse: {
+        code: response.status,
+        description: response.statusText,
+        url: process.env.NEXT_PUBLIC_API_URL,
+      },
+      event: { type: 'response', tag: 'api' },
+    });
     if (response?.status === 200) {
       return Promise.resolve(response.data);
     }
