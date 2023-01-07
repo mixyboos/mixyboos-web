@@ -678,7 +678,7 @@ const PricingPage = () => {
           <div>
             <div className="mb-10">
               <h3 className="mb-4 text-lg font-medium text-gray-900">
-                What do you mean by "Figma assets"?
+                What do you mean by &ldquo;Figma assets&ldquo;?
               </h3>
               <p className="text-gray-600">
                 You will have access to download the full Figma project
@@ -689,7 +689,7 @@ const PricingPage = () => {
             </div>
             <div className="mb-10">
               <h3 className="mb-4 text-lg font-medium text-gray-900">
-                What does "lifetime access" exactly mean?
+                What does &ldquo;lifetime access&ldquo; exactly mean?
               </h3>
               <p className="mb-4 text-gray-600">
                 Once you have purchased either the design, code, or both
@@ -702,9 +702,9 @@ const PricingPage = () => {
                 How does support work?
               </h3>
               <p className="mb-4 text-gray-600">
-                We're aware of the importance of well qualified support, that is
-                why we decided that support will only be provided by the authors
-                that actually worked on this project.
+                We&quot;re aware of the importance of well qualified support,
+                that is why we decided that support will only be provided by the
+                authors that actually worked on this project.
               </p>
               <p className="mb-4 text-gray-600">
                 Feel free to
@@ -716,7 +716,7 @@ const PricingPage = () => {
                 >
                   contact us
                 </a>
-                and we'll help you out as soon as we can.
+                and we&quot;ll help you out as soon as we can.
               </p>
             </div>
             <div className="mb-10">
@@ -726,10 +726,10 @@ const PricingPage = () => {
               </h3>
               <p className="mb-4 text-gray-600">
                 You can use Flowbite for an unlimited amount of projects,
-                whether it's a personal website, a SaaS app, or a website for a
-                client. As long as you don't build a product that will directly
-                compete with Flowbite either as a UI kit, theme, or template,
-                it's fine.
+                whether it&quot;s a personal website, a SaaS app, or a website
+                for a client. As long as you don&quot;t build a product that
+                will directly compete with Flowbite either as a UI kit, theme,
+                or template, it&quot;s fine.
               </p>
               <p className="mb-4 text-gray-600">
                 Find out more information by
@@ -744,7 +744,7 @@ const PricingPage = () => {
             </div>
             <div className="mb-10">
               <h3 className="mb-4 text-lg font-medium text-gray-900">
-                What does "free updates" include?
+                What does &ldquo;free updates&ldquo; include?
               </h3>
               <p className="mb-4 text-gray-600">
                 The free updates that will be provided is based on the
@@ -879,8 +879,8 @@ const PricingPage = () => {
               </h3>
               <p className="mb-4 text-gray-600">
                 Absolutely! You can use this design kit to build any type of
-                commercial business, whether it's a SaaS, an e-commerce app, an
-                application UI.
+                commercial business, whether it&quot;s a SaaS, an e-commerce
+                app, an application UI.
               </p>
               <p className="mb-4 text-gray-600">
                 As long as it is not a design resource that you will re-sell, it
@@ -908,8 +908,8 @@ const PricingPage = () => {
                 email with the invoice.
               </p>
               <p className="mb-4 text-gray-600">
-                If you forgot to complete the information, or you didn't get the
-                invoice by email, feel free to
+                If you forgot to complete the information, or you didn&quot;t
+                get the invoice by email, feel free to
                 <a
                   href="#"
                   className="font-medium underline text-fuchsia-600 hover:no-underline"
@@ -939,7 +939,8 @@ const PricingPage = () => {
                 progress.
               </p>
               <p className="mb-4 text-gray-600">
-                You'll be one of the first to know when it will be available.
+                You&quot;ll be one of the first to know when it will be
+                available.
               </p>
             </div>
             <div className="mb-10">
@@ -956,7 +957,7 @@ const PricingPage = () => {
                 >
                   contact us
                 </a>
-                within 30 days and we'll issue a full refund.
+                within 30 days and we&quot;ll issue a full refund.
               </p>
             </div>
             <div className="mb-10">
@@ -991,9 +992,9 @@ const PricingPage = () => {
               </h3>
               <p className="mb-4 text-gray-600">
                 After initializing the checkout process from Paddle, you will be
-                able to see a text "Add VAT code". Click on that, and add the
-                VAT code for your company. This will also remove the extra VAT
-                tax from the purchase.
+                able to see a text &ldquo;Add VAT code&ldquo;. Click on that,
+                and add the VAT code for your company. This will also remove the
+                extra VAT tax from the purchase.
               </p>
             </div>
             <div className="mb-10">
