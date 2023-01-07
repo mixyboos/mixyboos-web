@@ -5,7 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import Redis from 'ioredis';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import TokenPayload from '@lib/data/models/TokenPayload';
-import logger from '@lib/logger';
+// import logger from '@lib/logger';
 
 export const authOptions: AuthOptions = {
   session: {
@@ -35,7 +35,7 @@ export const authOptions: AuthOptions = {
         },
       },
       authorize: async (credentials, _req): Promise<any> => {
-        logger.info(`Authorizing: ${credentials}`);
+        // logger.info(`Authorizing: ${credentials}`);
         try {
           if (!credentials) {
             return false;
@@ -71,14 +71,14 @@ export const authOptions: AuthOptions = {
                 JSON.stringify(profile)
               );
             } catch (err) {
-              logger.error(`Error caching profile: ${err}`);
+              // logger.error(`Error caching profile: ${err}`);
             }
             return profile;
           } else {
             return false;
           }
         } catch (err) {
-          logger.error(`Error authorizing: ${err}`);
+          // logger.error(`Error authorizing: ${err}`);
         }
         return null;
       },
