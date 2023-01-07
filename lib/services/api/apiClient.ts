@@ -1,11 +1,28 @@
 import axios, { AxiosInstance } from 'axios';
+import https from 'https';
+import { getSession } from 'next-auth/react';
 
 class ApiClient {
   protected readonly _client: AxiosInstance;
-  protected readonly _token: string | undefined;
-
-  constructor(token?: string) {
-    this._token = token;
+  protected readonly jsonConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    //TODO: MAKE SURE THIS IS TRUE IN DEV
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: !process.env.DEVELOPMENT as boolean,
+    }),
+  };
+  protected readonly noauthConfig = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    //TODO: MAKE SURE THIS IS TRUE IN DEV
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: !process.env.DEVELOPMENT as boolean,
+    }),
+  };
+  constructor() {
     this._client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_API_URL as string,
     });
@@ -18,11 +35,11 @@ class ApiClient {
   }
 
   private _tokenRequestInterceptor = async (config: any) => {
-    const token = this._token;
-    if (token) {
+    var session = await getSession();
+    if (session) {
       config.headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json'
+        Authorization: `Bearer ${session.user.accessToken}`,
+        Accept: 'application/json',
       };
     }
     return config;

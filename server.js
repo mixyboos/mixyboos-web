@@ -1,15 +1,16 @@
-var https = require("https");
-var fs = require("fs");
+var https = require('https');
+var fs = require('fs');
 
-const next = require("next");
+console.log('server', 'env', process.env.NODE_ENV);
+const next = require('next');
 const port = 3000;
-const dev = process.env.NODE_ENV !== "production";
+const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev, dir: __dirname });
 const handle = app.getRequestHandler();
 
 const options = {
-  key: fs.readFileSync("/etc/letsencrypt/live/dev.fergl.ie/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/live/dev.fergl.ie/fullchain.pem"),
+  key: fs.readFileSync('/etc/letsencrypt/live/dev.fergl.ie/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/dev.fergl.ie/fullchain.pem'),
 };
 
 app.prepare().then(() => {

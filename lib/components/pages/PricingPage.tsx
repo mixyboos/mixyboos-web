@@ -1,38 +1,64 @@
 import React from 'react';
+import { MdLiveTv } from 'react-icons/md';
+import { RiRecordMailLine } from 'react-icons/ri';
+import Link from 'next/link';
 
 const PricingPage = () => {
   return (
-    <div className="container px-4 pt-32 mx-auto text-center xl:px-32 lg:px-0">
+    <div className="container px-4 pt-8 mx-auto text-center xl:px-32 lg:px-0">
       <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-5xl sm:leading-none sm:tracking-tight">
-        See our pricing
+        Welcome to MixyBoos
       </h1>
       <p className="mb-6 text-lg font-normal text-gray-500 xl:px-80 sm:text-xl">
-        All types of businesses need access to development resources, so we give
-        you the option to decide how much you need to use.
+        A new way to create and share music with those you love
       </p>
-      <div className="flex p-1 mx-auto bg-gray-200 rounded-lg sm:mt-8 max-w-fit">
+      <div className="flex p-1 mx-auto space-x-2 bg-gray-200 rounded-lg sm:mt-8 max-w-fit">
         <button
           type="button"
-          className="py-2 text-sm font-medium text-gray-900 bg-white border-gray-200 rounded-md shadow whitespace-nowrap shadow-gray-300 focus:outline-none sm:w-auto sm:px-8"
+          className="inline-flex items-center py-2 text-sm font-medium text-gray-900 bg-white border-gray-200 rounded-md shadow whitespace-nowrap shadow-gray-300 focus:outline-none sm:w-auto sm:px-8"
         >
-          Monthly
+          <RiRecordMailLine className="w-5 h-5 mr-2 text-green-800 bg-white rounded-full" />
+          <span>Pre-record</span>
         </button>
         <button
           type="button"
-          className="ml-0.5 relative border border-transparent rounded-md py-2 w-1/2 text-sm font-medium text-gray-700 whitespace-nowrap focus:outline-none sm:w-auto sm:px-8"
+          className="inline-flex items-center py-2 text-sm font-medium text-gray-900 bg-white border-gray-200 rounded-md shadow whitespace-nowrap shadow-gray-300 focus:outline-none sm:w-auto sm:px-8"
         >
-          Annual <span className="text-green-500">-20%</span>
+          <MdLiveTv className="w-5 h-5 mr-2 text-green-800 bg-white rounded-full" />
+          Go Live
         </button>
+      </div>
+      <div className="mt-4">
+        <Link
+          href="/auth/login"
+          className="text-white bg-gradient-to-br from-pink-500 to-voilet-500 hover:scale-[1.02] shadow-md shadow-gray-300 transition-transform font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-3"
+        >
+          <svg
+            className="w-5 h-5 mr-2 -ml-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+            />
+          </svg>
+          Login/Register
+        </Link>
       </div>
       <section className="grid grid-cols-1 pt-12 space-y-12 lg:space-y-0 lg:grid-cols-3 lg:gap-x-6 xl-gap-8">
         <div className="flex flex-col p-6 bg-white shadow-xl rounded-2xl shadow-gray-200 xl:p-8">
           <div className="flex-1">
             <h3 className="mb-4 text-2xl font-semibold text-gray-500">
-              Freelancer
+              Freeloader
             </h3>
             <div className="flex items-baseline justify-center text-gray-900">
-              <span className="text-3xl font-semibold">$</span>
-              <span className="text-5xl font-extrabold tracking-tight">49</span>
+              <span className="text-3xl font-semibold">€</span>
+              <span className="text-5xl font-extrabold tracking-tight">0</span>
               <span className="ml-1 text-xl font-normal text-gray-500">
                 /month
               </span>
@@ -55,7 +81,7 @@ const PricingPage = () => {
                   />
                 </svg>
                 <span className="text-base font-normal leading-tight text-gray-500">
-                  2 team members
+                  200 minutes per month
                 </span>
               </li>
               <li className="flex space-x-3">
@@ -72,7 +98,7 @@ const PricingPage = () => {
                   />
                 </svg>
                 <span className="text-base font-normal leading-tight text-gray-500">
-                  20GB Cloud storage
+                  10GB Cloud storage
                 </span>
               </li>
               <li className="flex space-x-3">
@@ -89,7 +115,7 @@ const PricingPage = () => {
                   />
                 </svg>
                 <span className="text-base font-normal leading-tight text-gray-500">
-                  Integration help
+                  Full help & support via email
                 </span>
               </li>
               <li className="flex space-x-3 line-through">

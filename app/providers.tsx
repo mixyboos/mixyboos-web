@@ -2,11 +2,14 @@
 
 import { SessionProvider } from 'next-auth/react';
 import { AudioProvider } from '@lib/services/audio';
+import { Flowbite } from 'flowbite-react';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <SessionProvider>
-      <AudioProvider>{children}</AudioProvider>
+      <Flowbite>
+        <AudioProvider>{children}</AudioProvider>
+      </Flowbite>
     </SessionProvider>
   );
 };

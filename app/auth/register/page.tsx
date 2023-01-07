@@ -1,23 +1,37 @@
+'use client';
 import Link from 'next/link';
 import React from 'react';
+
 import { FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
+import AuthService from '@lib/services/api/authService';
 const RegisterPage = () => {
   const [userName, setUserName] = React.useState('');
+  const [displayName, setDisplayName] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
 
-  const handleRegister = async ($event: FormEvent<HTMLFormElement>) => {
+  const handleRegistration = async ($event: FormEvent<HTMLFormElement>) => {
     $event.preventDefault();
     try {
-      await signIn('credentials', {
+      const result = await new AuthService().registerUser(
         userName,
         password,
-        callbackUrl: searchParams.get('callbackUrl') as string,
-        redirect: true,
-      });
+        confirmPassword,
+        displayName
+      );
+      debugger;
+      if (result) {
+        const response = await signIn('credentials', {
+          userName,
+          password,
+          callbackUrl: '/',
+          redirect: true,
+        });
+        console.log('RegisterPage', 'signin_credentials', response);
+      }
     } catch (err) {
-      console.error('login', 'handleLogin', err);
+      console.error('RegisterPage', 'handleLogin', err);
     }
   };
   return (
@@ -105,22 +119,42 @@ const RegisterPage = () => {
           </div>
           <form
             className="mt-8 space-y-6"
-            action="#"
-            data-bitwarden-watching="1"
+            onSubmit={(e) => handleRegistration(e)}
           >
             <div>
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Your email
               </label>
               <input
-                type="email"
-                name="email"
+                type="username"
+                name="username"
                 id="email"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
                 className=" border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                 placeholder="name@company.com"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="displayname"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Profile name
+              </label>
+              <input
+                type="displayname"
+                name="displayname"
+                id="displayname"
+                maxLength={30}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                placeholder="You can change this later if you don't like it"
                 required
               />
             </div>
@@ -135,8 +169,11 @@ const RegisterPage = () => {
                 type="password"
                 name="password"
                 id="password"
+                value={password}
                 placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 className=" border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
@@ -153,6 +190,9 @@ const RegisterPage = () => {
                 id="confirm-password"
                 placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                value={confirmPassword}
+                autoComplete="current-password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
@@ -188,16 +228,16 @@ const RegisterPage = () => {
             >
               Create account
             </button>
-            <div className="text-sm font-medium text-gray-500">
-              Already have an account?{' '}
-              <Link
-                href="/auth/login"
-                className="text-fuchsia-500 hover:underline"
-              >
-                Login here
-              </Link>
-            </div>
           </form>
+          <div className="text-sm font-medium text-gray-500">
+            Already have an account?{' '}
+            <Link
+              href="/auth/login"
+              className="text-fuchsia-500 hover:underline"
+            >
+              Login here
+            </Link>
+          </div>
         </div>
       </div>
     </div>
