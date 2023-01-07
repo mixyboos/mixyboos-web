@@ -5,6 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import Redis from 'ioredis';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import TokenPayload from '@lib/data/models/TokenPayload';
+import logger from '@lib/logger';
 
 export const authOptions: AuthOptions = {
   session: {
@@ -34,6 +35,7 @@ export const authOptions: AuthOptions = {
         },
       },
       authorize: async (credentials, _req): Promise<any> => {
+        logger.info(`Authorizing: ${credentials}`);
         try {
           if (!credentials) {
             return false;
