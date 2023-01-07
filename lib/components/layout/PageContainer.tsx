@@ -34,14 +34,13 @@ const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
       <Head>
         <title>Mixy|Boos</title>
       </Head>
-
       {hasHeader && <TopNavbar />}
       <div className="flex pt-16 overflow-hidden bg-white">
         {hasSidebar && <Sidebar />}
         <div
           id="main-content"
           className={`relative w-full h-full overflow-y-auto bg-gray-50 ${
-            hasSidebar && 'lg:ml-64'
+            hasSidebar && 'lg:ml-72'
           }`}
         >
           <main className="bg-gray-50">{children}</main>

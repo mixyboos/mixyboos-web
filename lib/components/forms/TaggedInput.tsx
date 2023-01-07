@@ -141,7 +141,7 @@ const TaggedInput = ({
           <aside
             role="menu"
             aria-labelledby="menu-heading"
-            className="absolute z-50 flex flex-col items-start w-64 mt-1 text-sm bg-white border rounded-md shadow-md"
+            className="absolute z-50 flex flex-col items-start mt-1 text-sm bg-white border rounded-md shadow-md w-72"
           >
             <ul className="flex flex-col w-full">
               {searchResults.map((result) => (

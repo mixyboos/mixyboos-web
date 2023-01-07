@@ -5,16 +5,6 @@ import { AxiosError } from 'axios';
 import logger from '../../../logger/logger';
 
 class AuthService extends ApiClient {
-  noauthConfig = {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    //TODO: MAKE SURE THIS IS TRUE IN DEV
-    httpsAgent: new https.Agent({
-      rejectUnauthorized: !process.env.DEVELOPMENT as boolean
-    })
-  };
-
   getUser = async (): Promise<UserModel> => {
     try {
       const result = await this._client.get('/profile/me');
@@ -39,8 +29,8 @@ class AuthService extends ApiClient {
       getAuthToken: {
         user,
         password,
-        url: process.env.API_URL
-      }
+        url: process.env.API_URL,
+      },
     });
 
     const authUrl = `${process.env.API_URL}/connect/token`;
@@ -48,15 +38,9 @@ class AuthService extends ApiClient {
     const params = new URLSearchParams();
     params.append('username', user);
     params.append('password', password);
-    params.append(
-      'grant_type',
-      process.env.API_AUTH_GRANT_TYPE as string
-    );
+    params.append('grant_type', process.env.API_AUTH_GRANT_TYPE as string);
     params.append('scope', process.env.API_AUTH_SCOPE as string);
-    params.append(
-      'client_id',
-      process.env.API_AUTH_CLIENT_ID as string
-    );
+    params.append('client_id', process.env.API_AUTH_CLIENT_ID as string);
     const response = await this._client.post(
       authUrl,
       params,
@@ -66,8 +50,8 @@ class AuthService extends ApiClient {
       getAuthTokenResponse: {
         code: response.status,
         description: response.statusText,
-        url: process.env.API_URL
-      }
+        url: process.env.API_URL,
+      },
     });
     if (response?.status === 200) {
       return Promise.resolve(response.data);
@@ -80,15 +64,9 @@ class AuthService extends ApiClient {
 
     const params = new URLSearchParams();
     params.append('refresh_token', refreshToken);
-    params.append(
-      'grant_type',
-      process.env.AUTH_REFRESH_GRANT_TYPE as string
-    );
+    params.append('grant_type', process.env.AUTH_REFRESH_GRANT_TYPE as string);
     params.append('scope', process.env.AUTH_SCOPE as string);
-    params.append(
-      'client_id',
-      process.env.AUTH_CLIENT_ID as string
-    );
+    params.append('client_id', process.env.AUTH_CLIENT_ID as string);
 
     const response = await this._client.post(
       authUrl,
@@ -100,32 +78,41 @@ class AuthService extends ApiClient {
     }
     return Promise.reject('Unable to log in');
   };
+  registerUser = async (
+    userName: string,
+    password: string,
+    confirmPassword: string,
+    displayName: string
+  ): Promise<boolean> => {
+    const url = '/account/register';
+    const result = await this._client.post(
+      url,
+      { userName, password, confirmPassword, displayName },
+      this.jsonConfig
+    );
 
+    if (result.status === 200) {
+      return true;
+    } else if (result.status === 400) {
+      console.log('authService', 'registerUser', result);
+    }
+    return false;
+  };
   loginUser = async (
     username: string,
     password: string
   ): Promise<UserModel | null> => {
     const url = '/connect/token';
-    const config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    };
+
     const params = new URLSearchParams();
     params.append('username', username);
     params.append('password', password);
-    params.append(
-      'grant_type',
-      process.env.AUTH_GRANT_TYPE as string
-    );
+    params.append('grant_type', process.env.AUTH_GRANT_TYPE as string);
     params.append('scope', process.env.AUTH_SCOPE as string);
-    params.append(
-      'client_id',
-      process.env.AUTH_CLIENT_ID as string
-    );
+    params.append('client_id', process.env.AUTH_CLIENT_ID as string);
 
     try {
-      const result = await this._client.post(url, params, config);
+      const result = await this._client.post(url, params, this.noauthConfig);
       if (result?.status === 200) {
         const model: AuthTokenModel = result.data.token;
         const user: UserModel = result.data.user;
@@ -140,8 +127,7 @@ class AuthService extends ApiClient {
   };
 }
 
-class AuthFailed extends Error {
-}
+class AuthFailed extends Error {}
 
 export { AuthFailed };
 export default AuthService;

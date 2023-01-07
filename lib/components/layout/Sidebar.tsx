@@ -111,7 +111,7 @@ const Sidebar = () => {
   return session && session.user && session.user.slug ? (
     <aside
       id="sidebar"
-      className="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 duration-200 lg:flex transition-width lg:w-64"
+      className="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 h-full pt-16 duration-200 w-80 lg:flex transition-width lg:w-72"
       aria-label="Sidebar"
     >
       <div className="relative flex flex-col flex-1 min-h-0 pt-0 bg-gray-50">
