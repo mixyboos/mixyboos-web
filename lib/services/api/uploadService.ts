@@ -1,4 +1,5 @@
 import ApiClient from './apiClient';
+import { AxiosError } from 'axios';
 
 class UploadService extends ApiClient {
   uploadAudio = async (
@@ -21,7 +22,10 @@ class UploadService extends ApiClient {
       }
     } catch (err) {
       console.log('authService', 'getUser_error', err);
-      if (err?.response?.status !== 401) throw new Error(err);
+      if (err instanceof AxiosError) {
+        if (![401, 400].includes(err.status as number))
+          throw new Error(err as any);
+      }
     }
     throw new Error('Unable to load mixes');
   };
