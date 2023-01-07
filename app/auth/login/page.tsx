@@ -2,15 +2,20 @@
 import React, { FormEvent, useState } from 'react';
 
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 const LoginPage = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [userName, setUserName] = useState('fergal.moran+mixyboos@gmail.com');
+  const [userName, setUserName] = useState(
+    process.env.NEXT_PUBLIC_ENVIRONMENT === 'development'
+      ? 'fergal.moran+mixyboos@gmail.com'
+      : ''
+  );
   const [password, setPassword] = useState(
-    'SVqVKJWZh5dIaM7JsNY1h0E/xbzPCD7y7Veedxa1Q/k='
+    process.env.NEXT_PUBLIC_ENVIRONMENT === 'development'
+      ? 'SVqVKJWZh5dIaM7JsNY1h0E/xbzPCD7y7Veedxa1Q/k='
+      : ''
   );
 
   const handleLogin = async ($event: FormEvent<HTMLFormElement>) => {
