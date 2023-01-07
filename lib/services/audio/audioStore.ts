@@ -1,5 +1,4 @@
-import create, { State } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import create from 'zustand';
 
 enum PlayState {
   stopped = 1,

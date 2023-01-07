@@ -127,7 +127,7 @@ const PricingPage = () => {
             </h3>
             <p className="my-4 font-light">
               You have many examples that can be used to create a fast prototype
-              for your team."
+              for your team.
             </p>
           </blockquote>
           <figcaption className="flex items-center justify-center space-x-3">
