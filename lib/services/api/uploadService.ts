@@ -10,7 +10,7 @@ class UploadService extends ApiClient {
       const result = await this._client.post(`/upload`, formData, {
         onUploadProgress: (e) => {
           console.log('Upload', 'progress', e);
-          callback(e.total, e.loaded);
+          callback(e.total ?? 0, e.loaded);
         },
         headers: {
           'content-type': 'multipart/form-data',
