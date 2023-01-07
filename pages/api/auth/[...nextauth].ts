@@ -64,17 +64,21 @@ export const authOptions: AuthOptions = {
               accessTokenExpires: token.expires_in,
             };
 
-            const redisClient = new Redis(process.env.DATABASE_URL as string);
-            await redisClient.set(
-              decodedToken.sub as string,
-              JSON.stringify(profile)
-            );
+            try {
+              const redisClient = new Redis(process.env.DATABASE_URL as string);
+              await redisClient.set(
+                decodedToken.sub as string,
+                JSON.stringify(profile)
+              );
+            } catch (err) {
+              logger.error(`Error caching profile: ${err}`);
+            }
             return profile;
           } else {
             return false;
           }
         } catch (err) {
-          console.error('NEXT', 'authorize', err);
+          logger.error(`Error authorizing: ${err}`);
         }
         return null;
       },
