@@ -1,7 +1,27 @@
+'use client'
 import Link from 'next/link';
 import React from 'react';
 
+import { FormEvent } from 'react';
+import { signIn } from 'next-auth/react';
 const RegisterPage = () => {
+  const [userName, setUserName] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+
+  const handleRegistration = async ($event: FormEvent<HTMLFormElement>) => {
+    $event.preventDefault();
+    try {
+      await signIn('credentials', {
+        userName,
+        password,
+        callbackUrl: "/login",
+        redirect: true,
+      });
+    } catch (err) {
+      console.error('login', 'handleLogin', err);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0">
       <Link
@@ -87,8 +107,7 @@ const RegisterPage = () => {
           </div>
           <form
             className="mt-8 space-y-6"
-            action="#"
-            data-bitwarden-watching="1"
+            onSubmit={(e) => handleRegistration(e)}
           >
             <div>
               <label
@@ -170,6 +189,7 @@ const RegisterPage = () => {
             >
               Create account
             </button>
+            </form>
             <div className="text-sm font-medium text-gray-500">
               Already have an account?{' '}
               <Link
