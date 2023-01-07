@@ -7,6 +7,7 @@ import jwt_decode, { JwtPayload } from 'jwt-decode';
 import TokenPayload from '@lib/data/models/TokenPayload';
 
 import logger from '../../../logger/logger';
+
 export const authOptions: AuthOptions = {
   session: {
     maxAge: 30 * 24 * 60 * 60, //30 days
@@ -69,7 +70,8 @@ export const authOptions: AuthOptions = {
             const profile = {
               id: decodedToken.sub,
               name: decodedToken.name,
-              email: decodedToken.name,
+              displayName: decodedToken.displayName,
+              email: decodedToken.email,
               image: decodedToken.image,
               slug: decodedToken.slug,
               accessToken: token.access_token,
@@ -99,6 +101,8 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }) {
       session.user.accessToken = token.accessToken as string;
+      session.user.displayName = token.displayName as string;
+      session.user.slug = token.slug as string;
       // session.user.refreshToken = token.refreshToken;
       // session.user.accessTokenExpires = token.accessTokenExpires;
       return session;
@@ -108,6 +112,8 @@ export const authOptions: AuthOptions = {
         return {
           ...token,
           accessToken: user.accessToken,
+          displayName: user.displayName,
+          slug: user.slug,
         };
       }
       return token;

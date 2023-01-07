@@ -40,3 +40,4 @@ jspm_packages
 .env
 .env.local.yarn
 .env.local
+working

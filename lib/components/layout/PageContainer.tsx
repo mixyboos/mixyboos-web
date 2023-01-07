@@ -6,7 +6,7 @@ import useAudioStore, {
   IAudioState,
   PlayState,
 } from '@lib/services/audio/audioStore';
-import { TopNavbar } from '@lib/components/layout/index';
+import { Sidebar, TopNavbar } from '@lib/components/layout/index';
 import Footer from '@lib/components/layout/Footer';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
@@ -17,26 +17,41 @@ export interface IPageContainerProps {
 }
 
 const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
-  const { status } = useSession();
-  const showHeader = useUiStore((state: IUiState) => state.hasHeader);
+  const hasHeader = useUiStore((state: IUiState) => state.hasHeader);
+  const setHasHeader = useUiStore((state: IUiState) => state.setHasHeader);
+  const hasSidebar = useUiStore((state: IUiState) => state.hasSidebar);
+  const setHasSidebar = useUiStore((state: IUiState) => state.setHasSidebar);
+
+  const { data: session, status } = useSession();
   const playState = useAudioStore((state: IAudioState) => state.playState);
+
+  React.useEffect(() => {
+    console.log('PageContainer', 'status', status, session);
+    setHasSidebar(status === 'authenticated');
+  }, [status]);
   return (
     <React.Fragment>
-      <div className="flex flex-col h-screen">
-        <Head>
-          <title>Mixy|Boos</title>
-        </Head>
+      <Head>
+        <title>Mixy|Boos</title>
+      </Head>
 
-        {showHeader && <TopNavbar />}
-        <main className="flex-1 m-4">
-          <React.Fragment>{children}</React.Fragment>
-        </main>
-        {playState !== PlayState.stopped && (
-          <footer className="py-5 text-center text-white bg-podnoms">
-            <Footer />
-          </footer>
-        )}
+      {hasHeader && <TopNavbar />}
+      <div className="flex pt-16 overflow-hidden bg-white">
+        {hasSidebar && <Sidebar />}
+        <div
+          id="main-content"
+          className={`relative w-full h-full overflow-y-auto bg-gray-50 ${
+            hasSidebar && 'lg:ml-64'
+          }`}
+        >
+          <main className="bg-gray-50">{children}</main>
+        </div>
       </div>
+      {playState !== PlayState.stopped && (
+        <footer className="py-5 text-center text-white bg-podnoms">
+          <Footer />
+        </footer>
+      )}
     </React.Fragment>
   );
 };

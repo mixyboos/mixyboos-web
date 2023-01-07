@@ -23,7 +23,7 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
     }
   };
   return (
-    <div className="w-full mx-auto mb-3 overflow-hidden bg-white rounded-sm shadow-md">
+    <div className="w-full p-1 mx-auto mb-3 overflow-hidden bg-white rounded-sm shadow-md">
       <div className="md:flex">
         <div className="p-1 md:flex-shrink-0">
           <img

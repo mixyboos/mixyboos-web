@@ -1,23 +1,29 @@
+'use client';
 import create from 'zustand';
+import { createContext } from 'react';
 
 export interface IUiState {
-  count: number;
-  incrementCount: () => void;
-  setCount: (count: number) => void;
   hasHeader: boolean;
+  hasSidebar: boolean;
   setHasHeader: (hasHeader: boolean) => void;
+  setHasSidebar: (hasSidebar: boolean) => void;
 }
 
-const useUiStore = create<IUiState>((set) => ({
-  count: 0,
+const useUiStore = create<IUiState>()((set, get) => ({
   hasHeader: true,
-  incrementCount: () => set((state) => ({ count: state.count + 1 })),
-  setCount: (count: number) => set((state) => ({ count: count })),
-  setHasHeader: () => {
-    set((newState) => {
-      return { hasHeader: newState.hasHeader };
-    });
+  hasSidebar: false,
+  setHasHeader: (hasHeader: boolean) => {
+    set({ hasHeader });
+  },
+  setHasSidebar: (hasSidebar: boolean) => {
+    if (get().hasSidebar !== hasSidebar) {
+      set({ hasSidebar });
+    }
   },
 }));
 
+// if (process.env.NODE_ENV === 'development') {
+//   mountStoreDevtool('Store', useUiStore);
+// }
+export const UIContext = createContext<IUiState | null>(null);
 export default useUiStore;
