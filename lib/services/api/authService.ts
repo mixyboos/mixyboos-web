@@ -48,9 +48,15 @@ class AuthService extends ApiClient {
     const params = new URLSearchParams();
     params.append('username', user);
     params.append('password', password);
-    params.append('grant_type', process.env.API_AUTH_GRANT_TYPE as string);
-    params.append('scope', process.env.API_AUTH_SCOPE as string);
-    params.append('client_id', process.env.API_AUTH_CLIENT_ID as string);
+    params.append(
+      'grant_type',
+      process.env.NEXT_PUBLIC_API_AUTH_GRANT_TYPE as string
+    );
+    params.append('scope', process.env.NEXT_PUBLIC_API_AUTH_SCOPE as string);
+    params.append(
+      'client_id',
+      process.env.NEXT_PUBLIC_API_AUTH_CLIENT_ID as string
+    );
     const response = await this._client.post(
       authUrl,
       params,
