@@ -38,24 +38,23 @@ class AuthService extends ApiClient {
       getAuthToken: {
         user,
         password,
-        url: process.env.NEXT_PUBLIC_API_URL,
-      },
-      event: { type: 'request', tag: 'api' },
+        url: process.env.API_URL,
+      }
     });
 
-    const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/connect/token`;
+    const authUrl = `${process.env.API_URL}/connect/token`;
 
     const params = new URLSearchParams();
     params.append('username', user);
     params.append('password', password);
     params.append(
       'grant_type',
-      process.env.NEXT_PUBLIC_API_AUTH_GRANT_TYPE as string
+      process.env.API_AUTH_GRANT_TYPE as string
     );
-    params.append('scope', process.env.NEXT_PUBLIC_API_AUTH_SCOPE as string);
+    params.append('scope', process.env.API_AUTH_SCOPE as string);
     params.append(
       'client_id',
-      process.env.NEXT_PUBLIC_API_AUTH_CLIENT_ID as string
+      process.env.API_AUTH_CLIENT_ID as string
     );
     const response = await this._client.post(
       authUrl,
@@ -66,9 +65,8 @@ class AuthService extends ApiClient {
       getAuthTokenResponse: {
         code: response.status,
         description: response.statusText,
-        url: process.env.NEXT_PUBLIC_API_URL,
+        url: process.env.API_URL,
       },
-      event: { type: 'response', tag: 'api' },
     });
     if (response?.status === 200) {
       return Promise.resolve(response.data);
@@ -77,18 +75,18 @@ class AuthService extends ApiClient {
   };
 
   refreshAuthToken = async (refreshToken: string) => {
-    const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/connect/token`;
+    const authUrl = `${process.env.API_URL}/connect/token`;
 
     const params = new URLSearchParams();
     params.append('refresh_token', refreshToken);
     params.append(
       'grant_type',
-      process.env.NEXT_PUBLIC_AUTH_REFRESH_GRANT_TYPE as string
+      process.env.AUTH_REFRESH_GRANT_TYPE as string
     );
-    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE as string);
+    params.append('scope', process.env.AUTH_SCOPE as string);
     params.append(
       'client_id',
-      process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string
+      process.env.AUTH_CLIENT_ID as string
     );
 
     const response = await this._client.post(
@@ -117,12 +115,12 @@ class AuthService extends ApiClient {
     params.append('password', password);
     params.append(
       'grant_type',
-      process.env.NEXT_PUBLIC_AUTH_GRANT_TYPE as string
+      process.env.AUTH_GRANT_TYPE as string
     );
-    params.append('scope', process.env.NEXT_PUBLIC_AUTH_SCOPE as string);
+    params.append('scope', process.env.AUTH_SCOPE as string);
     params.append(
       'client_id',
-      process.env.NEXT_PUBLIC_AUTH_CLIENT_ID as string
+      process.env.AUTH_CLIENT_ID as string
     );
 
     try {

@@ -35,7 +35,7 @@ export const authOptions: AuthOptions = {
         },
       },
       authorize: async (credentials, _req): Promise<any> => {
-        logger.info('Authorizing');
+        logger.info({ authorize: 'Authorizing' });
         try {
           if (!credentials) {
             return false;
@@ -45,13 +45,25 @@ export const authOptions: AuthOptions = {
             credentials.userName,
             credentials.password
           );
+
+          logger.info({
+            authorize: {
+              result: token,
+            },
+          });
+
           if (!token) {
             return null;
           }
-
+          logger.info({
+            authorize: 'Decoding token',
+          });
           const decodedToken = jwt_decode<JwtPayload & TokenPayload>(
             token.access_token
           );
+          logger.info({
+            authorize: 'Decoded token',
+          });
 
           if (decodedToken) {
             const profile = {
