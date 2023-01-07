@@ -9,17 +9,18 @@ import { MdOutlineCloudUpload } from 'react-icons/md';
 const MixListPage = () => {
   const { data: session, status } = useSession();
   const [mixes, setMixes] = React.useState<MixModel[]>([]);
-
+const [didMixLookup, setDidMixLookup]= React.useState(false);
   React.useEffect(() => {
     const getMixes = async () => {
       const mixes = await new MixService().getMixesFeed();
       setMixes(mixes);
+      setDidMixLookup(true);
     };
     if (status === 'authenticated' && session.user) {
       getMixes();
     }
   }, [session, status]);
-  return mixes.length === 0 ? (
+  return didMixLookup && mixes.length === 0 ? (
     <div className="grid w-full place-items-center">
       <div className="max-w-sm p-6 my-20 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
         <a href="#">

@@ -31,7 +31,7 @@ const PricingPage = () => {
       <div className="mt-4">
         <Link
           href="/auth/login"
-          className="text-white bg-gradient-to-br from-pink-500 to-voilet-500 hover:scale-[1.02] shadow-md shadow-gray-300 transition-transform font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-3"
+          className="text-white  bg-gradient-to-br from-pink-500 to-voilet-500 hover:scale-[1.02] shadow-md shadow-gray-300 transition-transform font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-3"
         >
           <svg
             className="w-5 h-5 mr-2 -ml-1"
@@ -56,7 +56,7 @@ const PricingPage = () => {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Most fun I&quot;ve had with my clothes on
             </h3>
-            <p className="my-4 font-light">
+            <p className="my-4 font-medium">
               If you care for your time, I hands down would go with this
             </p>
           </blockquote>
@@ -68,20 +68,18 @@ const PricingPage = () => {
             />
             <div className="space-y-0.5 font-medium dark:text-white text-left">
               <div>Fergal Moran</div>
-              <div className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 World&quot;s most handsome man
               </div>
             </div>
           </figcaption>
         </figure>
         <figure className="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-tr-lg dark:bg-gray-800 dark:border-gray-700">
-          <blockquote className="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
+          <blockquote className="max-w-2xl mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Mmmmm.... human music
             </h3>
-            <p className="my-4 font-light">
-              I like it
-            </p>
+            <p className="my-4 font-medium">I like it</p>
           </blockquote>
           <figcaption className="flex items-center justify-center space-x-3">
             <img
@@ -91,7 +89,7 @@ const PricingPage = () => {
             />
             <div className="space-y-0.5 font-medium dark:text-white text-left">
               <div>Ed Dunlea</div>
-              <div className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Minister for moaning
               </div>
             </div>
@@ -102,7 +100,7 @@ const PricingPage = () => {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Lovely hurling
             </h3>
-            <p className="my-4 font-light">
+            <p className="my-4 font-medium ">
               Well, as lovely as hurling can be, which is to say not very.
             </p>
           </blockquote>
@@ -114,7 +112,7 @@ const PricingPage = () => {
             />
             <div className="space-y-0.5 font-medium dark:text-white text-left">
               <div>Adam Dunlea</div>
-              <div className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Hurler on the ditch
               </div>
             </div>
@@ -123,11 +121,10 @@ const PricingPage = () => {
         <figure className="flex flex-col items-center justify-center p-8 text-center bg-white border-gray-200 rounded-b-lg md:rounded-br-lg dark:bg-gray-800 dark:border-gray-700">
           <blockquote className="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Efficient Collaborating
+              D&quot;ya have the balla?
             </h3>
-            <p className="my-4 font-light">
-              You have many examples that can be used to create a fast prototype
-              for your team.
+            <p className="my-4 font-medium">
+              You fucking do, g&quot;wan and play it ya cunt!!
             </p>
           </blockquote>
           <figcaption className="flex items-center justify-center space-x-3">
@@ -137,9 +134,9 @@ const PricingPage = () => {
               alt="profile picture"
             />
             <div className="space-y-0.5 font-medium dark:text-white text-left">
-              <div>Joseph McFall</div>
-              <div className="text-sm font-light text-gray-500 dark:text-gray-400">
-                CTO at Google
+              <div>Gangrene McDandruff</div>
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Local crank
               </div>
             </div>
           </figcaption>
