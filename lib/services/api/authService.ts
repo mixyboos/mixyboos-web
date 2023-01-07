@@ -2,6 +2,7 @@ import https from 'https';
 import ApiClient from './apiClient';
 import { AuthTokenModel, UserModel } from '@lib/data/models';
 import { AxiosError } from 'axios';
+import logger from '@lib/logger';
 
 class AuthService extends ApiClient {
   noauthConfig = {
@@ -34,7 +35,6 @@ class AuthService extends ApiClient {
     user: string,
     password: string
   ): Promise<AuthTokenModel> => {
-    const logger = require('pino')();
     logger.info({
       getAuthToken: {
         user,
