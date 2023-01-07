@@ -2,8 +2,7 @@ import https from 'https';
 import ApiClient from './apiClient';
 import { AuthTokenModel, UserModel } from '@lib/data/models';
 import { AxiosError } from 'axios';
-import logger from '@lib/logger';
-
+import logger from '../../../logger/logger';
 class AuthService extends ApiClient {
   noauthConfig = {
     headers: {
