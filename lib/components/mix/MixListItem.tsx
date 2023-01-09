@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import { MixModel } from '../../data/models';
-import useAudioStore, { PlayState } from '../../services/audio/audioStore';
+import { MixModel } from '@lib/data/models';
+import useAudioStore, { PlayState } from '@lib/services/audio/audioStore';
 import { ActionButton } from '@lib/components/widgets';
 
 interface IMixListItemProps {

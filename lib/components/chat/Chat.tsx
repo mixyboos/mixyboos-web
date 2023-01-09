@@ -2,7 +2,6 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import { Loading } from '../widgets';
 
 interface IChatProps {
   showId: string;

@@ -1,7 +1,7 @@
 import React from 'react';
-import MixCreate from './MixCreate';
+import MixCreate from '@lib/components/mix/MixCreate';
 
-const UploadPage = () => {
+const MixCreatePage = () => {
   return (
     <div className="p-5 mt-6 overflow-y-auto">
       <MixCreate />
@@ -9,4 +9,4 @@ const UploadPage = () => {
   );
 };
 
-export default UploadPage;
+export default MixCreatePage;

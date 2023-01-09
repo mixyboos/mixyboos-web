@@ -5,7 +5,6 @@ import Link from 'next/link';
 import React from 'react';
 import { useUiStore, IUiState } from '@lib/services/ui';
 import { usePathname, useRouter } from 'next/navigation';
-import { Loading } from '../widgets';
 import { RiFindReplaceLine } from 'react-icons/ri';
 import {
   MdOutlineCloudUpload,
@@ -15,8 +14,9 @@ import {
 } from 'react-icons/md';
 import { GoBroadcast } from 'react-icons/go';
 import { DarkThemeToggle } from 'flowbite-react';
-import NotificationsWidget from '../widgets/notifications/NotificationsWidget';
-import logger from 'logger/logger';
+import NotificationsWidget from '@lib/components/widgets/notifications/NotificationsWidget';
+import logger from '@lib/logger';
+
 
 const TopNavbar = () => {
   const { data: session, status } = useSession();
@@ -81,7 +81,11 @@ const TopNavbar = () => {
     >
       {({ open }) => (
         <>
-          <nav className="fixed z-30 w-full bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
+          {/* sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors
+          duration-500 lg:z-50 lg:border-b lg:border-slate-900/10
+          dark:border-slate-50/[0.06] bg-white/95
+          supports-backdrop-blur:bg-white/60 dark:bg-transparent */}
+          <nav className="sticky z-30 w-full bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center justify-start">

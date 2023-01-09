@@ -2,16 +2,11 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@lib/*": [
-        "lib/*"
-      ]
+      "@lib/*": ["lib/*"],
+      "@pages/*": ["pages/*"]
     },
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -34,9 +29,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "logger/logger.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    ".next/types/**/*.ts",
+    "lib/logger/logger.js"
+  ],
+  "exclude": ["node_modules"]
 }

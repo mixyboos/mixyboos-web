@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import TokenPayload from '@lib/data/models/TokenPayload';
-import logger from 'logger/logger';
+import logger from '@lib/logger';
 
 const token = {
   access_token:

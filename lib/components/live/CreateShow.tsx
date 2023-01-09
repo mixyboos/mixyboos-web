@@ -1,8 +1,8 @@
 import { useSession } from 'next-auth/react';
 import React from 'react';
-import LiveService from '../../services/api/liveService';
+import LiveService from '@lib/services/api/liveService';
 import { Button } from '@lib/components/widgets';
-import { CopyInput, Input, TaggedInput } from '../forms';
+import { CopyInput, Input, TaggedInput } from '@lib/components/forms';
 import { ShowModel } from '@lib/data/models';
 
 interface ICreateShowProps {

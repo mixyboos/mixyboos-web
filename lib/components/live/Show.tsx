@@ -1,7 +1,7 @@
 import React from 'react';
 import ShowStatus from './status';
 import Image from 'next/image';
-import { ActionButton, TagLabel } from '../widgets';
+import { ActionButton, TagLabel } from '@lib/components/widgets';
 import { VideoPlayer } from '@lib/components/audio/players';
 import { Chat } from '@lib/components/chat';
 

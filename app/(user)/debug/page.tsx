@@ -2,6 +2,8 @@
 import React from 'react';
 import { useSession } from 'next-auth/react';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { Button } from '@lib/components/widgets';
+import logger from '@lib/logger';
 
 const DebugPage = () => {
   const { data: session, status } = useSession();
@@ -50,6 +52,19 @@ const DebugPage = () => {
       >
         Send SignalR message
       </button>
+      <div className="mt-4">
+        <Button
+          buttonStyle="primary"
+          onClick={(e) => {
+            console.log('Button', 'onClickButton', e);
+          }}
+        >
+          Primary
+        </Button>
+        <Button buttonStyle="secondary">Secondary</Button>
+        <Button buttonStyle="basic">Basic</Button>
+        <Button buttonStyle="delete">Delete</Button>
+      </div>
     </div>
   );
 };

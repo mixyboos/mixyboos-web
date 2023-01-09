@@ -1,8 +1,7 @@
-import https from 'https';
 import ApiClient from './apiClient';
 import { AuthTokenModel, UserModel } from '@lib/data/models';
 import { AxiosError } from 'axios';
-import logger from '../../../logger/logger';
+import logger from '@lib/logger';
 
 class AuthService extends ApiClient {
   getUser = async (): Promise<UserModel> => {

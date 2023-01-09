@@ -5,14 +5,15 @@ import React from 'react';
 
 interface IDetailsFormProps {
   mixId: string;
+  mixTitle: string;
 }
-const DetailsForm = ({ mixId }: IDetailsFormProps) => {
+const MixDetailsForm = ({ mixId, mixTitle }: IDetailsFormProps) => {
   const router = useRouter();
   const mixService = new MixService();
   return (
     <div>
       <Formik
-        initialValues={{ title: '', description: '' }}
+        initialValues={{ title: mixTitle, description: '' }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             mixService
@@ -31,12 +32,18 @@ const DetailsForm = ({ mixId }: IDetailsFormProps) => {
         {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
           <form onSubmit={handleSubmit}>
             <div className="m-5 text-2xl font-bold text-center text-gray-800 heading">
-              Mix Details
+              Upload a mix
             </div>
             <div className="flex flex-col w-10/12 max-w-2xl p-4 mx-auto text-gray-800 border border-gray-300 shadow-lg editor">
+              <label
+                htmlFor="title"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Mix title
+              </label>
               <input
                 autoFocus
-                className="p-2 mb-4 bg-gray-100 border border-gray-300 outline-none title"
+                className="bg-transparent border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5 dark:text-white"
                 id="title"
                 name="title"
                 spellCheck="false"
@@ -129,4 +136,4 @@ const DetailsForm = ({ mixId }: IDetailsFormProps) => {
     </div>
   );
 };
-export default DetailsForm;
+export default MixDetailsForm;

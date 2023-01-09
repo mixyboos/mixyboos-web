@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import LiveService from '../../services/api/liveService';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import ShowStatus from '@lib/components/live/status';
 

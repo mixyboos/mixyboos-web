@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface IProgressProps {
+interface IProcessingFormProps {
   title: string;
   percentage: number;
 }
-export const Progress = ({ title, percentage }: IProgressProps) => {
+export const ProcessingForm = ({ title, percentage }: IProcessingFormProps) => {
   return (
     <div className="relative pt-1">
       <div className="flex justify-between mb-1">
@@ -19,11 +19,9 @@ export const Progress = ({ title, percentage }: IProgressProps) => {
       <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
         <div
           className="bg-blue-600 h-2.5 rounded-full"
-          style={{ width: `${percentage}%` }}
+          style={{ width: '45%' }}
         />
       </div>
     </div>
   );
 };
-
-export default Progress;
