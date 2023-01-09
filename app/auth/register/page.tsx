@@ -20,7 +20,7 @@ const RegisterPage = () => {
         confirmPassword,
         displayName
       );
-      debugger;
+      ;
       if (result) {
         const response = await signIn('credentials', {
           userName,
@@ -35,7 +35,7 @@ const RegisterPage = () => {
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0">
+    <>
       <Link
         href="/"
         className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10"
@@ -240,7 +240,7 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -53,7 +53,7 @@ const AudioProvider: React.FC<IAudioProviderProps> = ({ children }) => {
         setPosition((audio.current?.currentTime || 0) as number);
       }, 100);
     }
-  }, [url]);
+  }, [url, setDuration, setPlayState, setPosition]);
 
   useEffect(() => {
     if (audio.current) {

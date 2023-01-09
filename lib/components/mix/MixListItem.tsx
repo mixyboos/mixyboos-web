@@ -38,10 +38,10 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div>
-                    {mix.user && mix.user.image && (
+                    {mix.user && mix.user.profileImage && (
                       <img
                         className="w-6 h-6 rounded-full border-g"
-                        src={mix.user.image}
+                        src={mix.user.profileImage}
                         alt="Mix"
                       />
                     )}

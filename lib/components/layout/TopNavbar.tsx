@@ -4,7 +4,6 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 import { useUiStore, IUiState } from '@lib/services/ui';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { usePathname, useRouter } from 'next/navigation';
 import { Loading } from '../widgets';
 import { RiFindReplaceLine } from 'react-icons/ri';
@@ -17,6 +16,7 @@ import {
 import { GoBroadcast } from 'react-icons/go';
 import { DarkThemeToggle } from 'flowbite-react';
 import NotificationsWidget from '../widgets/notifications/NotificationsWidget';
+import logger from 'logger/logger';
 
 const TopNavbar = () => {
   const { data: session, status } = useSession();
@@ -27,6 +27,11 @@ const TopNavbar = () => {
   const classNames = (...classes: any[]) => {
     return classes.filter(Boolean).join(' ');
   };
+
+  React.useEffect(() => {
+    logger.debug('TopNavbar', 'session', session);
+    console.log('TopNavbar', 'session', session);
+  }, [session]);
 
   const _getMenuItems = () => {
     return (
@@ -447,7 +452,7 @@ const TopNavbar = () => {
                                 <span className="sr-only">Open user menu</span>
                                 <img
                                   className="w-8 h-8 rounded-full"
-                                  src={session.user.image}
+                                  src={session.user.profileImage}
                                   alt="user photo"
                                 />
                               </Menu.Button>

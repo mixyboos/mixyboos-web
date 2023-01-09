@@ -1,9 +1,11 @@
 interface UserModel {
   id: string;
+  title: string;
   slug: string;
   displayName: string;
   userName: string;
-  image: string;
+  profileImage?: string;
+  headerImage?: string;
   accessToken: string;
 }
 

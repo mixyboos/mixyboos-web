@@ -4,13 +4,14 @@ import React from 'react';
 import { IUiState, useUiStore } from '@lib/services/ui';
 import useAudioStore, {
   IAudioState,
-  PlayState,
+  PlayState
 } from '@lib/services/audio/audioStore';
 import { Sidebar, TopNavbar } from '@lib/components/layout/index';
 import Footer from '@lib/components/layout/Footer';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 import Script from 'next/script';
+import { Loading } from '@lib/components/widgets';
 
 export interface IPageContainerProps {
   children: React.ReactNode;
@@ -27,26 +28,26 @@ const PageContainer: React.FC<IPageContainerProps> = ({ children }) => {
 
   React.useEffect(() => {
     setHasSidebar(status === 'authenticated');
-  }, [status]);
-  return (
+  }, [status, setHasSidebar]);
+  return status === 'loading' ? <Loading /> : (
     <React.Fragment>
       <Head>
         <title>Mixy|Boos</title>
       </Head>
       {hasHeader && <TopNavbar />}
-      <div className="flex pt-16 overflow-hidden bg-white">
+      <div className='flex pt-16 overflow-hidden bg-white'>
         {hasSidebar && <Sidebar />}
         <div
-          id="main-content"
+          id='main-content'
           className={`relative w-full h-full overflow-y-auto bg-gray-50 ${
             hasSidebar && 'lg:ml-72'
           }`}
         >
-          <main className="bg-gray-50">{children}</main>
+          <main className='bg-gray-50'>{children}</main>
         </div>
       </div>
       {playState !== PlayState.stopped && (
-        <footer className="py-5 text-center text-white bg-podnoms">
+        <footer className='py-5 text-center text-white bg-podnoms'>
           <Footer />
         </footer>
       )}

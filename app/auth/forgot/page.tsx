@@ -1,10 +1,10 @@
-'use client'
+'use client';
 import Link from 'next/link';
 import React from 'react';
 
 const ForgotPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0">
+    <>
       <Link
         href="/"
         className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10"
@@ -183,7 +183,7 @@ const ForgotPage = () => {
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

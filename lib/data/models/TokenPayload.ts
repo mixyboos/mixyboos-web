@@ -2,7 +2,7 @@ interface ITokenPayload {
   name: string;
   email: string;
   displayName: string;
-  image: string;
+  profileImage: string;
   slug: string;
 }
 

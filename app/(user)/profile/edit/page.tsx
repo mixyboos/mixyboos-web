@@ -1,7 +1,27 @@
+'use client';
+import { Loading } from '@lib/components/widgets';
+import { UserModel } from '@lib/data/models';
+import ProfileService from '@lib/services/api/profileService';
+import { useSession } from 'next-auth/react';
 import React from 'react';
 
 const ProfileEditPage = () => {
-  return (
+  const [profile, setProfile] = React.useState<UserModel>();
+  const { data: session, status } = useSession();
+
+  React.useEffect(() => {
+    const getProfile = async () => {
+      const result = await new ProfileService().getProfileBySlug(
+        session?.user.slug as string
+      );
+      setProfile(result);
+    };
+    if (session && session.user && session.user.slug) {
+      getProfile();
+    }
+  }, [session]);
+
+  return profile ? (
     <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-6">
       <div className="mb-4 col-span-full xl:mb-0">
         <nav
@@ -81,15 +101,15 @@ const ProfileEditPage = () => {
           <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
             <img
               className="mb-4 rounded-lg shadow-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0 shadow-gray-300"
-              src="https://demos.creative-tim.com/soft-ui-flowbite-pro/images/users/jese-leos-2x.png"
-              alt="Jese picture"
+              src={profile.profileImage}
+              alt={profile.displayName}
             />
             <div>
               <h3 className="mb-1 text-2xl font-bold text-gray-900">
-                Alec Thompson
+                {profile.displayName}
               </h3>
               <div className="mb-4 text-base font-normal text-gray-500">
-                CEO / Co-Founder
+                {profile.title}
               </div>
               <a
                 href="#"
@@ -846,7 +866,8 @@ const ProfileEditPage = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <Loading />
   );
 };
-
 export default ProfileEditPage;

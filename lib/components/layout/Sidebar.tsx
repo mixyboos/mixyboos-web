@@ -24,7 +24,7 @@ const Sidebar = () => {
               <div className="flex items-center">
                 <div className="inline-flex items-center justify-center flex-shrink-0 w-12 h-12 text-white rounded-lg bg-gradient-to-br ">
                   <Avatar
-                    img={session?.user.image}
+                    img={session?.user.profileImage}
                     bordered={true}
                     rounded={true}
                     size="md"
@@ -35,7 +35,7 @@ const Sidebar = () => {
                     {session?.user.displayName}
                   </span>
                   <h3 className="text-base font-normal text-gray-500">
-                    <Link href={session?.user.slug as string}>
+                    <Link href={`/${session?.user.slug}` as string}>
                       View Profile
                     </Link>
                   </h3>

@@ -54,7 +54,7 @@ const PricingPage = () => {
         <figure className="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:border-r dark:bg-gray-800 dark:border-gray-700">
           <blockquote className="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Most fun I&quot;ve had with my clothes on
+              Most fun I&#39;ve had with my clothes on
             </h3>
             <p className="my-4 font-medium">
               If you care for your time, I hands down would go with this
@@ -69,7 +69,7 @@ const PricingPage = () => {
             <div className="space-y-0.5 font-medium dark:text-white text-left">
               <div>Fergal Moran</div>
               <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                World&quot;s most handsome man
+                World&#39;s most handsome man
               </div>
             </div>
           </figcaption>
@@ -121,10 +121,10 @@ const PricingPage = () => {
         <figure className="flex flex-col items-center justify-center p-8 text-center bg-white border-gray-200 rounded-b-lg md:rounded-br-lg dark:bg-gray-800 dark:border-gray-700">
           <blockquote className="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              D&quot;ya have the balla?
+              D&#39;ya have the balla?
             </h3>
             <p className="my-4 font-medium">
-              You fucking do, g&quot;wan and play it ya cunt!!
+              You fucking do, g&#39;wan and play it ya cunt!!
             </p>
           </blockquote>
           <figcaption className="flex items-center justify-center space-x-3">

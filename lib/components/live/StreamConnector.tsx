@@ -39,7 +39,7 @@ const StreamConnector = ({
       console.log('StreamConnector', 'Build the new connection');
       setConnection(newConnection);
     }
-  }, [session]);
+  }, [session, status]);
 
   React.useEffect(() => {
     if (connection) {
@@ -60,7 +60,7 @@ const StreamConnector = ({
         })
         .catch((e) => console.log('Connection failed: ', e));
     }
-  }, [connection]);
+  }, [connection, updateStreamStatus]);
 
   return (
     <>

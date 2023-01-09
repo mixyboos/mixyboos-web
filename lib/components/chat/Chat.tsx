@@ -66,7 +66,7 @@ const Chat = ({ showId }: IChatProps) => {
         });
       });
     }
-  }, [connection]);
+  }, [connection, messages, session, showId]);
 
   const sendMessage = () => {
     if (!session || !connection) return;
