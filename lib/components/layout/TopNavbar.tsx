@@ -16,7 +16,7 @@ import { GoBroadcast } from 'react-icons/go';
 import { DarkThemeToggle } from 'flowbite-react';
 import NotificationsWidget from '@lib/components/widgets/notifications/NotificationsWidget';
 import logger from '@lib/logger';
-
+import { Loading, NavLink } from '../widgets';
 
 const TopNavbar = () => {
   const { data: session, status } = useSession();
@@ -27,11 +27,6 @@ const TopNavbar = () => {
   const classNames = (...classes: any[]) => {
     return classes.filter(Boolean).join(' ');
   };
-
-  React.useEffect(() => {
-    logger.debug('TopNavbar', 'session', session);
-    console.log('TopNavbar', 'session', session);
-  }, [session]);
 
   const _getMenuItems = () => {
     return (
@@ -57,17 +52,6 @@ const TopNavbar = () => {
           )}
         >
           Upload
-        </Link>
-        <Link
-          href="/live"
-          className={classNames(
-            pathname === `${session?.user.slug}/`
-              ? 'bg-gray-900 text-white'
-              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-            'px-3 py-2 rounded-md text-sm font-medium'
-          )}
-        >
-          Go Live!
         </Link>
       </React.Fragment>
     );
@@ -221,27 +205,27 @@ const TopNavbar = () => {
                   {session ? (
                     <>
                       <div className="flex flex-row mr-4 space-x-2">
-                        <Link
-                          href="discover"
-                          className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-gray-800 uppercase border border-gray-200 hover:bg-gray-200 hover:opacity-75"
-                        >
-                          <RiFindReplaceLine className="text-lg text-gray-800 opacity-75 leading-lg" />
-                          <span className="ml-2 text-md">Discover</span>
-                        </Link>
-                        <Link
+                        <NavLink
+                          title="Discover"
+                          href="/discover"
+                          icon={
+                            <RiFindReplaceLine className="text-lg text-gray-800 opacity-75 leading-lg" />
+                          }
+                        />
+                        <NavLink
+                          title="Go Live"
                           href="/live"
-                          className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-gray-800 uppercase border border-gray-200 hover:bg-gray-200 hover:opacity-75"
-                        >
-                          <GoBroadcast className="text-lg text-gray-800 opacity-75 leading-lg" />
-                          <span className="ml-2">Go Live</span>
-                        </Link>
-                        <Link
+                          icon={
+                            <GoBroadcast className="text-lg text-gray-800 opacity-75 leading-lg" />
+                          }
+                        />
+                        <NavLink
+                          title="Upload"
                           href="/mix/create"
-                          className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-gray-800 uppercase border border-gray-200 hover:bg-gray-200 hover:opacity-75"
-                        >
-                          <MdOutlineCloudUpload className="text-lg text-gray-800 opacity-75 leading-lg" />
-                          <span className="ml-2">Upload</span>
-                        </Link>
+                          icon={
+                            <MdOutlineCloudUpload className="text-lg text-gray-800 opacity-75 leading-lg" />
+                          }
+                        />
                       </div>
                       <DarkThemeToggle />
                       <button

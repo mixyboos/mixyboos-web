@@ -1,5 +1,4 @@
-import logger from '@lib/logger';
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
 const ButtonStyle = {
   primary:

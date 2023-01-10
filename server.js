@@ -5,7 +5,8 @@ console.log('server', 'env', process.env.NODE_ENV);
 const next = require('next');
 const port = 3000;
 const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev, dir: __dirname });
+const hostname = 'mixyboos.dev.fergl.ie';
+const app = next({ dev, hostname, port, dir: __dirname });
 const handle = app.getRequestHandler();
 
 const options = {

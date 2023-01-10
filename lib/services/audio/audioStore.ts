@@ -1,3 +1,4 @@
+import { MixModel } from '@lib/data/models';
 import create from 'zustand';
 
 enum PlayState {
@@ -7,32 +8,39 @@ enum PlayState {
 }
 
 interface IAudioState {
-  id: string;
-  url: string;
+  nowPlaying?: MixModel;
   position: number;
   seekPosition: number;
   duration: number;
   playState: PlayState;
-  setNowPlaying: (id: string, url: string) => void;
+  currentVolume: number;
+  muted: boolean;
+  setNowPlaying: (mix: MixModel) => void;
   setPosition: (position: number) => void;
   setDuration: (duration: number) => void;
   setSeekPosition: (duration: number) => void;
   setPlayState: (playState: PlayState) => void;
   togglePlayState: () => void;
+  setVolume: (volume: number) => void;
+  setMuted: (muted: boolean) => void;
+  toggleMuted: () => void;
 }
 
 const useAudioStore = create<IAudioState>()((set, get) => ({
   id: '',
   url: '',
+  nowPlaying: undefined,
   position: -1,
   seekPosition: -1,
-  duration: -1,
+  duration: 0,
   playState: PlayState.stopped,
+  currentVolume: 50,
+  muted: false,
 
   setPosition: (position: number) => set((state) => ({ position })),
   setSeekPosition: (seekPosition: number) => set((state) => ({ seekPosition })),
   setDuration: (duration: number) => set((state) => ({ duration })),
-  setNowPlaying: (id: string, url: string) => set((state) => ({ id, url })),
+  setNowPlaying: (mix: MixModel) => set((state) => ({ nowPlaying: mix })),
   setPlayState: (playState: PlayState) => {
     if (get().playState !== playState) {
       set({ playState });
@@ -47,6 +55,9 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
             : PlayState.playing,
       };
     }),
+  setVolume: (volume: number) => set({ currentVolume: volume }),
+  setMuted: (muted: boolean) => set({ muted }),
+  toggleMuted: () => set((state) => ({ muted: !state.muted })),
 }));
 
 export type { IAudioState };

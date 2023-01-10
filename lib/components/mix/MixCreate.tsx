@@ -17,15 +17,18 @@ enum CreateState {
 
 const MixCreate = () => {
   const [createState, setCreateState] = useState(CreateState.new);
-  const [errors, setErrors] = useState('This is an error');
+  const [errors, setErrors] = useState<string[]>([]);
   const [fileName, setFilename] = useState('');
   const [percentageUploaded, setPercentageUploaded] = useState(0);
   const [mixId] = useState(uuidv4());
 
   return (
     <React.Fragment>
-      <div className="flex flex-col items-center justify-center w-full mx-auto">
-        {errors && (
+      <div className="flex flex-col items-center justify-center w-full mx-auto space-y-4">
+        <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
+          Let&apos;s create a mix
+        </h1>
+        {errors.length !== 0 && (
           <div className="flex w-full max-w-lg mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div className="flex items-center justify-center w-12 bg-red-500">
               <MdOutlineErrorOutline className="w-6 h-6 text-white fill-current" />
@@ -55,7 +58,7 @@ const MixCreate = () => {
             mixId={mixId}
             onError={(e) => {
               setCreateState(CreateState.error);
-              setErrors(e);
+              setErrors([...errors, e as string]);
             }}
             onUploadComplete={() => setCreateState(CreateState.processing)}
             onUploadStart={(fileName) => {

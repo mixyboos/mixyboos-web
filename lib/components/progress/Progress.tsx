@@ -6,7 +6,7 @@ interface IProgressProps {
 }
 export const Progress = ({ title, percentage }: IProgressProps) => {
   return (
-    <div className="relative pt-1">
+    <div className="flex flex-col w-1/2 p-4">
       <div className="flex justify-between mb-1">
         <span className="text-base font-medium text-fuchsia-700 dark:text-white">
           {title}

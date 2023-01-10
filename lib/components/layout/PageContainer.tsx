@@ -6,11 +6,10 @@ import useAudioStore, {
   IAudioState,
   PlayState,
 } from '@lib/services/audio/audioStore';
-import { Sidebar, TopNavbar } from '@lib/components/layout/index';
+import { TopNavbar } from '@lib/components/layout/index';
 import Footer from '@lib/components/layout/Footer';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
-import Script from 'next/script';
 import { Loading } from '@lib/components/widgets';
 
 export interface IPageContainerProps extends PropsWithChildren<any> {}
@@ -34,15 +33,21 @@ const PageContainer = ({ children }: IPageContainerProps) => {
       <Head>
         <title>Mixy|Boos</title>
       </Head>
-      {hasHeader && <TopNavbar />}
-      <main className="px-4 mx-auto overflow-hidden bg-white max-w-8xl sm:px-6 md:px-8">
-        {children}
-      </main>
-      {/* {playState !== PlayState.stopped && (
-        <footer className="py-5 text-center text-white bg-podnoms">
-          <Footer />
-        </footer>
-      )} */}
+      <div className="flex flex-col h-screen">
+        <div>{hasHeader && <TopNavbar />}</div>
+        <div className="flex-grow">
+          <main className="max-w-6xl px-4 mx-auto overflow-hidden bg-white sm:px-6 md:px-8">
+            {children}
+          </main>
+        </div>
+        <div>
+          {playState !== PlayState.stopped && (
+            <footer className="text-center text-white">
+              <Footer />
+            </footer>
+          )}
+        </div>
+      </div>
     </React.Fragment>
   );
 };

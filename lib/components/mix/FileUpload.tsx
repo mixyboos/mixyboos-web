@@ -67,9 +67,7 @@ const FileUpload = ({
                 className="w-8 h-8"
                 fill="currentColor"
               />
-              <span className="mt-2 text-base leading-normal">
-                Select a file
-              </span>
+              <span className="mt-2 text-base leading-normal">Browse</span>
               <input
                 type="file"
                 className="hidden"

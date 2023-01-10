@@ -108,8 +108,8 @@ const CreateShow = ({ startShow }: ICreateShowProps) => {
         <div className="flex buttons">
           <span className="inline-flex ml-auto rounded-md shadow-sm">
             <Button
-              size="md"
-              style="primary"
+              buttonSize="md"
+              buttonStyle="primary"
               type="button"
               onClick={() =>
                 startShow({

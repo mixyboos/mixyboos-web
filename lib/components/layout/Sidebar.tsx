@@ -10,7 +10,7 @@ const Sidebar = () => {
   const { data: session, status } = useSession();
   return session && session.user && session.user.slug ? (
     <aside
-      className="fixed top-0 left-0 z-20 flex-col flex-shrink-0 h-full pt-16 duration-200 w-72 lg:flex transition-width"
+      className="flex-col flex-shrink-0 h-full duration-200 w-72 lg:flex transition-width"
       aria-label="Sidebar"
     >
       <div className="relative flex flex-col flex-1 min-h-0 pt-0 bg-gray-50">
@@ -20,7 +20,7 @@ const Sidebar = () => {
             id="sidebar-items"
           >
             <div className="p-4 bg-white shadow-lg shadow-gray-200 rounded-2xl">
-              <div className="flex items-center">
+              <div className="flex items-center w-full ">
                 <div className="inline-flex items-center justify-center flex-shrink-0 w-12 h-12 text-white rounded-lg bg-gradient-to-br ">
                   <Avatar
                     img={session?.user.profileImage}
@@ -30,10 +30,10 @@ const Sidebar = () => {
                   />
                 </div>
                 <div className="flex-shrink-0 ml-3">
-                  <span className="text-xl font-bold leading-none text-gray-900">
+                  <span className="block mr-4 overflow-hidden text-xl font-bold leading-none text-gray-900 truncate text-clip w-52">
                     {session?.user.displayName}
                   </span>
-                  <h3 className="text-base font-normal text-gray-500">
+                  <h3 className="text-base font-normal text-gray-500 ">
                     <Link href={`/${session?.user.slug}` as string}>
                       View Profile
                     </Link>

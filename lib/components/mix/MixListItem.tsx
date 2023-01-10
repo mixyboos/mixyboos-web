@@ -3,6 +3,10 @@ import React from 'react';
 import { MixModel } from '@lib/data/models';
 import useAudioStore, { PlayState } from '@lib/services/audio/audioStore';
 import { ActionButton } from '@lib/components/widgets';
+import {
+  MdOutlinePauseCircleOutline,
+  MdOutlinePlayCircleOutline,
+} from 'react-icons/md';
 
 interface IMixListItemProps {
   mix: MixModel;
@@ -10,15 +14,15 @@ interface IMixListItemProps {
 
 const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
   const setNowPlaying = useAudioStore((state) => state.setNowPlaying);
-  const nowPlayingId = useAudioStore((state) => state.id);
+  const nowPlaying = useAudioStore((state) => state.nowPlaying);
   const togglePlayState = useAudioStore((state) => state.togglePlayState);
   const playState = useAudioStore((state) => state.playState);
   const loading = false;
 
   const _playClick = () => {
-    if (nowPlayingId !== mix.id && mix.audioUrl) {
-      setNowPlaying(mix.id, mix.audioUrl);
-    } else if (nowPlayingId === mix.id) {
+    if (nowPlaying?.id !== mix.id && mix.audioUrl) {
+      setNowPlaying(mix);
+    } else if (nowPlaying?.id === mix.id) {
       togglePlayState();
     }
   };
@@ -54,6 +58,8 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
                 <div className="text-gray-400">1 hour ago</div>
               </div>
             </div>
+            <h5>Now Playing Id{nowPlaying?.id}</h5>
+            <h5>Mix Id: {mix.id}</h5>
             <div className="mt-2">
               <div className="flex">
                 <div
@@ -62,42 +68,18 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
                     _playClick();
                   }}
                 >
-                  <svg
+                  <div
                     className={`cursor-pointer ${
                       loading ? 'text-red-100' : 'text-purple-400'
                     } hover:text-purple-700 transition duration-200`}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
                   >
-                    {nowPlayingId === mix.id &&
+                    {nowPlaying?.id === mix.id &&
                     playState === PlayState.playing ? (
-                      <>
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1"
-                          d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </>
+                      <MdOutlinePauseCircleOutline className="w-full h-full" />
                     ) : (
-                      <>
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1"
-                          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1"
-                          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </>
+                      <MdOutlinePlayCircleOutline className="w-full h-full" />
                     )}
-                  </svg>
+                  </div>
                 </div>
                 <div className="mt-2">
                   <a
