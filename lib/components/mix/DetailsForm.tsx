@@ -1,15 +1,21 @@
 import MixService from '@lib/services/api/mixService';
 import { Formik } from 'formik';
-import { useRouter } from 'next/navigation';
+
 import React from 'react';
 import { Button } from '@lib/components/widgets';
+import { MixModel } from '@lib/data/models';
 
 interface IDetailsFormProps {
   mixId: string;
   mixTitle: string;
+  onMixCreated: (mix: MixModel) => void;
 }
-const MixDetailsForm = ({ mixId, mixTitle }: IDetailsFormProps) => {
-  const router = useRouter();
+const MixDetailsForm = ({
+  mixId,
+  mixTitle,
+  onMixCreated,
+}: IDetailsFormProps) => {
+
   const mixService = new MixService();
   return (
     <Formik
@@ -21,10 +27,11 @@ const MixDetailsForm = ({ mixId, mixTitle }: IDetailsFormProps) => {
               id: mixId,
               title: values.title,
               description: values.description,
+              isProcessed: false,
             })
             .then((r) => {
               setSubmitting(false);
-              router.push('/');
+              onMixCreated(r);
             });
         }, 400);
       }}

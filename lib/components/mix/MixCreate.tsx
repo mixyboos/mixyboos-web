@@ -6,21 +6,36 @@ import { v4 as uuidv4 } from 'uuid';
 import MixDetailsForm from './DetailsForm';
 import FileUpload from './FileUpload';
 import { MdOutlineErrorOutline } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 enum CreateState {
+  new,
+  editing,
+  done,
+  error,
+}
+enum UploadState {
   new,
   uploading,
   processing,
-  editing,
   done,
   error,
 }
 
 const MixCreate = () => {
   const [createState, setCreateState] = useState(CreateState.new);
+  const [uploadState, setUploadState] = useState(UploadState.new);
+
   const [errors, setErrors] = useState<string[]>([]);
   const [fileName, setFilename] = useState('');
   const [percentageUploaded, setPercentageUploaded] = useState(0);
   const [mixId] = useState(uuidv4());
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (uploadState === UploadState.done && createState === CreateState.done) {
+      router.push('/');
+    }
+  }, [uploadState, createState]);
 
   return (
     <React.Fragment>
@@ -45,37 +60,39 @@ const MixCreate = () => {
             </div>
           </div>
         )}
-        {createState === CreateState.uploading && (
+        {uploadState === UploadState.uploading && (
           <Progress
             percentage={percentageUploaded}
             title="Uploading audio"
           />
         )}
-        {createState === CreateState.processing ||
-          createState === CreateState.new}
-        {createState === CreateState.new ? (
+        {uploadState === UploadState.new && (
           <FileUpload
             mixId={mixId}
             onError={(e) => {
               setCreateState(CreateState.error);
               setErrors([...errors, e as string]);
             }}
-            onUploadComplete={() => setCreateState(CreateState.processing)}
+            onUploadComplete={() => {
+              setUploadState(UploadState.done);
+            }}
             onUploadStart={(fileName) => {
               setFilename(fileName);
-              setCreateState(CreateState.uploading);
+              setUploadState(UploadState.uploading);
             }}
             onUploadProgress={(total, loaded) =>
               setPercentageUploaded(Math.round((loaded * 100) / total))
             }
           />
-        ) : (
-          createState !== CreateState.error && (
-            <MixDetailsForm
-              mixId={mixId}
-              mixTitle={fileName}
-            />
-          )
+        )}
+        {createState === CreateState.new && uploadState !== UploadState.new && (
+          <MixDetailsForm
+            mixId={mixId}
+            mixTitle={fileName}
+            onMixCreated={(mix) => {
+              setCreateState(mix ? CreateState.done : CreateState.error);
+            }}
+          />
         )}
       </div>
     </React.Fragment>

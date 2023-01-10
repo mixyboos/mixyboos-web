@@ -8,6 +8,8 @@ export interface IAudioProviderProps extends PropsWithChildren {}
 
 const AudioProvider = ({ children }: IAudioProviderProps) => {
   const audioRef = React.useRef<HTMLAudioElement>(null);
+  const [player, setPlayer] = React.useState<dashjs.MediaPlayerClass>();
+
   const timerRef = React.useRef<NodeJS.Timer>();
   const nowPlaying = useAudioStore((state) => state.nowPlaying);
 
@@ -19,10 +21,15 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   const playState = useAudioStore((state) => state.playState);
 
   React.useEffect(() => {
-    if (!nowPlaying?.audioUrl) return;
+    if (audioRef && !player) {
+      setPlayer(dashjs.MediaPlayer().create());
+    }
+  }, [player, audioRef]);
+
+  React.useEffect(() => {
+    if (!nowPlaying?.audioUrl || !player) return;
     const audio = audioRef.current;
     if (audio) {
-      const player = dashjs.MediaPlayer().create();
       player.initialize(audio, nowPlaying?.audioUrl, true);
 
       player.on(dashjs.MediaPlayer.events.PLAYBACK_STARTED, (e) => {
@@ -33,28 +40,21 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
     }
   }, [nowPlaying]);
   React.useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
     if (playState === PlayState.paused) {
-      audio.pause();
+      player?.pause();
     } else if (playState === PlayState.playing) {
-      audio.play();
+      player?.play();
     }
   }, [playState]);
 
   React.useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.currentTime = seekPosition;
+    player?.seek(seekPosition);
   }, [seekPosition]);
 
   React.useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio) {
-      audio.volume = currentVolume / 50;
-    }
+    player?.setVolume(currentVolume / 50);
   }, [currentVolume]);
+
   const _startProgressTimer = (player: dashjs.MediaPlayerClass) => {
     timerRef.current = setInterval(() => {
       setPosition(player.time());

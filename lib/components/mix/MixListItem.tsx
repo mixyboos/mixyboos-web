@@ -7,12 +7,13 @@ import {
   MdOutlinePauseCircleOutline,
   MdOutlinePlayCircleOutline,
 } from 'react-icons/md';
+import MixProcessingStatus from './MixProcessingStatus';
 
 interface IMixListItemProps {
   mix: MixModel;
 }
 
-const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
+const MixListItem = ({ mix }: IMixListItemProps) => {
   const setNowPlaying = useAudioStore((state) => state.setNowPlaying);
   const nowPlaying = useAudioStore((state) => state.nowPlaying);
   const togglePlayState = useAudioStore((state) => state.togglePlayState);
@@ -60,31 +61,46 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
             </div>
             <div className="mt-2">
               <div className="flex">
-                <div
-                  className="w-16"
-                  onClick={() => {
-                    _playClick();
-                  }}
-                >
+                {mix.isProcessed && (
                   <div
-                    className={`cursor-pointer ${
-                      loading ? 'text-red-100' : 'text-purple-400'
-                    } hover:text-purple-700 transition duration-200`}
+                    className="w-16"
+                    onClick={() => {
+                      _playClick();
+                    }}
                   >
-                    {nowPlaying?.id === mix.id &&
-                    playState === PlayState.playing ? (
-                      <MdOutlinePauseCircleOutline className="w-full h-full" />
-                    ) : (
-                      <MdOutlinePlayCircleOutline className="w-full h-full" />
-                    )}
+                    <div
+                      className={`cursor-pointer ${
+                        loading ? 'text-red-100' : 'text-purple-400'
+                      } hover:text-purple-700 transition duration-200`}
+                    >
+                      {nowPlaying?.id === mix.id &&
+                      playState === PlayState.playing ? (
+                        <MdOutlinePauseCircleOutline className="w-full h-full" />
+                      ) : (
+                        <MdOutlinePlayCircleOutline className="w-full h-full" />
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="mt-2">
                   <a
                     href="#"
                     className="block text-lg font-medium leading-tight text-gray-900 hover:underline"
                   >
-                    {mix.title}
+                    <div className="flex flex-row space-x-1">
+                      <div>{mix.title}</div>
+                      <div>
+                        {!mix.isProcessed && (
+                          <MixProcessingStatus
+                            mix={mix}
+                            title="Processing mix"
+                            onProcessingFinished={() => {
+                              mix.isProcessed = true;
+                            }}
+                          />
+                        )}
+                      </div>
+                    </div>
                   </a>
                   <p className="mx-1 text-sm text-gray-500 leading-2 line-clamp-1">
                     by {mix.user?.displayName}
