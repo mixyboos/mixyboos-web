@@ -1,18 +1,18 @@
 'use client';
 
 import { SessionProvider } from 'next-auth/react';
-import { AudioProvider } from '@lib/services/audio';
 import { Flowbite } from 'flowbite-react';
 import { AnalyticsWrapper } from '@lib/components/analytics';
+import { AudioProvider } from '@lib/services/audio';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <SessionProvider>
       <Flowbite>
-        {/* <AudioProvider> */}
+        <AudioProvider>
           {children}
           <AnalyticsWrapper />
-        {/* </AudioProvider> */}
+        </AudioProvider>
       </Flowbite>
     </SessionProvider>
   );
