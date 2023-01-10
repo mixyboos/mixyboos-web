@@ -58,8 +58,6 @@ const MixListItem: React.FC<IMixListItemProps> = ({ mix }) => {
                 <div className="text-gray-400">1 hour ago</div>
               </div>
             </div>
-            <h5>Now Playing Id{nowPlaying?.id}</h5>
-            <h5>Mix Id: {mix.id}</h5>
             <div className="mt-2">
               <div className="flex">
                 <div

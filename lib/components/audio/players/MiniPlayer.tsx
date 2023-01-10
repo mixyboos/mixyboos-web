@@ -93,6 +93,7 @@ const MiniPlayer = () => {
           <div
             className="h-3 bg-indigo-100 rounded-full"
             onClick={_handleTimeClick}
+            ref={seekBarElem}
           >
             <div
               className="relative h-3 bg-indigo-600 rounded-l-full rounded-r-none"
