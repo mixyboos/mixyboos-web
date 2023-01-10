@@ -9,10 +9,10 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <SessionProvider>
       <Flowbite>
-        <AudioProvider>
+        {/* <AudioProvider> */}
           {children}
           <AnalyticsWrapper />
-        </AudioProvider>
+        {/* </AudioProvider> */}
       </Flowbite>
     </SessionProvider>
   );

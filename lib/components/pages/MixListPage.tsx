@@ -9,7 +9,7 @@ import { MdOutlineCloudUpload } from 'react-icons/md';
 const MixListPage = () => {
   const { data: session, status } = useSession();
   const [mixes, setMixes] = React.useState<MixModel[]>([]);
-const [didMixLookup, setDidMixLookup]= React.useState(false);
+  const [didMixLookup, setDidMixLookup] = React.useState(false);
   React.useEffect(() => {
     const getMixes = async () => {
       const mixes = await new MixService().getMixesFeed();
@@ -29,8 +29,8 @@ const [didMixLookup, setDidMixLookup]= React.useState(false);
           </h5>
         </a>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Why don&#39;t you start following some people? Or even better,
-          upload your own music?
+          Why don&#39;t you start following some people? Or even better, upload
+          your own music?
         </p>
         <Link
           href="/mix/create"

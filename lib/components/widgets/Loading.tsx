@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ILoadingProps {
-  message: string;
+  message?: string;
 }
 const Loading = ({ message = '' }: ILoadingProps) => {
   return (

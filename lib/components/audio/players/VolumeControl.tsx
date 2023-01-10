@@ -1,3 +1,4 @@
+'use client';
 import { Popover } from '@headlessui/react';
 import React from 'react';
 import { MdVolumeOff, MdVolumeUp } from 'react-icons/md';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loading } from '@lib/components/widgets';
+import { FollowButton, Loading } from '@lib/components/widgets';
 import { UserModel } from '@lib/data/models';
 import ProfileService from '@lib/services/api/profileService';
 import { notFound } from 'next/navigation';
@@ -15,13 +15,7 @@ interface IUserProfilePageParams {
 async function fetchUser(slug: string): Promise<UserModel | undefined> {
   const session = await unstable_getServerSession(authOptions);
   if (!session) return undefined;
-  // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profile?slug=${slug}`, {
-  //   headers: {
-  //     Authorization: `Bearer ${session.user.accessToken}`
-  //   }
-  // });
-  // if (!res.ok) return undefined;
-  // return res.json();
+
   const profileService = new ProfileService(session.user.accessToken);
   return profileService.getProfileBySlug(slug);
 }
@@ -66,7 +60,7 @@ const UserProfilePage = async ({ params }: IUserProfilePageParams) => {
       </section>
       <section className="relative py-8 bg-slate-200">
         <div className="container px-4 mx-auto">
-          <div className="relative flex flex-col w-full min-w-0 mb-6 -mt-64 break-words bg-white rounded-lg shadow-xl">
+          <div className="relative flex flex-col w-full min-w-0 mb-6 -mt-64 break-words rounded-lg shadow-xl">
             <div className="px-6">
               <div className="flex flex-wrap justify-center">
                 <div className="flex justify-center w-full px-4 lg:w-3/12 lg:order-2">
@@ -80,12 +74,7 @@ const UserProfilePage = async ({ params }: IUserProfilePageParams) => {
                 </div>
                 <div className="w-full px-4 lg:w-4/12 lg:order-3 lg:text-right lg:self-center">
                   <div className="px-3 py-6 mt-32 sm:mt-0">
-                    <button
-                      className="px-4 py-2 mb-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-pink-500 rounded shadow outline-none active:bg-pink-600 hover:shadow-md focus:outline-none sm:mr-2"
-                      type="button"
-                    >
-                      Follow
-                    </button>
+                    <FollowButton />
                     <button
                       className="px-4 py-2 mb-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-pink-500 rounded shadow outline-none active:bg-pink-600 hover:shadow-md focus:outline-none sm:mr-2"
                       type="button"

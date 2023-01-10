@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+var relativeTime = require('dayjs/plugin/relativeTime');
+
 const secondsToReadableString = (seconds: number) =>
   seconds <= 0 || isNaN(seconds)
     ? '00:00'
@@ -7,5 +10,8 @@ const secondsToReadableString = (seconds: number) =>
 // seconds < 3600
 //     ? new Date(seconds * 1000).toISOString().substr(14, 5)
 //     : new Date(seconds * 1000).toISOString().substr(11, 8);
-
-export { secondsToReadableString };
+const humanizeDate = (date: string) => {
+  dayjs.extend(relativeTime);
+  return dayjs(date).fromNow();
+};
+export { humanizeDate, secondsToReadableString };

@@ -36,7 +36,7 @@ const PageContainer = ({ children }: IPageContainerProps) => {
       <div className="flex flex-col h-screen overflow-hidden">
         <div>{hasHeader && <TopNavbar />}</div>
         <div className="flex-grow overflow-y-scroll">
-          <main className="max-w-6xl px-4 mx-auto overflow-hidden bg-white sm:px-6 md:px-8">
+          <main className="max-w-6xl px-4 mx-auto overflow-hidden sm:px-6 md:px-8">
             {children}
           </main>
         </div>

@@ -8,9 +8,15 @@ class ProfileService extends ApiClient {
       if (results.status === 200) {
         return results.data;
       }
-    } catch {
-    }
+    } catch {}
     return undefined;
+  };
+
+  toggleFollow = async (slug: string): Promise<boolean> => {
+    const result = await this._client.post(
+      `/profile/togglefollow?slug=${slug}`
+    );
+    return result.status === 200;
   };
 }
 

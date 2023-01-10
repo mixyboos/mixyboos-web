@@ -1,3 +1,4 @@
+import FollowButton from './FollowButton';
 import ActionButton from './ActionButton';
 import MiniActionButton from './MiniActionButton';
 import Button from './Button';
@@ -7,6 +8,7 @@ import NavLink from './NavLink';
 import NotificationsWidget from './notifications/NotificationsWidget';
 
 export {
+  FollowButton,
   ActionButton,
   MiniActionButton,
   Button,

@@ -1,3 +1,4 @@
+import { UserModel } from '@lib/data/models';
 import NextAuth from 'next-auth';
 
 declare module 'next-auth' {
@@ -16,5 +17,6 @@ declare module 'next-auth' {
     profileImage: string;
     name: string;
     slug: string;
+    profile: UserModel;
   }
 }

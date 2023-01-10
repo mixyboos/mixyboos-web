@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MixModel } from '@lib/data/models';
-import MixListItem from './MixListItem';
+import { MainPlayer } from '@lib/components/audio/players';
 
 interface IMixListProps {
   mixes: MixModel[];
@@ -14,7 +14,7 @@ const MixList = ({ mixes }: IMixListProps) => {
       ) : (
         <div>
           {mixes?.map((r) => (
-            <MixListItem
+            <MainPlayer
               key={r.id}
               mix={r}
             />

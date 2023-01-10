@@ -2,18 +2,19 @@
 import React from 'react';
 import { MixModel } from '@lib/data/models';
 import useAudioStore, { PlayState } from '@lib/services/audio/audioStore';
-import { ActionButton } from '@lib/components/widgets';
+import { ActionButton, Loading } from '@lib/components/widgets';
 import {
   MdOutlinePauseCircleOutline,
   MdOutlinePlayCircleOutline,
 } from 'react-icons/md';
-import MixProcessingStatus from './MixProcessingStatus';
+import Link from 'next/link';
+import MixProcessingStatus from '@lib/components/mix/MixProcessingStatus';
 
-interface IMixListItemProps {
+interface IMainPlayerProps {
   mix: MixModel;
 }
 
-const MixListItem = ({ mix }: IMixListItemProps) => {
+const MainPlayer = ({ mix }: IMainPlayerProps) => {
   const setNowPlaying = useAudioStore((state) => state.setNowPlaying);
   const nowPlaying = useAudioStore((state) => state.nowPlaying);
   const togglePlayState = useAudioStore((state) => state.togglePlayState);
@@ -27,39 +28,44 @@ const MixListItem = ({ mix }: IMixListItemProps) => {
       togglePlayState();
     }
   };
-  return (
-    <div className="w-full p-1 mx-auto mb-3 overflow-hidden bg-white rounded-sm shadow-md">
+  return mix ? (
+    <div
+      id="player-body"
+      className="p-1 mx-auto mb-3 overflow-hidden "
+    >
       <div className="md:flex">
         <div className="p-1 md:flex-shrink-0">
           <img
-            className="object-cover w-full h-48 rounded-md md:w-48"
+            className="object-cover w-full rounded-md h-36 md:w-48"
             src={`${mix.image}`}
             alt={`image for ${mix.title}`}
           />
         </div>
         <div className="flex flex-col justify-between p-4">
           <div>
-            <div className="text-xs font-semibold tracking-wide text-indigo-500 uppercase">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div>
-                    {mix.user && mix.user.profileImage && (
-                      <img
-                        className="w-6 h-6 rounded-full border-g"
-                        src={mix.user.profileImage}
-                        alt="Mix"
-                      />
-                    )}
+            {false && (
+              <div className="text-xs font-semibold tracking-wide text-indigo-500 uppercase">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div>
+                      {mix.user && mix.user?.profileImage && (
+                        <img
+                          className="w-4 h-4 rounded-full border-g"
+                          src={mix.user?.profileImage}
+                          alt="Mix"
+                        />
+                      )}
+                    </div>
+                    <div className="px-2 text-gray-600">
+                      <span className="font-bold">{mix.user?.displayName}</span>
+                      <span className="text-gray-400"> listened</span>
+                    </div>
                   </div>
-                  <div className="px-2 text-gray-600">
-                    <span className="font-bold">{mix.user?.displayName}</span>
-                    <span className="text-gray-400"> listened</span>
-                  </div>
+                  <div className="text-gray-400">1 hour ago</div>
                 </div>
-                <div className="text-gray-400">1 hour ago</div>
               </div>
-            </div>
-            <div className="mt-2">
+            )}
+            <div className="mt-0">
               <div className="flex">
                 {mix.isProcessed && (
                   <div
@@ -70,8 +76,8 @@ const MixListItem = ({ mix }: IMixListItemProps) => {
                   >
                     <div
                       className={`cursor-pointer ${
-                        loading ? 'text-red-100' : 'text-purple-400'
-                      } hover:text-purple-700 transition duration-200`}
+                        loading ? 'text-amaranth-700' : 'text-amaranth-500'
+                      } hover:text-amaranth-400 transition duration-200`}
                     >
                       {nowPlaying?.id === mix.id &&
                       playState === PlayState.playing ? (
@@ -83,12 +89,14 @@ const MixListItem = ({ mix }: IMixListItemProps) => {
                   </div>
                 )}
                 <div className="mt-2">
-                  <a
-                    href="#"
+                  <Link
+                    href={`/${mix.user?.slug}/${mix.slug}`}
                     className="block text-lg font-medium leading-tight text-gray-900 hover:underline"
                   >
                     <div className="flex flex-row space-x-1">
-                      <div>{mix.title}</div>
+                      <div className="text-gray-500 dark:text-white ">
+                        {mix.title}
+                      </div>
                       <div>
                         {!mix.isProcessed && (
                           <MixProcessingStatus
@@ -101,13 +109,13 @@ const MixListItem = ({ mix }: IMixListItemProps) => {
                         )}
                       </div>
                     </div>
-                  </a>
-                  <p className="mx-1 text-sm text-gray-500 leading-2 line-clamp-1">
+                  </Link>
+                  <p className="mx-1 text-sm text-gray-500 dark:text-gray-100 leading-2 line-clamp-1">
                     by {mix.user?.displayName}
                   </p>
                 </div>
               </div>
-              <p className="mt-2 ml-1 text-sm text-gray-400 line-clamp-2">
+              <p className="mt-2 ml-1 text-sm text-gray-500 dark:text-gray-100 line-clamp-2">
                 {mix.description}
               </p>
             </div>
@@ -175,7 +183,9 @@ const MixListItem = ({ mix }: IMixListItemProps) => {
         </div>
       </div>
     </div>
+  ) : (
+    <Loading message="Loading mix" />
   );
 };
 
-export default MixListItem;
+export default MainPlayer;

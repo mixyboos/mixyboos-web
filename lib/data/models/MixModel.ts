@@ -5,6 +5,7 @@ interface MixModel {
   slug?: string;
   title: string;
   description: string;
+  dateUploaded: string;
   image?: string;
   audioUrl?: string;
   user?: UserModel;

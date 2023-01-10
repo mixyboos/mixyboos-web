@@ -27,7 +27,7 @@ class UploadService extends ApiClient {
           throw new Error(err as any);
       }
     }
-    throw new Error('Unable to load mixes');
+    throw new Error('Unable to upload audio');
   };
 }
 

@@ -26,18 +26,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Open Sans', 'sans-serif'],
-        body: ['Open Sans', 'sans-serif'],
-        mono: [
-          'ui-monospace',
-          'SFMono-Regular',
-          'Menlo',
-          'Monaco',
-          'Consolas',
-          'Liberation Mono',
-          'Courier New',
-          'monospace',
-        ],
+        space: ['Space Grotesk', 'sans-serif'],
       },
       boxShadow: {
         sm: '0 2px 9px -5pc rgb(0 0 0 / 0.15)',
@@ -56,6 +45,23 @@ module.exports = {
         20: '20rem',
       },
       colors: {
+        primary: '#205C85',
+        secondary: '#60BEC3',
+        tertiary: '#F2E0B5',
+        accent: '#CF9584',
+        bold: '#AC7E50',
+        amaranth: {
+          50: '#fff1f4',
+          100: '#ffe3e8',
+          200: '#ffcbd8',
+          300: '#ffa1b8',
+          400: '#ff6d94',
+          500: '#fa3972',
+          600: '#e91f64',
+          700: '#c40c4f',
+          800: '#a40d49',
+          900: '#8c0f45',
+        },
         fuchsia: {
           50: '#fbb2ea',
           100: '#f88bdf',
@@ -92,18 +98,7 @@ module.exports = {
           800: '#cc0066',
           900: '#b8005c',
         },
-        slate: {
-          50: '#c2c9d6',
-          100: '#b6b7cd',
-          200: '#aab4c5',
-          300: '#a8b8d8',
-          400: '#96a2b8',
-          500: '#8392ab',
-          600: '#627594',
-          700: '#586b86',
-          800: '#536179',
-          900: '#4a576d',
-        },
+
         gray: {
           50: '#f9fafb',
           100: '#f8f9fa',

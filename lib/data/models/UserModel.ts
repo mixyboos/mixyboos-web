@@ -1,3 +1,7 @@
+interface Follow {
+  id: string;
+  name: string;
+}
 interface UserModel {
   id: string;
   slug: string;
@@ -7,6 +11,9 @@ interface UserModel {
   userName: string;
   profileImage?: string;
   headerImage?: string;
+
+  following: Follow[];
+  followers: Follow[];
 }
 
 export default UserModel;

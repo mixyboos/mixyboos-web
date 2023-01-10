@@ -13,12 +13,14 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   const timerRef = React.useRef<NodeJS.Timer>();
   const nowPlaying = useAudioStore((state) => state.nowPlaying);
 
-  const currentVolume = useAudioStore((state) => state.currentVolume);
-  const setPosition = useAudioStore((state) => state.setPosition);
-  const setDuration = useAudioStore((state) => state.setDuration);
-  const seekPosition = useAudioStore((state) => state.seekPosition);
-  const setPlayState = useAudioStore((state) => state.setPlayState);
-  const playState = useAudioStore((state) => state.playState);
+  const {
+    currentVolume,
+    setPosition,
+    setDuration,
+    seekPosition,
+    setPlayState,
+    playState,
+  } = useAudioStore();
 
   React.useEffect(() => {
     if (audioRef && !player) {

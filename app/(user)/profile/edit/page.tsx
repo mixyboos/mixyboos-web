@@ -11,6 +11,7 @@ const ProfileEditPage = () => {
 
   React.useEffect(() => {
     const getProfile = async () => {
+      debugger;
       const result = await new ProfileService().getProfileBySlug(
         session?.user.slug as string
       );

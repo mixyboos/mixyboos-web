@@ -50,7 +50,7 @@ const RegisterPage = () => {
         </span>
       </Link>
 
-      <div className="w-full max-w-lg p-10 bg-white shadow-xl rounded-2xl shadow-gray-300">
+      <div className="w-full max-w-lg p-10 shadow-xl rounded-2xl shadow-gray-300">
         <div className="space-y-8">
           <h2 className="text-2xl font-bold text-gray-900">
             Create a Free Account

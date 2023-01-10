@@ -5,6 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import TokenPayload from '@lib/data/models/TokenPayload';
 import logger from '@lib/logger';
+import ProfileService from '@lib/services/api/profileService';
 
 export const authOptions: AuthOptions = {
   session: {
@@ -108,6 +109,12 @@ export const authOptions: AuthOptions = {
       session.user.displayName = token.displayName as string;
       session.user.profileImage = token.profileImage as string;
       session.user.slug = token.slug as string;
+
+      if (session.user.accessToken) {
+        const authService = new AuthService(session.user.accessToken);
+        const profile = await authService.getUser();
+        session.user.profile = profile;
+      }
       // session.user.refreshToken = token.refreshToken;
       // session.user.accessTokenExpires = token.accessTokenExpires;
       return session;

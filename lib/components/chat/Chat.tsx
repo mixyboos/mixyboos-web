@@ -78,7 +78,7 @@ const Chat = ({ showId }: IChatProps) => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-full bg-white">
+    <div className="flex flex-col justify-between h-full ">
       <div
         id="header"
         className="flex justify-between px-1 py-2 border-b-2 border-gray-200 sm:items-center"
