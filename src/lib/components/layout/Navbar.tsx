@@ -1,6 +1,17 @@
 import React from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { RiFindReplaceLine } from "react-icons/ri";
+import { AiOutlineClose } from "react-icons/ai";
+import { GoBroadcast } from "react-icons/go";
+import { MdOutlineCloudUpload } from "react-icons/md";
+import { BsSearch } from "react-icons/bs";
+import Link from "next/link";
+import Image from "next/image";
+import NavLink from "../widgets/NavLink";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 
 const Navbar = () => {
+  const user = useUser();
   return (
     <nav className="fixed z-30 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-slate-800">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -19,15 +30,18 @@ const Navbar = () => {
                 fill="currentColor"
               />
             </button>
-            <Link href="/" className="ml-2 flex md:mr-24">
+            <Link
+              href="/"
+              className="ml-2 flex justify-center align-middle md:mr-24"
+            >
               <Image
-                className="mr-2 h-6"
+                className="mr-2"
                 src="/img/logo.svg"
                 alt="Mixyboos"
                 width={24}
                 height={24}
               />
-              <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">
+              <span className=" whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">
                 MixyBoos
               </span>
             </Link>
@@ -72,10 +86,12 @@ const Navbar = () => {
               />
             </button>
 
-            {session && <NotificationsDropdownComponent session={session} />}
+            {/* {session && <NotificationsDropdownComponent session={session} />}
             {false && <AppsDropdownComponent />}
             <ThemeToggler />
-            {session && <ProfileDropdown session={session} />}
+            {session && <ProfileDropdown session={session} />} */}
+            {!user.isSignedIn && <SignInButton />}
+            {!!user.isSignedIn && <UserButton />}
           </div>
         </div>
       </div>
