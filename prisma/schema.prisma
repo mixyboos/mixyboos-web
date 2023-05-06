@@ -7,3 +7,17 @@ datasource db {
     url          = env("DATABASE_URL")
     relationMode = "prisma"
 }
+
+model Mix {
+    id          String @id @default(cuid())
+    title       String @db.VarChar(255)
+    description String
+    audioUrl    String
+
+    userId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+
+    @@index([userId])
+}
