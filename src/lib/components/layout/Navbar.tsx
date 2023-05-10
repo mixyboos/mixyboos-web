@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiFindReplaceLine } from "react-icons/ri";
