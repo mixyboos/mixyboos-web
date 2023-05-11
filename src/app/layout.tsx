@@ -1,6 +1,7 @@
 import Navbar from "@/lib/components/layout/Navbar";
-import { ClerkProvider } from "@clerk/nextjs";
+import { SessionProvider } from "next-auth/react";
 import "./globals.css";
+import Providers from "./Providers";
 
 export default function RootLayout({
   children,
@@ -8,14 +9,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <Providers>
       <html lang="en">
         <body>
           <Navbar />
           <div className="pt-16">{children}</div>
         </body>
       </html>
-    </ClerkProvider>
+    </Providers>
   );
 }
 export const metadata = {

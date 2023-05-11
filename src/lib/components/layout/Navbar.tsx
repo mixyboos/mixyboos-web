@@ -9,10 +9,10 @@ import { BsSearch } from "react-icons/bs";
 import Link from "next/link";
 import Image from "next/image";
 import NavLink from "../widgets/NavLink";
-import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
-  const user = useUser();
+  const { data: sessionData } = useSession();
   return (
     <nav className="fixed z-30 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-slate-800">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -91,8 +91,8 @@ const Navbar = () => {
             {false && <AppsDropdownComponent />}
             <ThemeToggler />
             {session && <ProfileDropdown session={session} />} */}
-            {!user.isSignedIn && <SignInButton />}
-            {!!user.isSignedIn && <UserButton />}
+            {!sessionData?.user && <Link href="/auth/login">Login</Link>}
+            {!!sessionData?.user && <Link href="/auth/logout">Logout</Link>}
           </div>
         </div>
       </div>
