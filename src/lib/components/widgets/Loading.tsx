@@ -6,7 +6,7 @@ interface ILoadingProps {
 const Loading = ({ message = "" }: ILoadingProps) => {
   return (
     <>
-      <div role="status" className="mr-3 flex flex-row space-x-1">
+      <div role="status" className="flex flex-row space-x-1">
         <svg
           aria-hidden="true"
           className="mr-2 h-5 w-5 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
