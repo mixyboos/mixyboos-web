@@ -2,7 +2,7 @@
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiFindReplaceLine } from "react-icons/ri";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineLogin } from "react-icons/ai";
 import { GoBroadcast } from "react-icons/go";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
@@ -10,9 +10,34 @@ import Link from "next/link";
 import Image from "next/image";
 import NavLink from "../widgets/NavLink";
 import { useSession } from "next-auth/react";
+import ProfileDropdown from "@/lib/components/widgets/ProfileDropdown";
+import { Session } from "next-auth";
+import Loading from "../widgets/Loading";
+
+const NavbarLogin = ({
+  session,
+  status,
+}: {
+  session: Session | null;
+  status: "authenticated" | "loading" | "unauthenticated";
+}) => {
+  if (status === "loading") return <Loading />;
+
+  return session ? (
+    <ProfileDropdown session={session} />
+  ) : (
+    <NavLink
+      title="Login"
+      href="/auth/login"
+      icon={
+        <AiOutlineLogin className="text-cerise-800 leading-lg text-lg opacity-75 dark:text-slate-300" />
+      }
+    />
+  );
+};
 
 const Navbar = () => {
-  const { data: sessionData } = useSession();
+  const { data: session, status } = useSession();
   return (
     <nav className="fixed z-30 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-slate-800">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -91,8 +116,7 @@ const Navbar = () => {
             {false && <AppsDropdownComponent />}
             <ThemeToggler />
             {session && <ProfileDropdown session={session} />} */}
-            {!sessionData?.user && <Link href="/auth/login">Login</Link>}
-            {!!sessionData?.user && <Link href="/auth/logout">Logout</Link>}
+            <NavbarLogin session={session} status={status} />
           </div>
         </div>
       </div>

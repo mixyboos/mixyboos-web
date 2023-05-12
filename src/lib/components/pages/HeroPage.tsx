@@ -40,7 +40,7 @@ const testimonials = [
 ];
 const HeroPage = () => {
   return (
-    <div className="container mx-auto px-4 text-center lg:px-0 xl:px-32">
+    <div className="container mx-auto -mt-16 px-4 text-center lg:px-0 xl:px-32">
       <h1 className="mb-3 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl sm:leading-none md:tracking-wide">
         Welcome to MixyBoos
       </h1>

@@ -1,25 +1,29 @@
 import Navbar from "@/lib/components/layout/Navbar";
-import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Providers from "./Providers";
+import { Raleway } from 'next/font/google';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+
+const font = Raleway({
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Providers>
-      <html lang="en">
+    <html lang="en" className={font.className}>
+      <Providers>
         <body>
           <Navbar />
-          <div className="pt-16">{children}</div>
+          <div className="bg-gray-50 pt-16 dark:bg-gray-900">{children}</div>
         </body>
-      </html>
-    </Providers>
+      </Providers>
+    </html>
   );
-}
+};
 export const metadata = {
   title: "Mixy::Boos",
   description: "Robot Powered Mixes",
 };
+
+export default RootLayout;

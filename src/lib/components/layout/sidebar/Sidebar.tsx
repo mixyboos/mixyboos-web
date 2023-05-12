@@ -1,19 +1,7 @@
 "use client";
 import React from "react";
-import { Sidebar, TextInput, Avatar } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import classNames from "classnames";
-import { UserModel } from "@lib/data/models";
-import {
-  HiShoppingBag,
-  HiPencil,
-  HiLogin,
-  HiThumbUp,
-  HiOutlineDeviceMobile,
-  HiPhotograph,
-  HiPresentationChartBar,
-} from "react-icons/hi";
 import { FiTrendingUp } from "react-icons/fi";
 import { BsPersonBoundingBox, BsPersonVcard } from "react-icons/bs";
 import {
@@ -26,12 +14,13 @@ import {
 import { CgSandClock } from "react-icons/cg";
 import { BiCategoryAlt } from "react-icons/bi";
 import Loading from "../../widgets/Loading";
+import UserImage from "../../widgets/UserImage";
 
-interface IIDashboardSidebarProps {
-  user: UserModel | undefined;
-}
+type DashboardSidebarProps = {
+  session: Session | undefined;
+};
 
-const DashboardSidebar = ({ user }: IIDashboardSidebarProps) => {
+const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
   const router = useRouter();
   const _sidebarItemClick = (path: string | undefined): void => {
     if (!path) return;
@@ -40,24 +29,29 @@ const DashboardSidebar = ({ user }: IIDashboardSidebarProps) => {
       router.push(path);
     }
   };
+  React.useEffect(() => {
+    console.log("Sidebar", "useEffect", session);
+  }, [session]);
 
-  return !user ? (
-    <Loading />
-  ) : (
+  if (!session?.user) return <Loading />;
+
+  return (
     <div className="h-full w-60 space-y-2 p-3 dark:bg-slate-900 dark:text-gray-100">
       <div className="flex items-center space-x-4 p-2">
-        {user.profileImage && (
-          <UserImage src={user.profileImage} status={"offline"} size={"md"} />
+        {session.user.image && (
+          <UserImage src={session.user.image} status={"offline"} size={"md"} />
         )}
         <div>
-          <h2 className="text-lg font-semibold">{user.displayName}</h2>
+          <h2 className="text-lg font-semibold">
+            {session.user.name || "Argle Bargle"}
+          </h2>
           <span className="flex items-center space-x-1">
             <a
               rel="noopener noreferrer"
               href="#"
               className="text-xs hover:underline dark:text-gray-400"
             >
-              {user.biography}
+              {session.user.biography || "Hello Lover"}
             </a>
           </span>
         </div>

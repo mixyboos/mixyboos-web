@@ -1,9 +1,18 @@
 "use client";
+import { api } from "@/lib/utils/api";
+import { Flowbite } from "flowbite-react";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <SessionProvider>{children}</SessionProvider>;
+type ProvidersProps = {
+  children: React.ReactNode;
+};
+const Providers = ({ children }: ProvidersProps) => {
+  return (
+    <SessionProvider>
+      <Flowbite theme={{}}>{children}</Flowbite>
+    </SessionProvider>
+  );
 };
 
-export default Providers;
+export default api.withTRPC(Providers);
