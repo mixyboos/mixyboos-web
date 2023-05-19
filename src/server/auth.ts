@@ -1,8 +1,5 @@
 import { type GetServerSidePropsContext } from "next";
-import {
-  getServerSession,
-  type NextAuthOptions,
-} from "next-auth";
+import { getServerSession, type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -16,7 +13,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session: ({ session, token }) => {
-      console.log("auth", "session", session, token);
       if (token) {
         session.id = token.id as string;
       }
@@ -72,6 +68,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: user.id,
+          name: user.name,
           email: user.email,
           username: user.username,
           image: user.image,
@@ -80,7 +77,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   jwt: {
-    secret: env.JWT_SECRET,
+    secret: env.NEXTAUTH_SECRET,
     maxAge: 15 * 24 * 30 * 60, // 15 days
   },
   pages: {

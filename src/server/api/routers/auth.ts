@@ -1,4 +1,9 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { generateSecretKey } from "@/lib/utils/crypt";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import { faker } from "@faker-js/faker";
 import * as trpc from "@trpc/server";
 import { hash } from "argon2";
@@ -47,5 +52,38 @@ export const authRouter = createTRPCRouter({
       orderBy: [{ createdAt: "desc" }],
     });
     return mixes;
+  }),
+  getStreamKey: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.id;
+    if (!userId) return undefined;
+
+    const user = await ctx.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) return undefined;
+
+    if (!user.streamKey) {
+      const key = generateSecretKey();
+      if (key) {
+        user.streamKey = key;
+        await ctx.prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            ...user,
+          },
+        });
+      } else {
+        throw new trpc.TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Unable to generate secret key for user.",
+        });
+      }
+    }
+    return user.streamKey;
   }),
 });

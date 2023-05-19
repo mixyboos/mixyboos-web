@@ -29,9 +29,6 @@ const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
       router.push(path);
     }
   };
-  React.useEffect(() => {
-    console.log("Sidebar", "useEffect", session);
-  }, [session]);
 
   if (!session?.user) return <Loading />;
 
