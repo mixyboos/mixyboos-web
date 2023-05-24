@@ -76,7 +76,7 @@ export const showRouter = createTRPCRouter({
     });
     return show;
   }),
-  checkForStart: protectedProcedure
+  checkForStart: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ input: { userId }, ctx }) => {
       const show = await ctx.prisma.liveShow.findFirst({

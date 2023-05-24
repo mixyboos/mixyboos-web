@@ -1,6 +1,7 @@
 import { LiveShow } from "@prisma/client";
 import React, { Component } from "react";
 import ShowStatus from "./status";
+import Pusher from "pusher-js";
 
 type StreamConnectorProps = {
   inProgressShow?: LiveShow;
@@ -19,22 +20,25 @@ const StreamConnector = ({
     "Please start your streamulator (OBS??)!"
   );
 
-  // React.useEffect(() => {
-  //   console.log("page", "pusher", env.NEXT_PUBLIC_PUSHER_KEY);
-  //   const pusher = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
-  //     cluster: "eu",
-  //   });
+  React.useEffect(() => {
+    if (!show?.id) return;
 
-  //   const channel = pusher.subscribe("chat");
+    console.log("page", "pusher", process.env.NEXT_PUBLIC_PUSHER_KEY);
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+      cluster: "eu",
+    });
 
-  //   channel.bind("chat-event", function (data: any) {
-  //     console.log("page", "chat-event", data);
-  //   });
+    const channel = pusher.subscribe(`ls_${show?.id}`);
 
-  //   return () => {
-  //     pusher.unsubscribe("chat");
-  //   };
-  // }, []);
+    channel.bind("show-started", (data: any) => {
+      console.log("StreamConnector", "show-started", data);
+      updateStreamStatus(show, ShowStatus.inProgress);
+    });
+
+    return () => {
+      pusher.unsubscribe("chat");
+    };
+  }, [show, updateStreamStatus]);
 
   return (
     <div className="mx-auto mt-12  max-w-xl rounded-lg bg-white text-gray-900 shadow dark:bg-slate-800 dark:text-white sm:p-8">
