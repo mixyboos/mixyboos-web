@@ -1,11 +1,14 @@
-import { LiveShow } from "@prisma/client";
-import React, { Component } from "react";
+import React from "react";
 import ShowStatus from "./status";
 import Pusher from "pusher-js";
+import LiveShowDTO from "@/lib/models/LiveShowDTO";
 
 type StreamConnectorProps = {
-  inProgressShow?: LiveShow;
-  updateStreamStatus: (show: LiveShow | undefined, status: ShowStatus) => void;
+  inProgressShow?: LiveShowDTO;
+  updateStreamStatus: (
+    show: LiveShowDTO | undefined,
+    status: ShowStatus
+  ) => void;
 };
 
 const StreamConnector = ({
@@ -39,6 +42,8 @@ const StreamConnector = ({
       pusher.unsubscribe("chat");
     };
   }, [show, updateStreamStatus]);
+
+  if (show?.id) return null;
 
   return (
     <div className="mx-auto mt-12  max-w-xl rounded-lg bg-white text-gray-900 shadow dark:bg-slate-800 dark:text-white sm:p-8">

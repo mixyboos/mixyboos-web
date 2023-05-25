@@ -12,13 +12,26 @@ export default Queue(
 
     const res = await superagent
       .get(url)
-      .retry(10, (err, res) =>{
+      .retry(10, (err, res) => {
+        console.log("wait", "result", res.notFound, res.statusCode, res.status);
+        const shouldRetry = res.notFound;
+        if (shouldRetry) {
+          console.log("wait", "Waiting to retry");
+          Atomics.wait(
+            new Int32Array(new SharedArrayBuffer(4)),
+            0,
+            0,
+            2 * 1000
+          );
+          return true;
+        }
         return res.notFound;
       })
       .catch((err) => {
-        console.log("WaitForShow", "Error fetching ", err);
+        console.log("WaitForShow", "Error fetching retrying");
       });
 
+    console.log("wait", "Finished waiting for show", res?.statusCode);
     if (res?.statusCode === StatusCodes.OK) {
       //showtime
       const result = await rt.trigger(`ls_${job.showId}`, "show-started", {
@@ -32,6 +45,6 @@ export default Queue(
     const result = await rt.trigger(`ls_${job.showId}`, "show-failure", {
       id: job.showId,
     });
-    console.error("waitForShow", "FAILED: show-started", job.showId);
+    console.error("waitForShow", "FAILED: show-failure", job.showId);
   }
 );

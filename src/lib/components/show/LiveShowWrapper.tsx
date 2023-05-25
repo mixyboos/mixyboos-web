@@ -7,12 +7,16 @@ import Show from "./Show";
 import StreamConnector from "./StreamConnector";
 import { api } from "@/lib/utils/api";
 import { notice } from "../notifications/toast";
+import { useSession } from "next-auth/react";
+import Loading from "../widgets/Loading";
+import type LiveShowDTO from "@/lib/models/LiveShowDTO";
 
 type LiveShowWrapperProps = {
-  incomingShow: LiveShow | undefined | null;
+  incomingShow: LiveShowDTO | undefined | null;
 };
 
 const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
+  const { data: session } = useSession();
   const startShowApi = api.show.startShow.useMutation();
   const [show, setShow] = React.useState(incomingShow);
   const [showStatus, setShowStatus] = React.useState<ShowStatus>(
@@ -54,9 +58,12 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
     }
   };
   const _getPage = (status: ShowStatus) => {
+    console.log("LiveShowWrapper", "_getPage", showStatus);
     switch (status) {
       case ShowStatus.setup:
         return <CreateShow startShow={startShow} />;
+      case ShowStatus.awaitingStreamConnection:
+        return;
       case ShowStatus.inProgress:
       case ShowStatus.ending:
         return show?.id ? (
@@ -84,23 +91,22 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
   return (
     <>
       {show &&
-      showStatus !== ShowStatus.checking &&
-      showStatus !== ShowStatus.setup ? (
-        <StreamConnector
-          inProgressShow={show}
-          updateStreamStatus={(
-            incomingShow: LiveShow | undefined,
-            status: ShowStatus
-          ) => {
-            setShowStatus(status);
-            if (incomingShow) {
-              setShow(incomingShow);
-            }
-          }}
-        />
-      ) : (
-        _getPage(showStatus)
-      )}
+        showStatus !== ShowStatus.checking &&
+        showStatus !== ShowStatus.setup && (
+          <StreamConnector
+            inProgressShow={show}
+            updateStreamStatus={(
+              incomingShow: LiveShowDTO | undefined,
+              status: ShowStatus
+            ) => {
+              setShowStatus(status);
+              if (incomingShow) {
+                setShow(incomingShow);
+              }
+            }}
+          />
+        )}
+      {session ? _getPage(showStatus) : <Loading />}
     </>
   );
 };
