@@ -56,7 +56,7 @@ const HeroPage = () => {
           <span>Pre-record</span>
         </button>
         <Link
-          href="/live"
+          href="/live/create"
           className="inline-flex items-center whitespace-nowrap rounded-md border-gray-200 bg-white py-2 text-sm font-medium text-gray-900 shadow shadow-gray-300 focus:outline-none sm:w-auto sm:px-8"
         >
           <MdLiveTv className="mr-2 h-5 w-5 rounded-full bg-white text-green-800" />

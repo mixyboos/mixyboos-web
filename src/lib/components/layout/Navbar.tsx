@@ -61,11 +61,11 @@ const Navbar = () => {
               className="ml-2 flex justify-center align-middle md:mr-24"
             >
               <Image
-                className="mr-2"
+                className="mr-2 h-8 w-auto"
                 src="/img/logo.svg"
                 alt="Mixyboos"
-                width={24}
-                height={24}
+                width={32}
+                height={32}
               />
               <span className=" whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">
                 MixyBoos
@@ -82,7 +82,7 @@ const Navbar = () => {
             />
             <NavLink
               title="Go Live"
-              href="/live"
+              href="/live/create"
               icon={
                 <GoBroadcast className="text-cerise-800 leading-lg text-lg opacity-75 dark:text-slate-300" />
               }

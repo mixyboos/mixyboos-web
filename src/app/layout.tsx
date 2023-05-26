@@ -1,8 +1,7 @@
 import Navbar from "@/lib/components/layout/Navbar";
 import "./globals.css";
 import Providers from "./Providers";
-import { Raleway } from 'next/font/google';
-
+import { Raleway } from "next/font/google";
 
 const font = Raleway({
   subsets: ["latin"],
@@ -12,12 +11,12 @@ const font = Raleway({
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en" className={font.className}>
-      <Providers>
-        <body>
+      <body>
+        <Providers>
           <Navbar />
           <div className="bg-gray-50 pt-16 dark:bg-gray-900">{children}</div>
-        </body>
-      </Providers>
+        </Providers>
+      </body>
     </html>
   );
 };
