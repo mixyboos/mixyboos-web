@@ -5,6 +5,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { z } from "zod";
+import { type LiveShowModel, mapShowStatusFromDb } from "@/lib/models";
 
 export const showRouter = createTRPCRouter({
   startShow: protectedProcedure
@@ -24,7 +25,7 @@ export const showRouter = createTRPCRouter({
         });
       const inProgressShow = await ctx.prisma.liveShow.findFirst({
         where: {
-          isFinished: false,
+          status: { in: ["SETUP", "AWAITING"] },
           userId: userId,
         },
       });
@@ -66,22 +67,43 @@ export const showRouter = createTRPCRouter({
 
       return show;
     }),
-  getInProgress: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.session?.id;
-    const show = await ctx.prisma.liveShow.findFirst({
-      where: {
-        isFinished: false,
-        userId: userId,
-      },
-    });
-    return show;
-  }),
+  getInProgress: protectedProcedure.query(
+    async ({ ctx }): Promise<LiveShowModel | undefined> => {
+      if (!ctx.session) {
+        throw new trpc.TRPCError({
+          code: "FORBIDDEN",
+          message: "No session available.",
+        });
+      }
+      const userId = ctx.session.id;
+      const show = await ctx.prisma.liveShow.findFirst({
+        where: {
+          status: { in: ["SETUP", "AWAITING"] },
+          userId: userId,
+        },
+      });
+      if (!show) {
+        return undefined;
+      }
+      return {
+        ...show,
+        tags: ["House"],
+        status: mapShowStatusFromDb(show.status),
+        user: {
+          slug: ctx.session.user.slug,
+          displayName: ctx.session.user.name,
+          biography: ctx.session.user.bio,
+          profileImage: ctx.session.user.image,
+        },
+      };
+    }
+  ),
   checkForStart: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ input: { userId }, ctx }) => {
       const show = await ctx.prisma.liveShow.findFirst({
         where: {
-          isFinished: false,
+          status: { in: ["STREAMING"] },
           userId: userId,
         },
       });

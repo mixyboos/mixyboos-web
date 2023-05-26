@@ -1,3 +1,4 @@
-import rt from "./pusher";
+import createPusherServer from "./server";
+import createPusherClient from "./client";
 
-export default rt;
+export { createPusherServer, createPusherClient };

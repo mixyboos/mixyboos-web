@@ -65,10 +65,9 @@ const CreateShow = ({ startShow }: CreateShowProps) => {
       <Formik
         validationSchema={toFormikValidationSchema(schema)}
         initialValues={{ title: "", description: "", tags: [] }}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           console.log("CreateShow", "submitting", values);
-          startShow(values.title, values.description, values.tags);
-          // const result = await handleLogin(values.email, values.password);
+          await startShow(values.title, values.description, values.tags);
         }}
       >
         {({ values, errors, touched, handleChange }) => (

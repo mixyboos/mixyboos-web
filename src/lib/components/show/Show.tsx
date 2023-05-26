@@ -1,16 +1,33 @@
 import React from "react";
 import ShowPlayerPage from "./ShowPlayerPage";
-import type LiveShowDTO from "@/lib/models/LiveShowDTO";
-import type ShowStatus from "./status";
+import type { LiveShowModel } from "@/lib/models";
+import ShowStatus from "../../models/ShowStatus";
+import { Chat } from "../chat";
+import { createPusherClient } from "@/lib/services/realtime";
 
 type ShowProps = {
   title: string;
-  show: LiveShowDTO;
+  show: LiveShowModel;
   showStatus: ShowStatus;
   setShowStatus: (showStatus: ShowStatus) => void;
 };
 
 const Show = ({ title, show, showStatus, setShowStatus }: ShowProps) => {
+  const pusher = createPusherClient();
+
+  const showChannel = `ls_${show?.id}`;
+  const channel = pusher.subscribe(showChannel);
+
+  channel.bind("show-finished", (data: LiveShowModel) => {
+    console.log("Show", "Show finished", data);
+    setShowStatus(ShowStatus.ending);
+  });
+  React.useEffect(() => {
+    return () => {
+      pusher.unsubscribe(showChannel);
+      channel.disconnect();
+    };
+  });
   return (
     <div className="mt-6 overflow-y-auto p-5">
       <div className="flex flex-col lg:flex-row">
@@ -18,8 +35,7 @@ const Show = ({ title, show, showStatus, setShowStatus }: ShowProps) => {
           <ShowPlayerPage show={show} title={title} />
         </div>
         <aside className="w-full  lg:w-3/12">
-          Chat....
-          {/* <Chat show={show} /> */}
+          <Chat show={show} />
         </aside>
       </div>
     </div>

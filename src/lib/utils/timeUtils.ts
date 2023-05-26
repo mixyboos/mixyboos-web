@@ -8,10 +8,7 @@ const secondsToReadableString = (seconds: number) =>
     ? new Date(seconds * 1000).toISOString().slice(11, 19)
     : new Date(seconds * 1000).toISOString().slice(14, 19);
 
-const humanizeDate = (
-  date: string = new Date().toISOString(),
-  showSuffix = false
-) => {
+const humanizeDate = (date: Date = new Date(), showSuffix = false) => {
   dayjs.extend(relativeTime);
   return dayjs(date).fromNow(!showSuffix);
 };

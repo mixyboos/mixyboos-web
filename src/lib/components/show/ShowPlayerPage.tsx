@@ -6,11 +6,12 @@ import {
 } from "react-icons/ri";
 import { humanizeDate } from "@/lib/utils/timeUtils";
 import UserImage from "../widgets/UserImage";
-import type LiveShowDTO from "@/lib/models/LiveShowDTO";
+import type { LiveShowModel } from "@/lib/models";
+import VideoPlayer from "../players/VideoPlayer";
 
 type ShowPlayerPageProps = {
   title: string;
-  show: LiveShowDTO;
+  show: LiveShowModel;
 };
 
 const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
@@ -21,8 +22,8 @@ const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
           src={`${process.env.NEXT_PUBLIC_LIVE_HOST as string}/hls/${
             show.id
           }/index.m3u8`}
-          controls={true}
-          autoPlay={false}
+          controls={false}
+          autoPlay={true}
         />
       </div>
       <div className="flex-none">

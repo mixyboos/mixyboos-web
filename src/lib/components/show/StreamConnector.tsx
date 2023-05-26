@@ -1,12 +1,13 @@
 import React from "react";
-import ShowStatus from "./status";
+import ShowStatus from "../../models/ShowStatus";
 import Pusher from "pusher-js";
-import LiveShowDTO from "@/lib/models/LiveShowDTO";
+import type { LiveShowModel } from "@/lib/models";
+import { createPusherClient, pusherClient } from "@/lib/services/realtime";
 
 type StreamConnectorProps = {
-  inProgressShow?: LiveShowDTO;
+  inProgressShow?: LiveShowModel;
   updateStreamStatus: (
-    show: LiveShowDTO | undefined,
+    show: LiveShowModel | undefined,
     status: ShowStatus
   ) => void;
 };
@@ -27,11 +28,10 @@ const StreamConnector = ({
     if (!show?.id) return;
 
     console.log("page", "pusher", process.env.NEXT_PUBLIC_PUSHER_KEY);
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
-      cluster: "eu",
-    });
+    const pusher = createPusherClient();
 
-    const channel = pusher.subscribe(`ls_${show?.id}`);
+    const showChannel = `ls_${show?.id}`;
+    const channel = pusher.subscribe(showChannel);
 
     channel.bind("show-started", (data: any) => {
       console.log("StreamConnector", "show-started", data);
@@ -39,7 +39,7 @@ const StreamConnector = ({
     });
 
     return () => {
-      pusher.unsubscribe("chat");
+      pusher.unsubscribe(showChannel);
     };
   }, [show, updateStreamStatus]);
 

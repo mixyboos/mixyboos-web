@@ -1,11 +1,12 @@
+import { createPusherServer } from "@/lib/services/realtime";
 import { StatusCodes } from "http-status-codes";
 import { Queue } from "quirrel/next";
 import superagent from "superagent";
-import rt from "@/lib/services/realtime";
 
 export default Queue(
   "api/queues/shows/wait", // 👈 the route it's reachable on
   async (job: { showId: string }) => {
+    const rt = createPusherServer();
     console.log("WaitForShow", job);
     const url = `https://live-mixyboos.dev.fergl.ie:9091/hls/${job.showId}/index.m3u8`;
     console.log("WaitForShow", "Checking URL", url);
@@ -34,7 +35,7 @@ export default Queue(
     console.log("wait", "Finished waiting for show", res?.statusCode);
     if (res?.statusCode === StatusCodes.OK) {
       //showtime
-      const result = await rt.trigger(`ls_${job.showId}`, "show-started", {
+      await rt.trigger(`ls_${job.showId}`, "show-started", {
         id: job.showId,
       });
       console.log("waitForShow", "show-started", job.showId);
@@ -42,7 +43,7 @@ export default Queue(
     }
 
     //notime
-    const result = await rt.trigger(`ls_${job.showId}`, "show-failure", {
+    await rt.trigger(`ls_${job.showId}`, "show-failure", {
       id: job.showId,
     });
     console.error("waitForShow", "FAILED: show-failure", job.showId);

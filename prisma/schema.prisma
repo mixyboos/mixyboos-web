@@ -12,14 +12,14 @@ model Mix {
   title       String @db.VarChar(255)
   description String
   audioUrl    String
-  tags        Tag[]
 
-  userId String
-
+  userId    String
+  tags      Tag[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
   @@index([userId])
+  @@map("mix")
 }
 
 model LiveShow {
@@ -28,23 +28,34 @@ model LiveShow {
   description String
   tags        Tag[]
 
-  startDate  DateTime @default(now())
-  isFinished Boolean  @default(false)
-  userId     String
+  startDate DateTime @default(now())
+  userId    String
+
+  status LiveShowStatus @default(SETUP)
 
   @@index([userId])
+  @@map("live_show")
 }
 
 model Tag {
-  id        String   @id @default(cuid())
-  title     String   @db.VarChar(25)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  liveShows LiveShow[]
-  mixes     Mix[]
+  id         String    @id @default(cuid())
+  title      String    @db.VarChar(25)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  Mix        Mix?      @relation(fields: [mixId], references: [id])
+  mixId      String?
+  LiveShow   LiveShow? @relation(fields: [liveShowId], references: [id])
+  liveShowId String?
 
   @@unique([title])
+  @@map("tag")
+}
+
+enum LiveShowStatus {
+  SETUP
+  AWAITING
+  STREAMING
+  FINISHED
 }
 
 //next auth
@@ -65,6 +76,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@map("account")
 }
 
 model Session {
@@ -73,6 +85,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
 }
 
 model User {
@@ -89,6 +103,7 @@ model User {
   sessions  Session[]
 
   @@index([streamKey])
+  @@map("user")
 }
 
 model VerificationToken {
@@ -97,4 +112,5 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_token")
 }
