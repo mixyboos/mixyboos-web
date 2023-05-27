@@ -142,7 +142,7 @@ const PlayersComponent = () => {
                 <div className="flex min-w-0 items-center">
                   <img
                     className="h-10 w-10 flex-shrink-0"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/products/iphone.png"
+                    src="https://placekeanu.com/200/150"
                     alt="imac image"
                   />
                   <div className="ml-3">
@@ -178,7 +178,7 @@ const PlayersComponent = () => {
                 <div className="flex min-w-0 items-center">
                   <img
                     className="h-10 w-10 flex-shrink-0"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/products/imac.png"
+                    src="https://placekeanu.com/200/150"
                     alt="imac image"
                   />
                   <div className="ml-3">
@@ -214,7 +214,7 @@ const PlayersComponent = () => {
                 <div className="flex min-w-0 items-center">
                   <img
                     className="h-10 w-10 flex-shrink-0"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/products/watch.png"
+                    src="https://placekeanu.com/200/150"
                     alt="watch image"
                   />
                   <div className="ml-3">
@@ -250,7 +250,7 @@ const PlayersComponent = () => {
                 <div className="flex min-w-0 items-center">
                   <img
                     className="h-10 w-10 flex-shrink-0"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/products/ipad.png"
+                    src="https://placekeanu.com/200/150"
                     alt="ipad image"
                   />
                   <div className="ml-3">
@@ -286,7 +286,7 @@ const PlayersComponent = () => {
                 <div className="flex min-w-0 items-center">
                   <img
                     className="h-10 w-10 flex-shrink-0"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/products/imac.png"
+                    src="https://placekeanu.com/200/150"
                     alt="imac image"
                   />
                   <div className="ml-3">
@@ -334,7 +334,7 @@ const PlayersComponent = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/users/neil-sims.png"
+                    src="https://placekeanu.com/200/150"
                     alt="Neil image"
                   />
                 </div>
@@ -343,7 +343,7 @@ const PlayersComponent = () => {
                     Neil Sims
                   </p>
                   <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                    email@flowbite.com
+                    email@mixyboos.com
                   </p>
                 </div>
                 <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
@@ -356,7 +356,7 @@ const PlayersComponent = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/users/bonnie-green.png"
+                    src="https://placekeanu.com/200/150"
                     alt="Neil image"
                   />
                 </div>
@@ -365,7 +365,7 @@ const PlayersComponent = () => {
                     Bonnie Green
                   </p>
                   <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                    email@flowbite.com
+                    email@mixyboos.com
                   </p>
                 </div>
                 <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
@@ -378,7 +378,7 @@ const PlayersComponent = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/users/michael-gough.png"
+                    src="https://placekeanu.com/200/150"
                     alt="Neil image"
                   />
                 </div>
@@ -387,7 +387,7 @@ const PlayersComponent = () => {
                     Michael Gough
                   </p>
                   <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                    email@flowbite.com
+                    email@miyboos.com
                   </p>
                 </div>
                 <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
@@ -400,7 +400,7 @@ const PlayersComponent = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/users/thomas-lean.png"
+                    src="https://placekeanu.com/200/150"
                     alt="Neil image"
                   />
                 </div>
@@ -409,7 +409,7 @@ const PlayersComponent = () => {
                     Thomes Lean
                   </p>
                   <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                    email@flowbite.com
+                    email@mixyboos.com
                   </p>
                 </div>
                 <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
@@ -422,7 +422,7 @@ const PlayersComponent = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full"
-                    src="https://flowbite-admin-dashboard.vercel.app/images/users/lana-byrd.png"
+                    src="https://placekeanu.com/200/150"
                     alt="Neil image"
                   />
                 </div>
@@ -431,7 +431,7 @@ const PlayersComponent = () => {
                     Lana Byrd
                   </p>
                   <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                    email@flowbite.com
+                    email@mixyboos.com
                   </p>
                 </div>
                 <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">

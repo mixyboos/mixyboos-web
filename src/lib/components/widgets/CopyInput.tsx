@@ -1,5 +1,4 @@
 import React from "react";
-import { Tooltip } from "flowbite-react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { HiOutlineDuplicate } from "react-icons/hi";
 
