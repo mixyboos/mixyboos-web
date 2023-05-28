@@ -84,7 +84,7 @@ const LoginPage = () => {
     setLoginError(true);
   };
   return (
-    <div className="w-full max-w-xl space-y-8 rounded-lg bg-white p-6 shadow dark:bg-gray-800 sm:p-8">
+    <div className="w-full max-w-xl space-y-8 rounded-lg  p-6 shadow  sm:p-8">
       <div className="space-y-8">
         <div className="mt-6 grid grid-cols-3 gap-3">
           <button

@@ -11,7 +11,7 @@ const Home = async () => {
     redirect("/dashboard");
   }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center dark:bg-slate-800">
+    <main className="flex min-h-screen flex-col items-center justify-center">
       {session ? <h1>Hello Sailor</h1> : <HeroPage />}
     </main>
   );

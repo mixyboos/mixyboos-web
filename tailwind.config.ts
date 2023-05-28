@@ -1,9 +1,8 @@
-import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-export default {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ["class"],
-
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     container: {
@@ -59,12 +58,12 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
+          from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to: { height: 0 },
         },
       },
       animation: {
@@ -74,4 +73,4 @@ export default {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+};

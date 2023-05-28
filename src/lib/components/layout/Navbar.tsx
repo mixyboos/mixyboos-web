@@ -7,6 +7,9 @@ import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils/styles";
 import Search from "@/components/widgets/search";
 import { UserNav } from "@/components/widgets/user-nav";
+import { ModeToggle } from "@/components/widgets/mode-toggle";
+import { type Icon, Icons } from "@/components/icons";
+import { LucideIcon } from "lucide-react";
 
 // const NavbarLogin = ({
 //   session,
@@ -29,12 +32,31 @@ import { UserNav } from "@/components/widgets/user-nav";
 //     />
 //   );
 // };
+type NavLinkProps = {
+  href: string;
+  title: string;
+  Icon: Icon;
+};
 
+const NavLink = ({ href, title, Icon }: NavLinkProps) => {
+  const path = usePathname();
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "text-sm font-medium lowercase transition-colors hover:text-primary",
+        path !== href && "text-muted-foreground"
+      )}
+    >
+      <div className="inline-flex items-center">
+        <Icon className="mr-0.5 h-4 w-4" />
+        <span>{title}</span>
+      </div>
+    </Link>
+  );
+};
 const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
   const { data: session, status } = useSession();
-  const path = usePathname();
-
-  console.log("Navbar", "path", path);
   return (
     <div className="flex h-16 items-center px-4">
       <nav
@@ -54,45 +76,14 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
             Mixy/Boos
           </span>
         </a>
-        <Link
-          href="/discover"
-          className={cn(
-            "text-sm font-medium lowercase transition-colors hover:text-primary",
-            path !== "/discover" && "text-muted-foreground"
-          )}
-        >
-          Discover
-        </Link>
-        <Link
-          href="/live/create"
-          className={cn(
-            "text-sm font-medium lowercase transition-colors hover:text-primary",
-            path !== "/live/create" && "text-muted-foreground"
-          )}
-        >
-          Go live
-        </Link>
-        <Link
-          href="/mix/create"
-          className={cn(
-            "text-sm font-medium lowercase transition-colors hover:text-primary",
-            path !== "/mix/create" && "text-muted-foreground"
-          )}
-        >
-          Upload
-        </Link>
-        <Link
-          href="/calendar"
-          className={cn(
-            "text-sm font-medium lowercase transition-colors hover:text-primary",
-            path !== "/calendar" && "text-muted-foreground"
-          )}
-        >
-          Upcoming
-        </Link>
+        <NavLink href="/discover" title="Discover" Icon={Icons.discover} />
+        <NavLink href="/live/create" title="Go live" Icon={Icons.live} />
+        <NavLink href="/mix/create" title="Upload" Icon={Icons.mix} />
+        <NavLink href="/calendar" title="Upcoming" Icon={Icons.schedule} />
       </nav>
       <div className="ml-auto flex items-center space-x-4">
         <Search />
+        <ModeToggle />
         <UserNav />
       </div>
     </div>
