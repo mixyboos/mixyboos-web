@@ -7,9 +7,8 @@ import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils/styles";
 import Search from "@/components/widgets/search";
 import { UserNav } from "@/components/widgets/user-nav";
-import { ModeToggle } from "@/components/widgets/mode-toggle";
+import { ThemeToggle } from "@/components/widgets/theme-toggle";
 import { type Icon, Icons } from "@/components/icons";
-import { LucideIcon } from "lucide-react";
 
 // const NavbarLogin = ({
 //   session,
@@ -83,7 +82,7 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
       </nav>
       <div className="ml-auto flex items-center space-x-4">
         <Search />
-        <ModeToggle />
+        <ThemeToggle />
         <UserNav />
       </div>
     </div>

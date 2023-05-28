@@ -1,18 +1,21 @@
 import Navbar from "@/lib/components/layout/Navbar";
-import "../styles/globals.css";
+import "@/styles/globals.css";
+import { type Metadata } from "next";
 import Providers from "./Providers";
-import { Raleway } from "next/font/google";
+import { fontSans } from "@/config/fonts";
 import Image from "next/image";
-
-const font = Raleway({
-  subsets: ["latin"],
-  display: "swap",
-});
+import { cn } from "@/lib/utils/styles";
+import { siteConfig } from "@/config/site";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en" className={font.className} suppressHydrationWarning>
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
         <Providers>
           <div className="md:hidden">
             <Image
@@ -41,9 +44,22 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     </html>
   );
 };
-export const metadata = {
-  title: "Mixy::Boos",
-  description: "Robot Powered Mixes",
+
+export const metadata: Metadata = {
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default RootLayout;
