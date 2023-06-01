@@ -10,6 +10,6 @@ type LiveShowModel = {
   startDate: Date;
   status: ShowStatus;
 
-  user: UserModel;
+  user: UserModel | undefined;
 };
 export default LiveShowModel;

@@ -39,6 +39,8 @@ export default async function handler(
 
     //it's showtime....
     await waitForShow.enqueue({ showId: show.id }, { delay: 1 });
+
+    //nginx-rtmp-proxy needs MOVED_TEMPORARILY to rename the show path
     res.redirect(StatusCodes.MOVED_TEMPORARILY, show.id);
   }
   return res

@@ -1,42 +1,68 @@
 "use client";
-import Link from "next/link";
+
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import React from "react";
-
-import { MdLogin } from "react-icons/md";
-import Button from "@/lib/components/widgets/Button";
-import { BsFacebook, BsGoogle, BsTwitter } from "react-icons/bs";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
 import { notice } from "@/lib/components/notifications/toast";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { api } from "@/lib/utils/api";
+import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { api } from "@/lib/utils/api";
 
-const RegisterPage = () => {
+const LoginPage = () => {
+  const schema = z
+    .object({
+      username: z
+        .string()
+        .min(5, { message: "must be at least 5 characters" })
+        .max(100),
+      email: z
+        .string()
+        .min(1, { message: "Need an email I'm afraid." })
+        .email("This is not a valid email."),
+      password: z.string().min(4),
+      confirmPassword: z.string().min(4),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: "Passwords don't match",
+    });
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+  });
   const register = api.auth.signUp.useMutation({
     onSuccess: (result) => {
       console.log("page", "register_success", result);
     },
   });
 
-  const schema = Yup.object().shape({
-    email: Yup.string()
-      .required("Email is a required field")
-      .email("Invalid email format"),
-    username: Yup.string()
-      .required("Username is a required field")
-      .max(20, "Username cannot be more than 20 characters"),
-    password: Yup.string()
-      .required("Password is a required field")
-      .min(8, "Password must be at least 8 characters"),
-  });
-
-  const handleRegister = async (
-    email: string,
-    username: string,
-    password: string
-  ) => {
+  async function onSubmit(values: z.infer<typeof schema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
     try {
-      const result = await register.mutateAsync({ email, username, password });
+      const result = await register.mutateAsync({
+        email: values.email,
+        username: values.username,
+        password: values.password,
+      });
       console.log("page", "handleRegister", result);
       if (result?.status === 201) {
         await signIn();
@@ -44,14 +70,14 @@ const RegisterPage = () => {
     } catch (err) {
       console.error("RegisterPage", "handleLogin", err);
     }
-  };
+  }
   return (
-    <div className="w-full max-w-xl space-y-8 rounded-lg bg-white p-6 shadow dark:bg-gray-800 sm:p-8">
-      <div className="space-y-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Create a new account
-        </h2>
-        <div className="mt-6 grid grid-cols-3 gap-3">
+    <div className="w-full max-w-xl space-y-4 rounded-lg  border p-6  shadow sm:p-8">
+      <div className="space-y-4">
+        <h1 className="scroll-m-20 text-2xl font-bold tracking-tight">
+          Register with...
+        </h1>
+        <div className="mt-2 grid grid-cols-3 gap-3">
           <button
             title="Sign in with Facebook"
             onClick={() => {
@@ -60,7 +86,7 @@ const RegisterPage = () => {
             }}
             className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#4267B2] shadow-sm hover:bg-gray-50"
           >
-            <BsFacebook className="h-5 w-5" />
+            <Icons.facebook className="h-5 w-5" />
           </button>
           <button
             title="Sign in with Google"
@@ -72,7 +98,7 @@ const RegisterPage = () => {
             }}
             className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#DB4437] shadow-sm hover:bg-gray-50"
           >
-            <BsGoogle className="h-5 w-5" />
+            <Icons.google className="h-5 w-5" />
           </button>
           <button
             title="Sign in with Twitter"
@@ -82,130 +108,104 @@ const RegisterPage = () => {
             }}
             className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#00acee] shadow-sm hover:bg-gray-50"
           >
-            <BsTwitter className="h-5 w-5" />
+            <Icons.twitter className="h-5 w-5" />
           </button>
         </div>
-        <Formik
-          validationSchema={schema}
-          initialValues={{ email: "", username: "", password: "" }}
-          onSubmit={async (values) => {
-            await handleRegister(
-              values.email,
-              values.username,
-              values.password
-            );
-          }}
-        >
-          {({
-            values,
-            setValues,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-          }) => (
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="block w-full rounded-lg border border-gray-300 p-2.5 text-gray-900 focus:border-fuchsia-300 focus:ring-2 focus:ring-fuchsia-50 sm:text-sm"
-                  placeholder="name@company.com"
-                  onChange={handleChange}
-                />
-                {errors.email && touched.email && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                    <span className="font-medium">Oops!</span> {errors.email}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="username"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your user name
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  className="block w-full rounded-lg border border-gray-300 p-2.5 text-gray-900 focus:border-fuchsia-300 focus:ring-2 focus:ring-fuchsia-50 sm:text-sm"
-                  placeholder="Your name on the site"
-                  onChange={handleChange}
-                />
-                {errors.username && touched.username && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                    <span className="font-medium">Oops!</span> {errors.username}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 sm:text-sm"
-                  onChange={handleChange}
-                />
-                {errors.password && touched.password && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                    <span className="font-medium">Oops!</span>
-                    {errors.password}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="confirmpassword"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Confirm password
-                </label>
-                <input
-                  id="confirmpassword"
-                  name="confirmpassword"
-                  type="password"
-                  placeholder="Confirm password"
-                  className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 sm:text-sm"
-                  onChange={handleChange}
-                />
-                {errors.password && touched.password && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                    <span className="font-medium">Oops!</span>
-                    {errors.password}
-                  </p>
-                )}
-              </div>
-
-              <Button
-                id="login-button"
-                buttonStyle="fancy"
-                type="submit"
-                title="Create new account"
-                icon={<MdLogin />}
-              ></Button>
-            </form>
-          )}
-        </Formik>
+        <div className="border-sm mt-4 text-center shadow-lg">
+          or create a new account
+        </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      maxLength={100}
+                      placeholder="superawesomedjperson"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="superawesomedjperson@gmail.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="mysecretpassword123"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="mysecretpassword123"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="w-full">
+              <Button type="submit" variant={"outline"} size={"fullWidth"}>
+                <div className="inline-flex items-center">
+                  <Icons.register className="mr-2 h-4 w-4" />
+                  <span>Register</span>
+                </div>
+              </Button>
+            </div>
+            <div className="text-sm font-medium text-gray-500">
+              Already registered?
+              <Link
+                href="/auth/login"
+                className="ml-2 text-fuchsia-600 hover:underline"
+              >
+                Login to your account
+              </Link>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

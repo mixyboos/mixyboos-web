@@ -1,13 +1,23 @@
+"use client";
 import React from "react";
-import Input from "../widgets/Input";
-import TaggedInput from "../widgets/TaggedInput";
-import CopyInput from "../widgets/CopyInput";
-import Button from "../widgets/Button";
 import { api } from "@/lib/utils/api";
 import { z } from "zod";
-import { Form, Formik } from "formik";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import Textarea from "../widgets/Textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
+import { Separator } from "@/components/ui/separator";
+import { useSession } from "next-auth/react";
+import { Textarea } from "@/components/ui/textarea";
 
 type CreateShowProps = {
   startShow: (
@@ -17,9 +27,10 @@ type CreateShowProps = {
   ) => Promise<void>;
 };
 
-const CreateShow = ({ startShow }: CreateShowProps) => {
+const CreateShow: React.FC<CreateShowProps> = ({ startShow }) => {
   const { data: streamKey } = api.auth.getStreamKey.useQuery();
   const { data: streamHost } = api.settings.getStreamHost.useQuery();
+  const { data: session } = useSession();
 
   const schema = z.object({
     title: z
@@ -34,128 +45,129 @@ const CreateShow = ({ startShow }: CreateShowProps) => {
       })
       .min(10, "C'mon make an effort - 5 characters minimum.")
       .max(500, "Woah!! Slow down, Shakespeare. 500 character limit."),
+    tags: z.string().array(),
+  });
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      title: "This is a new live stream",
+      description: "New new new new new new new live stream",
+      tags: [],
+    },
   });
 
+  React.useEffect(() => {
+    console.log("CreateShow", "session", session);
+  }, [session]);
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    await startShow(values.title, values.description, values.tags);
+  };
   if (!streamKey || !streamHost) return null;
 
   return (
-    <div className="mx-auto mt-12  max-w-xl rounded-lg bg-white text-gray-900 shadow dark:bg-slate-800 dark:text-white sm:p-8">
-      <div className="flex items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-red-300"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+    <div className="mx-auto mt-12 max-w-xl  space-y-6 rounded-lg shadow-sm shadow-red-400 sm:p-8">
+      <div>
+        <div className="inline-flex items-center space-x-2">
+          <Icons.liveStream className="h-8 w-8 text-red-300" />
+          <h3 className="text-lg font-medium"> {"Let's do a live stream"}</h3>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {"We'll need a few details before we can get going"}
+        </p>
+      </div>
+      <Separator />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input
+                    maxLength={100}
+                    placeholder={`${
+                      session?.user.name ?? "User"
+                    }'s adventures in live streaming`}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </svg>
-        <span className="px-2 text-2xl font-semibold ">
-          Let&apos;s do a Live Stream!
-        </span>
-      </div>
-      <div className="mx-4 mt-4">
-        <div className="mb-3 pt-0"></div>
-      </div>
-      <Formik
-        validationSchema={toFormikValidationSchema(schema)}
-        initialValues={{ title: "", description: "", tags: [] }}
-        onSubmit={async (values) => {
-          console.log("CreateShow", "submitting", values);
-          await startShow(values.title, values.description, values.tags);
-        }}
-      >
-        {({ values, errors, touched, handleChange }) => (
-          <Form>
-            <div className="mx-4 mt-4">
-              <Input
-                id="title"
-                label="Stream title"
-                type="text"
-                onChange={handleChange}
-                placeholder="Title for your stream"
-              />
-              {touched && errors.title && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Error!</span> {errors.title}
-                </p>
-              )}
-            </div>
-            <div className="mx-4 mt-4">
-              <Textarea
-                id="description"
-                label="Stream description"
-                onChange={handleChange}
-                placeholder="Description of your stream (optional)"
-              />
-              {errors.description && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  <span className="font-medium">Error!</span>{" "}
-                  {errors.description}
-                </p>
-              )}
-            </div>
-            <div className="mx-4 mt-4">
-              <TaggedInput
-                id="stream-tags"
-                label="Tags"
-                value={values.tags}
-                placeholder="Add some tags for your show"
-              />
-            </div>
-            <div className="mx-4 mt-4">
-              <CopyInput
-                id="stream-key"
-                label="Stream key"
-                type="text"
-                readOnly={true}
-                value={streamKey}
-                obfuscate={true}
-                placeholder="Stream key"
-              />
-            </div>
-            <div className="mx-4 mt-4">
-              <CopyInput
-                id="server-url"
-                label="Server url"
-                type="text"
-                readOnly={true}
-                value={streamHost}
-                placeholder="Stream key"
-              />
-            </div>
-            <div className="buttons flex">
-              <span className="ml-auto inline-flex rounded-md shadow-sm">
-                <Button
-                  title={"Let's Go!"}
-                  buttonSize="md"
-                  buttonStyle="primary"
-                  type="submit"
-                  icon={
-                    <svg
-                      className="mr-2 h-4 w-4 fill-current"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-                      />
-                    </svg>
-                  }
-                ></Button>
-              </span>
-            </div>
-          </Form>
-        )}
-      </Formik>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    maxLength={2000}
+                    placeholder={`A few words describing your show...`}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <div className="mx-4 mt-4">
+            <Textarea
+              id="description"
+              label="Stream description"
+              onChange={handleChange}
+              placeholder="Description of your stream (optional)"
+            />
+            {errors.description && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                <span className="font-medium">Error!</span> {errors.description}
+              </p>
+            )}
+          </div>
+          <div className="mx-4 mt-4">
+            <TaggedInput
+              id="stream-tags"
+              label="Tags"
+              value={values.tags}
+              placeholder="Add some tags for your show"
+            />
+
+          </div>
+          <div className="mx-4 mt-4">
+            <CopyInput
+              id="stream-key"
+              label="Stream key"
+              type="text"
+              readOnly={true}
+              value={streamKey}
+              obfuscate={true}
+              placeholder="Stream key"
+            />
+          </div>
+          <div className="mx-4 mt-4">
+            <CopyInput
+              id="server-url"
+              label="Server url"
+              type="text"
+              readOnly={true}
+              value={streamHost}
+              placeholder="Stream key"
+            />
+          </div> */}
+          <Separator />
+          <div className="w-full">
+            <Button type="submit" variant={"outline"} size={"fullWidth"}>
+              <div className="inline-flex items-center">
+                <Icons.submit className="mr-2 h-4 w-4" />
+                <span>{"Let's Go!"}</span>
+              </div>
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

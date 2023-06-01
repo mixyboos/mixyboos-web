@@ -1,11 +1,10 @@
 import React from "react";
 import ShowStatus from "../../models/ShowStatus";
-import Pusher from "pusher-js";
 import type { LiveShowModel } from "@/lib/models";
-import { createPusherClient, pusherClient } from "@/lib/services/realtime";
+import { createPusherClient } from "@/lib/services/realtime";
 
 type StreamConnectorProps = {
-  inProgressShow?: LiveShowModel;
+  show?: LiveShowModel;
   updateStreamStatus: (
     show: LiveShowModel | undefined,
     status: ShowStatus
@@ -13,10 +12,9 @@ type StreamConnectorProps = {
 };
 
 const StreamConnector = ({
-  inProgressShow,
+  show,
   updateStreamStatus,
 }: StreamConnectorProps) => {
-  const [show, setShow] = React.useState(inProgressShow);
   const [messageTitle, setMessageTitle] = React.useState(
     "Waiting for stream..."
   );
@@ -43,7 +41,7 @@ const StreamConnector = ({
     };
   }, [show, updateStreamStatus]);
 
-  if (show?.id) return null;
+  if (!show?.id) return null;
 
   return (
     <div className="mx-auto mt-12  max-w-xl rounded-lg bg-white text-gray-900 shadow dark:bg-slate-800 dark:text-white sm:p-8">

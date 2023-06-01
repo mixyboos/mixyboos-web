@@ -62,7 +62,7 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
         className={cn("flex items-center space-x-4 lg:space-x-6", className)}
         {...props}
       >
-        <a className="mr-6 flex items-center space-x-2" href="/">
+        <Link className="mr-6 flex items-center space-x-2" href="/">
           <Image
             className="mr-2 h-6 w-6"
             src="/img/logo.svg"
@@ -74,7 +74,7 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
           <span className="hidden font-bold lowercase sm:inline-block">
             Mixy/Boos
           </span>
-        </a>
+        </Link>
         <NavLink href="/discover" title="Discover" Icon={Icons.discover} />
         <NavLink href="/live/create" title="Go live" Icon={Icons.live} />
         <NavLink href="/mix/create" title="Upload" Icon={Icons.mix} />

@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="mx-20 -mb-16 flex h-screen overflow-hidden">
       <Sidebar session={session} />
-      {children}
+      <div className="w-full">{children}</div>
     </div>
   );
 };

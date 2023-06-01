@@ -8,11 +8,10 @@ import { createPusherClient } from "@/lib/services/realtime";
 type ShowProps = {
   title: string;
   show: LiveShowModel;
-  showStatus: ShowStatus;
-  setShowStatus: (showStatus: ShowStatus) => void;
+  setShow: (show: LiveShowModel) => void;
 };
 
-const Show = ({ title, show, showStatus, setShowStatus }: ShowProps) => {
+const Show = ({ title, show, setShow }: ShowProps) => {
   const pusher = createPusherClient();
 
   const showChannel = `ls_${show?.id}`;
@@ -20,7 +19,10 @@ const Show = ({ title, show, showStatus, setShowStatus }: ShowProps) => {
 
   channel.bind("show-finished", (data: LiveShowModel) => {
     console.log("Show", "Show finished", data);
-    setShowStatus(ShowStatus.ending);
+    setShow({
+      ...show,
+      status: ShowStatus.ending,
+    });
   });
   React.useEffect(() => {
     return () => {
