@@ -1,4 +1,5 @@
 import { createPusherServer } from "@/lib/services/realtime";
+import { prisma } from "@/server/db";
 import { StatusCodes } from "http-status-codes";
 import { Queue } from "quirrel/next";
 import superagent from "superagent";
@@ -7,9 +8,17 @@ export default Queue(
   "api/queues/shows/wait", // 👈 the route it's reachable on
   async (job: { showId: string }) => {
     const rt = createPusherServer();
-    console.log("WaitForShow", job);
     const url = `https://live-mixyboos.dev.fergl.ie:9091/hls/${job.showId}/index.m3u8`;
-    console.log("WaitForShow", "Checking URL", url);
+
+    const show = await prisma.shows.findUnique({
+      where: {
+        id: job.showId
+      }
+    })
+
+    if(!show){
+      throw new Error(`Unable to find show ${job.showId}`)
+    }
 
     const res = await superagent
       .get(url)
@@ -35,6 +44,11 @@ export default Queue(
     console.log("wait", "Finished waiting for show", res?.statusCode);
     if (res?.statusCode === StatusCodes.OK) {
       //showtime
+
+      //update mix entry in db
+
+
+      //push status to client
       await rt.trigger(`ls_${job.showId}`, "show-started", {
         id: job.showId,
       });

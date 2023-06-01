@@ -5,7 +5,14 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { z } from "zod";
-import { type LiveShowModel, mapShowStatusFromDb } from "@/lib/models";
+import { ShowStatus, type LiveShowModel } from "@/lib/models";
+import {
+  mapNoShowToShowModel,
+  mapShowToShowModel,
+} from "@/lib/utils/mappers/showMappers";
+import { StatusCodes, UNAUTHORIZED } from "http-status-codes";
+import { randomUUID } from "crypto";
+import { LiveShowStatus } from "@prisma/client";
 
 export const showRouter = createTRPCRouter({
   startShow: protectedProcedure
@@ -62,17 +69,18 @@ export const showRouter = createTRPCRouter({
           tags: {
             connect: tagsToAdd,
           },
+          status: LiveShowStatus.AWAITING,
         },
       });
 
-      return show;
+      return mapShowToShowModel(show, ctx.session.user);
     }),
   getInProgress: protectedProcedure.query(
-    async ({ ctx }): Promise<LiveShowModel | undefined> => {
+    async ({ ctx }): Promise<LiveShowModel> => {
       if (!ctx.session) {
         throw new trpc.TRPCError({
-          code: "FORBIDDEN",
-          message: "No session available.",
+          code: "UNAUTHORIZED",
+          message: "GTFO!",
         });
       }
       const userId = ctx.session.id;
@@ -83,19 +91,9 @@ export const showRouter = createTRPCRouter({
         },
       });
       if (!show) {
-        return undefined;
+        return mapNoShowToShowModel(ctx.session.user);
       }
-      return {
-        ...show,
-        tags: ["House"],
-        status: mapShowStatusFromDb(show.status),
-        user: {
-          slug: ctx.session.user.slug,
-          displayName: ctx.session.user.name,
-          biography: ctx.session.user.bio,
-          profileImage: ctx.session.user.image,
-        },
-      };
+      return mapShowToShowModel(show, ctx.session.user);
     }
   ),
   checkForStart: publicProcedure
@@ -103,10 +101,11 @@ export const showRouter = createTRPCRouter({
     .query(async ({ input: { userId }, ctx }) => {
       const show = await ctx.prisma.liveShow.findFirst({
         where: {
-          status: { in: ["STREAMING"] },
+          status: { in: ["AWAITING"] },
           userId: userId,
         },
       });
-      return show;
+
+      return show ? mapShowToShowModel(show, undefined) : null;
     }),
 });

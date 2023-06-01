@@ -1,6 +1,6 @@
 "use client";
+import { ThemeProvider } from "@/components/theme-provider";
 import { api } from "@/lib/utils/api";
-import { Flowbite } from "flowbite-react";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
 
@@ -10,7 +10,9 @@ type ProvidersProps = {
 const Providers = ({ children }: ProvidersProps) => {
   return (
     <SessionProvider>
-      <Flowbite theme={{}}>{children}</Flowbite>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        {children}
+      </ThemeProvider>
     </SessionProvider>
   );
 };

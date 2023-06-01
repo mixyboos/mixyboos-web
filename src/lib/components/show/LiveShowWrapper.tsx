@@ -5,7 +5,6 @@ import CreateShow from "./CreateShow";
 import Show from "./Show";
 import StreamConnector from "./StreamConnector";
 import { api } from "@/lib/utils/api";
-import { useSession } from "next-auth/react";
 import Loading from "../widgets/Loading";
 import type { LiveShowModel } from "@/lib/models";
 
@@ -14,23 +13,12 @@ type LiveShowWrapperProps = {
 };
 
 const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
-  const { data: session } = useSession();
   const startShowApi = api.show.startShow.useMutation();
   const [show, setShow] = React.useState(incomingShow);
-  const [showStatus, setShowStatus] = React.useState<ShowStatus>(
-    ShowStatus.checking
-  );
 
   React.useEffect(() => {
-    if (showStatus === ShowStatus.ending || showStatus === ShowStatus.error) {
-      return;
-    }
-    if (show?.id) {
-      setShowStatus(ShowStatus.inProgress);
-    } else {
-      setShowStatus(ShowStatus.setup);
-    }
-  }, [show, showStatus]);
+    console.log("LiveShowWrapper", "ShowStatus", show?.status);
+  }, [show?.status]);
 
   const startShow = async (
     title: string,
@@ -45,8 +33,8 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
           tags,
         });
 
-        if (result) {
-          setShowStatus(ShowStatus.awaitingStreamConnection);
+        if (result && show) {
+          setShow(result);
         }
       } catch (err) {
         alert(err as string);
@@ -56,33 +44,35 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
     }
   };
 
-  if (showStatus === ShowStatus.checking)
+  if (show?.status === ShowStatus.setup) {
+    return <CreateShow show={show} startShow={startShow} />;
+  }
+
+  if (show?.status === ShowStatus.checking) {
     return <Loading message={"Checking stream status"} />;
-  if (showStatus === ShowStatus.setup)
-    return <CreateShow startShow={startShow} />;
-  if (show && showStatus === ShowStatus.awaitingStreamConnection) {
+  }
+
+  if (show && show?.status === ShowStatus.awaitingStreamConnection) {
     return (
-      <StreamConnector
-        inProgressShow={show}
-        updateStreamStatus={(
-          incomingShow: LiveShowModel | undefined,
-          status: ShowStatus
-        ) => {
-          setShowStatus(status);
-          if (incomingShow) {
-            setShow(incomingShow);
-          }
-        }}
-      />
+      <>
+        Stream Connector
+        <StreamConnector
+          show={show}
+          updateStreamStatus={(incomingShow: LiveShowModel | undefined) => {
+            if (incomingShow) {
+              setShow(incomingShow);
+            }
+          }}
+        />
+      </>
     );
   }
-  if (show?.id && showStatus === ShowStatus.inProgress)
+  if (show?.id && show?.status === ShowStatus.inProgress)
     return (
       <Show
         title={show.title || "Unknown show"}
         show={show}
-        showStatus={showStatus}
-        setShowStatus={setShowStatus}
+        setShow={setShow}
       />
     );
 
@@ -92,7 +82,7 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
       role="alert"
     >
       <span className="font-medium">Info alert!</span> Unknown show status:{" "}
-      {showStatus}.
+      {show?.status}.
     </div>
   );
 };

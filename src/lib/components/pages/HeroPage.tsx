@@ -10,37 +10,33 @@ const testimonials = [
     text: "Well.. since they discontinued Mr. Matey",
     from: "Fergal Moran",
     fromTitle: "World's most handsome man",
-    fromAvatar:
-      "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png",
+    fromAvatar: "https://i.pravatar.cc/150?img=43",
   },
   {
     headline: "Mmmmm.... human music",
     text: "I like it",
     from: "Ed Dunlea",
     fromTitle: "Minister for moaning",
-    fromAvatar:
-      "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/roberta-casas.png",
+    fromAvatar: "https://i.pravatar.cc/150?img=59",
   },
   {
     headline: "Lovely hurling",
     text: "Well, as lovely as hurling can be, which is to say not very.",
     from: "Adam Dunbar",
     fromTitle: "Hurler on the ditch",
-    fromAvatar:
-      "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png",
+    fromAvatar: "https://i.pravatar.cc/150?img=38",
   },
   {
     headline: "D'ya have the balla?",
     text: "You fucking do, g'wan and play it ya cunt!!",
     from: "Gangrene McDandruff",
     fromTitle: "Local crank",
-    fromAvatar:
-      "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png",
+    fromAvatar: "https://i.pravatar.cc/150?img=10",
   },
 ];
 const HeroPage = () => {
   return (
-    <div className="container mx-auto -mt-16 px-4 text-center lg:px-0 xl:px-32">
+    <div className="container mx-auto -mt-32 px-4 text-center lg:px-0 xl:px-32">
       <h1 className="mb-3 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl sm:leading-none md:tracking-wide">
         Welcome to MixyBoos
       </h1>
