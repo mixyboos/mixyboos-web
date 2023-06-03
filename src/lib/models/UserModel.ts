@@ -1,7 +1,7 @@
 type UserModel = {
-  slug: string;
-  displayName: string;
-  biography: string;
-  profileImage: string;
+  username: string;
+  name: string;
+  bio: string | null;
+  image: string | null;
 };
 export default UserModel;

@@ -5,13 +5,11 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { z } from "zod";
-import { ShowStatus, type LiveShowModel } from "@/lib/models";
+import { type LiveShowModel } from "@/lib/models";
 import {
   mapNoShowToShowModel,
   mapShowToShowModel,
 } from "@/lib/utils/mappers/showMappers";
-import { StatusCodes, UNAUTHORIZED } from "http-status-codes";
-import { randomUUID } from "crypto";
 import { LiveShowStatus } from "@prisma/client";
 
 export const showRouter = createTRPCRouter({
@@ -86,7 +84,7 @@ export const showRouter = createTRPCRouter({
       const userId = ctx.session.id;
       const show = await ctx.prisma.liveShow.findFirst({
         where: {
-          status: { in: ["SETUP", "AWAITING"] },
+          status: { in: ["SETUP", "AWAITING", "STREAMING"] },
           userId: userId,
         },
       });

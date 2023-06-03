@@ -1,25 +1,18 @@
 import React from "react";
-import ShowStatus from "../../models/ShowStatus";
 import type { LiveShowModel } from "@/lib/models";
 import { createPusherClient } from "@/lib/services/realtime";
 
 type StreamConnectorProps = {
   show?: LiveShowModel;
-  updateStreamStatus: (
-    show: LiveShowModel | undefined,
-    status: ShowStatus
-  ) => void;
+  setShow: (show: LiveShowModel) => void;
 };
 
-const StreamConnector = ({
-  show,
-  updateStreamStatus,
-}: StreamConnectorProps) => {
+const StreamConnector = ({ show, setShow }: StreamConnectorProps) => {
   const [messageTitle, setMessageTitle] = React.useState(
     "Waiting for stream..."
   );
   const [messageText, setMessageText] = React.useState(
-    "Please start your streamulator (OBS??)!"
+    "Please start streaming now.. If your stream doesn't show, please stop and restart your stream."
   );
 
   React.useEffect(() => {
@@ -31,15 +24,15 @@ const StreamConnector = ({
     const showChannel = `ls_${show?.id}`;
     const channel = pusher.subscribe(showChannel);
 
-    channel.bind("show-started", (data: any) => {
+    channel.bind("show-started", (data: LiveShowModel) => {
       console.log("StreamConnector", "show-started", data);
-      updateStreamStatus(show, ShowStatus.inProgress);
+      setShow(data);
     });
 
     return () => {
       pusher.unsubscribe(showChannel);
     };
-  }, [show, updateStreamStatus]);
+  }, [show, setShow]);
 
   if (!show?.id) return null;
 

@@ -57,11 +57,11 @@ const Chat = ({ show }: ChatProps) => {
         {messages.map((item) => (
           <ChatItem
             key={item.id}
-            img={item.fromUser.profileImage}
+            img={item.fromUser.image}
             date={item.timestamp}
-            from={item.fromUser.displayName}
+            from={item.fromUser.name}
             message={item.message}
-            isMe={item.fromUser.slug === session?.user.slug}
+            isMe={item.fromUser.username === session?.user.username}
             status={"Delivered"}
           />
         ))}

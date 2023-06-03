@@ -58,14 +58,14 @@ const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
           <div className="flex items-center justify-between bg-white px-4 py-4 dark:bg-slate-800">
             <div className="flex min-w-0 items-center">
               <UserImage
-                src={show.user.profileImage || ""}
+                src={show.user.image || ""}
                 status={"offline"}
                 size={"md"}
               />
 
               <div className="ml-3">
                 <p className="truncate font-medium text-gray-900 dark:text-white">
-                  {show.user.displayName}
+                  {show.user.name}
                 </p>
                 <div className="flex flex-1 items-center justify-end text-sm text-red-600 dark:text-red-500">
                   <span className="text-gray-500">

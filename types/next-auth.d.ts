@@ -12,6 +12,6 @@ declare module "next-auth" {
     email: string;
     image: string;
     bio: string;
-    slug: string;
+    username: string;
   }
 }

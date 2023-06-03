@@ -94,6 +94,7 @@ model User {
   username      String?
   password      String?
   name          String?
+  bio          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?

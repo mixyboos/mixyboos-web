@@ -45,7 +45,7 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
   };
 
   if (show?.status === ShowStatus.setup) {
-    return <CreateShow show={show} startShow={startShow} />;
+    return <CreateShow startShow={startShow} />;
   }
 
   if (show?.status === ShowStatus.checking) {
@@ -56,14 +56,7 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
     return (
       <>
         Stream Connector
-        <StreamConnector
-          show={show}
-          updateStreamStatus={(incomingShow: LiveShowModel | undefined) => {
-            if (incomingShow) {
-              setShow(incomingShow);
-            }
-          }}
-        />
+        <StreamConnector show={show} setShow={setShow} />
       </>
     );
   }

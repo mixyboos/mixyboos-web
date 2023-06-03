@@ -1,9 +1,7 @@
-import { ShowStatus } from "@/lib/models";
+import { ShowStatus, type UserModel } from "@/lib/models";
 import type { LiveShowModel } from "@/lib/models";
 import { type LiveShow } from "@prisma/client";
 import { randomUUID } from "crypto";
-import { type User } from "next-auth";
-import { mapUserToUserModel } from "./userMapper";
 
 const mapShowStatusFromDb = (
   status: "SETUP" | "AWAITING" | "STREAMING" | "FINISHED"
@@ -22,7 +20,7 @@ const mapShowStatusFromDb = (
   }
 };
 
-const mapNoShowToShowModel = (user: User): LiveShowModel => {
+const mapNoShowToShowModel = (user: UserModel): LiveShowModel => {
   return {
     id: randomUUID().toString(),
     title: "",
@@ -30,16 +28,16 @@ const mapNoShowToShowModel = (user: User): LiveShowModel => {
     description: "",
     startDate: new Date(),
     status: ShowStatus.setup,
-    user: mapUserToUserModel(user),
+    user: user,
   };
 };
 const mapShowToShowModel = (
   show: LiveShow,
-  user: User | undefined
+  user: UserModel | undefined
 ): LiveShowModel => ({
   ...show,
   tags: ["House"],
   status: mapShowStatusFromDb(show.status),
-  user: mapUserToUserModel(user),
+  user: user,
 });
 export { mapShowStatusFromDb, mapShowToShowModel, mapNoShowToShowModel };

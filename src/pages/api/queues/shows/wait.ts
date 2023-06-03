@@ -1,5 +1,8 @@
 import { createPusherServer } from "@/lib/services/realtime";
+import { mapShowToShowModel } from "@/lib/utils/mappers/showMappers";
+import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
 import { prisma } from "@/server/db";
+import { LiveShowStatus } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import { Queue } from "quirrel/next";
 import superagent from "superagent";
@@ -10,14 +13,26 @@ export default Queue(
     const rt = createPusherServer();
     const url = `https://live-mixyboos.dev.fergl.ie:9091/hls/${job.showId}/index.m3u8`;
 
-    const show = await prisma.shows.findUnique({
+    const show = await prisma.liveShow.findUnique({
       where: {
-        id: job.showId
-      }
-    })
+        id: job.showId,
+      },
+    });
 
-    if(!show){
-      throw new Error(`Unable to find show ${job.showId}`)
+    if (!show) {
+      throw new Error(`Unable to find show ${job.showId}`);
+    }
+
+    const user = mapDbAuthUserToUserModel(
+      await prisma.user.findUnique({
+        where: {
+          id: show.userId,
+        },
+      })
+    );
+
+    if (!user) {
+      throw new Error(`Unable to find user ${show.userId}`);
     }
 
     const res = await superagent
@@ -38,7 +53,7 @@ export default Queue(
         return res.notFound;
       })
       .catch((err) => {
-        console.log("WaitForShow", "Error fetching retrying");
+        console.log("WaitForShow", "Error fetching retrying", err);
       });
 
     console.log("wait", "Finished waiting for show", res?.statusCode);
@@ -46,11 +61,16 @@ export default Queue(
       //showtime
 
       //update mix entry in db
-
+      await prisma.liveShow.update({
+        where: {
+          id: show.id,
+        },
+        data: { ...show, status: LiveShowStatus.STREAMING },
+      });
 
       //push status to client
       await rt.trigger(`ls_${job.showId}`, "show-started", {
-        id: job.showId,
+        show: mapShowToShowModel(show, user),
       });
       console.log("waitForShow", "show-started", job.showId);
       return;

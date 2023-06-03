@@ -50,8 +50,8 @@ const ProfileDropdown = ({ session }: ProfileDropdownProps) => {
                 {({ active }) => (
                   <div className="px-4 py-3" role="none">
                     <p className="text-sm" role="none">
-                      <Link href={`/${session.user.slug}`}>
-                        {session.user.displayName}
+                      <Link href={`/${session.user.username}`}>
+                        {session.user.name}
                       </Link>
                     </p>
                     <p
