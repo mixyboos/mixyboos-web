@@ -37,7 +37,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="border-b">
               <Navbar className="mx-6" />
             </div>
-            <div className="flex-1 space-y-4 p-8 pt-6">{children}</div>
+            <div className="flex-1">{children}</div>
           </div>
         </Providers>
       </body>

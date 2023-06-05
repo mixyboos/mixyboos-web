@@ -6,12 +6,7 @@ import Loading from "@/lib/components/widgets/Loading";
 
 const LivePage = () => {
   const { isFetching, data: show } = api.show.getInProgress.useQuery();
-
-  return (
-    <div className="h-screen overflow-y-hidden">
-      {isFetching ? <Loading /> : <LiveShowWrapper incomingShow={show} />}
-    </div>
-  );
+  return isFetching ? <Loading /> : <LiveShowWrapper incomingShow={show} />;
 };
 
 export default LivePage;

@@ -31,16 +31,24 @@ const Show = ({ title, show, setShow }: ShowProps) => {
     };
   });
   return (
-    <div className="mt-6 overflow-y-auto p-5">
-      <div className="flex flex-col lg:flex-row">
-        <div className="mr-4 w-full lg:w-9/12">
-          <ShowPlayerPage show={show} title={title} />
-        </div>
-        <aside className="w-full  lg:w-3/12">
-          <Chat show={show} />
-        </aside>
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="col-span-5 rounded-lg border bg-card text-card-foreground shadow-sm">
+        <ShowPlayerPage show={show} title={title} />
+      </div>
+      <div className="col-span-2 rounded-lg border bg-card text-card-foreground shadow-sm">
+        <Chat show={show} />
       </div>
     </div>
+    // <div className="mt-6 overflow-y-auto p-5">
+    //   <div className="flex flex-col lg:flex-row">
+    //     <div className="mr-4 w-full lg:w-9/12">
+    //       <ShowPlayerPage show={show} title={title} />
+    //     </div>
+    //     <aside className="w-full  lg:w-3/12">
+    //       <Chat show={show} />
+    //     </aside>
+    //   </div>
+    // </div>
   );
 };
 
