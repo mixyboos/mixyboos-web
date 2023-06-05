@@ -99,7 +99,19 @@ export const showRouter = createTRPCRouter({
     .query(async ({ input: { userId }, ctx }) => {
       const show = await ctx.prisma.liveShow.findFirst({
         where: {
-          status: { in: ["AWAITING"] },
+          status: { in: ["AWAITING", "STREAMING"] },
+          userId: userId,
+        },
+      });
+
+      return show ? mapShowToShowModel(show, undefined) : null;
+    }),
+  checkForInProgress: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input: { userId }, ctx }) => {
+      const show = await ctx.prisma.liveShow.findFirst({
+        where: {
+          status: { in: ["STREAMING"] },
           userId: userId,
         },
       });

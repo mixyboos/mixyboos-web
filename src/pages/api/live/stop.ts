@@ -1,3 +1,4 @@
+import { ShowStatus } from "@/lib/models";
 import { createPusherServer } from "@/lib/services/realtime";
 import { showRouter } from "@/server/api/routers/show";
 import { userRouter } from "@/server/api/routers/user";
@@ -29,7 +30,7 @@ export default async function handler(
       .status(StatusCodes.UNAUTHORIZED)
       .json({ message: "Unauthorised!" });
   }
-  const show = await showApi.checkForStart({ userId: user.id });
+  const show = await showApi.checkForInProgress({ userId: user.id });
 
   if (!show) {
     return res
@@ -45,12 +46,12 @@ export default async function handler(
         }
     ));
     */
-  show.status = "FINISHED";
+  show.status = ShowStatus.ended;
   await ctx.prisma.liveShow.update({
     where: {
       id: show.id,
     },
-    data: { ...show },
+    data: { ...show, status: "FINISHED" },
   });
   await createPusherServer().trigger(`ls_${show.id}`, "show-finished", show);
 

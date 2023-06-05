@@ -21,7 +21,7 @@ const Show = ({ title, show, setShow }: ShowProps) => {
     console.log("Show", "Show finished", data);
     setShow({
       ...show,
-      status: ShowStatus.ending,
+      status: ShowStatus.ended,
     });
   });
   React.useEffect(() => {

@@ -14,7 +14,7 @@ const mapShowStatusFromDb = (
     case "STREAMING":
       return ShowStatus.inProgress;
     case "FINISHED":
-      return ShowStatus.ending;
+      return ShowStatus.ended;
     default:
       return ShowStatus.setup;
   }

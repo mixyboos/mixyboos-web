@@ -3,6 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from "react";
 import Hls, { type HlsConfig } from "hls.js";
+import { StatusCodes } from "http-status-codes";
+import NotFoundImageContainer from "@/components/widgets/notfound-image-container";
 
 export interface HlsPlayerProps
   extends React.VideoHTMLAttributes<HTMLVideoElement> {
@@ -12,6 +14,7 @@ export interface HlsPlayerProps
 
 function VideoPlayer({ hlsConfig, src, autoPlay, ...props }: HlsPlayerProps) {
   const playerRef = React.createRef<HTMLVideoElement>();
+  const [loadError, setLoadError] = React.useState(false);
   React.useEffect(() => {
     let hls: Hls;
 
@@ -29,6 +32,10 @@ function VideoPlayer({ hlsConfig, src, autoPlay, ...props }: HlsPlayerProps) {
         newHls.attachMedia(playerRef.current);
       }
 
+      newHls.on(Hls.Events.ERROR, (event, data) => {
+        console.log("VideoPlayer", "ERROR", event, data);
+        setLoadError(data.response?.code === StatusCodes.NOT_FOUND);
+      });
       newHls.on(Hls.Events.MEDIA_ATTACHED, () => {
         newHls.loadSource(src);
 
@@ -78,7 +85,15 @@ function VideoPlayer({ hlsConfig, src, autoPlay, ...props }: HlsPlayerProps) {
       }
     };
   }, [autoPlay, hlsConfig, playerRef, src]);
-  return <video className="videoCentered" ref={playerRef} {...props} />;
+  return loadError ? (
+    <NotFoundImageContainer width={500} height={400} />
+  ) : (
+    <video
+      className="videoCentered w-[90%] max-w-[90%]"
+      ref={playerRef}
+      {...props}
+    />
+  );
 }
 
 export default VideoPlayer;

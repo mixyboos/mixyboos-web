@@ -3,7 +3,7 @@ enum ShowStatus {
   setup = "setup",
   awaitingStreamConnection = "awaitingStreamConnection",
   inProgress = "inProgress",
-  ending = "ending",
+  ended = "ending",
   error = "error",
 }
 

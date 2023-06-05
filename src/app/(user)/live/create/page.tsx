@@ -8,7 +8,7 @@ const LivePage = () => {
   const { isFetching, data: show } = api.show.getInProgress.useQuery();
 
   return (
-    <div className="-mb-16 h-screen overflow-y-hidden">
+    <div className="h-screen overflow-y-hidden">
       {isFetching ? <Loading /> : <LiveShowWrapper incomingShow={show} />}
     </div>
   );
