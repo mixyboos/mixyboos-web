@@ -6,9 +6,9 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils/styles";
 import Search from "@/components/widgets/search";
-import { UserNav } from "@/components/widgets/user-nav";
 import { ThemeToggle } from "@/components/widgets/theme-toggle";
 import { type Icon, Icons } from "@/components/icons";
+import UserNav from "@/components/widgets/user-nav";
 
 // const NavbarLogin = ({
 //   session,
@@ -83,7 +83,12 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
       <div className="ml-auto flex items-center space-x-4">
         <Search />
         <ThemeToggle />
-        <UserNav />
+        {status !== "loading" &&
+          (session ? (
+            <UserNav session={session} />
+          ) : (
+            <NavLink href="/auth/login" title="Login" Icon={Icons.login} />
+          ))}
       </div>
     </div>
 
