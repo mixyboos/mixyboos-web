@@ -1,3 +1,4 @@
+import { Icons } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +11,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Icons } from "@/components/icons";
 import { type Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -47,21 +47,21 @@ const UserNav: React.FC<UserNavProps> = ({ session }) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href={"/profile/edit"} className="flex w-full flex-row">
+            <Link href={"/settings/profile"} className="flex w-full flex-row">
               <Icons.user className="mr-2 h-4 w-4" />
               <span className="flex-grow">Profile</span>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href={"/profile/billing"} className="flex w-full flex-row">
+            <Link href={"/settings/billing"} className="flex w-full flex-row">
               <Icons.creditCard className="mr-2 h-4 w-4" />
               <span className="flex-grow">Billing</span>
               <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href={"/profile/settings"} className="flex w-full flex-row">
+            <Link href={"/settings"} className="flex w-full flex-row">
               <Icons.settings className="mr-2 h-4 w-4" />
               <span className="flex-grow">Settings</span>
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>

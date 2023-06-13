@@ -31,7 +31,7 @@ const Show = ({ title, show, setShow }: ShowProps) => {
     };
   });
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 text-gray-900">
       <div className="col-span-5 rounded-lg border bg-card text-card-foreground shadow-sm">
         <ShowPlayerPage show={show} title={title} />
       </div>

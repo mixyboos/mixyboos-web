@@ -1,14 +1,15 @@
 "use client";
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { cn } from "@/lib/utils/styles";
+
+import { Icons, type Icon } from "@/components/icons";
 import Search from "@/components/widgets/search";
 import { ThemeToggle } from "@/components/widgets/theme-toggle";
-import { type Icon, Icons } from "@/components/icons";
 import UserNav from "@/components/widgets/user-nav";
+import { cn } from "@/lib/utils/styles";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
 
 // const NavbarLogin = ({
 //   session,
@@ -43,8 +44,8 @@ const NavLink = ({ href, title, Icon }: NavLinkProps) => {
     <Link
       href={href}
       className={cn(
-        "text-sm font-medium lowercase transition-colors hover:text-primary",
-        path !== href && "text-muted-foreground"
+        "text-sm font-medium lowercase text-primary hover:opacity-60 transition-opacity",
+        path !== href && "text-primary"
       )}
     >
       <div className="inline-flex items-center">

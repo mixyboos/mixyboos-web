@@ -1,4 +1,8 @@
 import {
+  mapAuthUserToUserModel,
+  mapDbAuthUserToUserModel,
+} from "@/lib/utils/mappers/userMapper";
+import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -15,13 +19,17 @@ export const userRouter = createTRPCRouter({
       });
     }
 
-    const user = ctx.prisma.user.findUnique({
+    const user = await ctx.prisma.user.findUnique({
       where: {
         id: userId,
       },
     });
-
-    return user;
+    if (!user) {
+      throw new trpc.TRPCError({
+        code: "UNAUTHORIZED",
+      });
+    }
+    return mapDbAuthUserToUserModel(user);
   }),
 
   getByStreamKey: publicProcedure

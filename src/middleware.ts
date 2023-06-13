@@ -13,5 +13,10 @@ export { default } from "next-auth/middleware";
 // });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/mix/create", "/live/create"],
+  matcher: [
+    "/dashboard/:path*",
+    "/mix/create",
+    "/live/create",
+    "/settings/:path*",
+  ],
 };

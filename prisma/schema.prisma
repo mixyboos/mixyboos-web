@@ -94,14 +94,15 @@ model User {
   username      String?
   password      String?
   name          String?
-  bio          String?
+  bio           String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-
-  streamKey String?   @unique
-  accounts  Account[]
-  sessions  Session[]
+  headerImage   String?
+  urls          String[]
+  streamKey     String?   @unique
+  accounts      Account[]
+  sessions      Session[]
 
   @@index([streamKey])
   @@map("user")
