@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import Dropzone, { DropzoneRef, useDropzone } from "react-dropzone";
+import Dropzone, { useDropzone, type DropzoneRef } from "react-dropzone";
 
 type ImageUploadProps = {
   onImageChanged: (newImage: File | undefined) => void;
@@ -60,7 +60,7 @@ const ImageUpload = ({ onImageChanged }: ImageUploadProps) => {
                           ></path>
                         </svg>
                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">Click to upload</span>
+                          <span className="font-semibold">Click to upload</span>{" "}
                           or drag and drop
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">

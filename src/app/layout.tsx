@@ -1,7 +1,7 @@
 import Navbar from "@/lib/components/layout/Navbar";
 import "@/styles/globals.css";
 import { type Metadata } from "next";
-import Providers from "./Providers";
+import Providers from "./providers";
 import { fontSans } from "@/config/fonts";
 import Image from "next/image";
 import { cn } from "@/lib/utils/styles";

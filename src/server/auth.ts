@@ -15,6 +15,7 @@ export const authOptions: NextAuthOptions = {
     session: ({ session, token }) => {
       if (token) {
         session.id = token.id as string;
+        session.id = token.id as string;
       }
 
       return session;
@@ -23,6 +24,8 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.name = user.name;
+        token.bio = user.bio;
       }
 
       return token;
@@ -69,6 +72,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           name: user.name,
+          bio: user.bio,
           email: user.email,
           username: user.username,
           image: user.image,
