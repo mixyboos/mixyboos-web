@@ -11,7 +11,11 @@ const config = {
     esmExternals: false,
   },
   images: {
-    domains: ["cloudflare-ipfs.com", "avatars.githubusercontent.com"],
+    domains: [
+      "cloudflare-ipfs.com",
+      "avatars.githubusercontent.com",
+      "uploadthing.com",
+    ],
   },
 };
 export default config;

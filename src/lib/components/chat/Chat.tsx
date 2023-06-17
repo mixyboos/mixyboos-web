@@ -57,7 +57,7 @@ const Chat = ({ show }: ChatProps) => {
         {messages.map((item) => (
           <ChatItem
             key={item.id}
-            img={item.fromUser.image}
+            img={item.fromUser.profileImage}
             date={item.timestamp}
             from={item.fromUser.name}
             message={item.message}

@@ -36,8 +36,8 @@ const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
   return (
     <div className="h-full w-60 space-y-2 p-3 ">
       <div className="flex items-center space-x-4 p-2">
-        {session.user.image && (
-          <UserImage src={session.user.image} status={"offline"} size={"md"} />
+        {session.user.profileImage && (
+          <UserImage src={session.user.profileImage} status={"offline"} size={"md"} />
         )}
         <div>
           <h2 className="text-sm font-semibold">

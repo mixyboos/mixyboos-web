@@ -10,7 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
+import { notice } from "@/lib/components/notifications/toast";
 import { type UserModel } from "@/lib/models";
+import { api } from "@/lib/utils/api";
 import { cn } from "@/lib/utils/styles";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -29,11 +32,8 @@ const formSchema = z.object({
     .max(30, {
       message: "Username must not be longer than 30 characters.",
     }),
-  email: z
-    .string()
-    .email()
-    .optional(),
-  bio: z.string().max(160).min(0).optional(),
+  email: z.string().email(),
+  bio: z.string().max(160).min(0).nullable(),
   urls: z
     .array(
       z.object({
@@ -47,8 +47,15 @@ type FormValues = z.infer<typeof formSchema>;
 const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
   profile,
 }: ProfileEditFormProps) => {
+  const updateUser = api.user.updateUser.useMutation({
+    onSuccess: (result) => {
+      console.log("profile-edit-form", "onSuccess", result);
+      notice("Success", "Profile updated successfully");
+    },
+  });
   const defaultValues: Partial<FormValues> = {
     username: profile.username,
+    email: profile.email || "",
     bio: profile.bio || "",
     urls: [],
   };
@@ -63,8 +70,15 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
     control: form.control,
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log("profile-edit-form", "onSubmit", data);
+    await updateUser.mutateAsync({
+      ...profile,
+      username: data.username,
+      email: data.email,
+      bio: data.bio,
+      urls: [],
+    });
   };
 
   return (

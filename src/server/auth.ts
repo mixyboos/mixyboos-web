@@ -1,11 +1,17 @@
-import { type GetServerSidePropsContext } from "next";
-import { getServerSession, type NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "@/env.mjs";
+import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
 import { prisma } from "@/server/db";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verify } from "argon2";
+import { type GetServerSidePropsContext } from "next";
+import {
+  getServerSession,
+  type NextAuthOptions,
+  type Session,
+  type User,
+} from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -13,21 +19,26 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session: ({ session, token }) => {
-      if (token) {
-        session.id = token.id as string;
-        session.id = token.id as string;
-      }
-
-      return session;
+      return {
+        id: token.id,
+        user: token.user,
+      } as Session;
     },
-    jwt: ({ token, user }) => {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
-        token.bio = user.bio;
+    jwt: async ({ token }) => {
+      if (!token.email) {
+        return token;
       }
-
+      const user = await prisma.user.findFirst({
+        where: {
+          email: token.email,
+        },
+      });
+      if (user) {
+        return {
+          id: token.sub,
+          user: mapDbAuthUserToUserModel(user),
+        };
+      }
       return token;
     },
   },
@@ -48,35 +59,40 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        if (!credentials?.email || !credentials?.password) {
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            return null;
+          }
+
+          const user = await prisma.user.findFirst({
+            where: { email: credentials.email },
+          });
+
+          if (!user || !user.password) {
+            return null;
+          }
+
+          const isValidPassword = await verify(
+            user.password,
+            credentials.password
+          );
+
+          if (!isValidPassword) {
+            return null;
+          }
+
+          return {
+            id: user.id,
+            name: user.name,
+            bio: user.bio,
+            email: user.email,
+            username: user.username,
+            profileImage: user.profileImage,
+            headerImage: user.headerImage,
+          } as User;
+        } catch (e) {
           return null;
         }
-
-        const user = await prisma.user.findFirst({
-          where: { email: credentials.email },
-        });
-
-        if (!user || !user.password) {
-          return null;
-        }
-
-        const isValidPassword = await verify(
-          user.password,
-          credentials.password
-        );
-
-        if (!isValidPassword) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          name: user.name,
-          bio: user.bio,
-          email: user.email,
-          username: user.username,
-          image: user.image,
-        };
       },
     }),
   ],

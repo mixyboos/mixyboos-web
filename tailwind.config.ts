@@ -14,9 +14,9 @@ const config: Config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
@@ -33,7 +33,7 @@ const config: Config = {
         },
         muted: {
           DEFAULT: "var(--muted)",
-          foreground: "hsl(var(--muted-foreground))",
+          foreground: "var(--muted-foreground)",
         },
         accent: {
           DEFAULT: "var(--accent)",

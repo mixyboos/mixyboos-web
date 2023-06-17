@@ -1,11 +1,13 @@
-import Navbar from "@/lib/components/layout/Navbar";
-import "@/styles/globals.css";
-import { type Metadata } from "next";
-import Providers from "./providers";
 import { fontSans } from "@/config/fonts";
-import Image from "next/image";
-import { cn } from "@/lib/utils/styles";
 import { siteConfig } from "@/config/site";
+import Navbar from "@/lib/components/layout/Navbar";
+import { cn } from "@/lib/utils/styles";
+import { type Metadata } from "next";
+import Image from "next/image";
+import Providers from "./providers";
+//the order of these matters
+import "@uploadthing/react/styles.css";
+import "@/styles/globals.css";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -19,14 +21,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <Providers>
           <div className="md:hidden">
             <Image
-              src="/examples/dashboard-light.png"
+              src="/img/dashboard-light.png"
               width={1280}
               height={866}
               alt="Dashboard"
               className="block dark:hidden"
             />
             <Image
-              src="/examples/dashboard-dark.png"
+              src="/img/dashboard-dark.png"
               width={1280}
               height={866}
               alt="Dashboard"
