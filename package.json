@@ -41,6 +41,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@azure/storage-blob": "^12.14.0",
     "@faker-js/faker": "^8.0.2",
     "@hookform/resolvers": "^3.1.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.0.2",

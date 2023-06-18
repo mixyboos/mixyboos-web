@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   server: {
@@ -26,6 +26,8 @@ export const env = createEnv({
     PUSHER_APPID: z.string(),
     PUSHER_KEY: z.string(),
     PUSHER_SECRET: z.string(),
+
+    AZURE_CONNECTION: z.string(),
   },
   client: {
     NEXT_PUBLIC_PUSHER_KEY: z.string().min(1),
@@ -41,8 +43,10 @@ export const env = createEnv({
     JWT_SECRET: process.env.JWT_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
 
+    AZURE_CONNECTION: process.env.AZURE_CONNECTION,
+
+    NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
     PUSHER_APPID: process.env.PUSHER_APPID,
     PUSHER_KEY: process.env.PUSHER_KEY,
     PUSHER_SECRET: process.env.PUSHER_SECRET,
