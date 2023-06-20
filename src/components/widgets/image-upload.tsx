@@ -38,7 +38,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageChanged }) => {
                   {acceptedFiles[0] && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      className="object-cover"
+                      className="object-cover h-64 w-64 rounded-md border-muted border-2"
                       src={URL.createObjectURL(acceptedFiles[0])}
                       alt="image preview"
                     />

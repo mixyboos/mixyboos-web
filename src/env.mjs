@@ -27,7 +27,8 @@ export const env = createEnv({
     PUSHER_KEY: z.string(),
     PUSHER_SECRET: z.string(),
 
-    AZURE_CONNECTION: z.string(),
+    AZURE_ACCOUNT_NAME: z.string(),
+    AZURE_ACCOUNT_KEY: z.string(),
   },
   client: {
     NEXT_PUBLIC_PUSHER_KEY: z.string().min(1),
@@ -44,7 +45,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 
-    AZURE_CONNECTION: process.env.AZURE_CONNECTION,
+    AZURE_ACCOUNT_NAME: process.env.AZURE_ACCOUNT_NAME,
+    AZURE_ACCOUNT_KEY: process.env.AZURE_ACCOUNT_KEY,
 
     NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
     PUSHER_APPID: process.env.PUSHER_APPID,

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Form,
   FormDescription,
@@ -10,8 +12,9 @@ import { Button } from "@/components/ui/button";
 import ImageUpload from "@/components/widgets/image-upload";
 import { notice } from "@/lib/components/notifications/toast";
 import { type UserModel } from "@/lib/models";
+import { uploadFile } from "@/lib/services/azure/upload";
+import { getFileExtension } from "@/lib/services/utils/fileUtils";
 import { api } from "@/lib/utils/api";
-import { useUploadThing } from "@/lib/utils/upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -58,16 +61,11 @@ type FormValues = z.infer<typeof formSchema>;
 const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   profile,
 }) => {
+  const uploader = api.upload.getSASToken.useQuery({ containerName: "images" });
   const updateUser = api.user.updateUser.useMutation({
     onSuccess: (result) => {
       console.log("profile-edit-form", "onSuccess", result);
       notice("Success", "Profile updated successfully");
-    },
-  });
-  const { startUpload: uploadProfileImage } = useUploadThing({
-    endpoint: "profileImageUpload",
-    onUploadError: () => {
-      alert("error occurred while uploading");
     },
   });
 
@@ -83,12 +81,27 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   const onSubmit = async (data: FormValues) => {
     console.log("profile-images-form", "onSubmit", data);
     if (data.profileImage && data.profileImage instanceof File) {
-      const results = await uploadProfileImage([data.profileImage]);
-      if (results && results[0]) {
-        const { fileUrl, fileKey } = results[0];
+      const token = uploader.data;
+      if (!token) {
+        notice("Error", "Unable to upload at this time");
+        return;
+      }
+
+      const form = new FormData();
+      form.append("image", data.profileImage);
+      console.log("profile-images-form", "token", token);
+      const result = await uploadFile(
+        data.profileImage,
+        "images",
+        `profile/avatars/${profile.id}.${getFileExtension(
+          data.profileImage.name
+        )}`,
+        token
+      );
+      if (result) {
         await updateUser.mutateAsync({
           ...profile,
-          profileImage: fileUrl,
+          profileImage: result,
         });
       }
     }
