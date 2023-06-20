@@ -7,10 +7,14 @@ const mapAuthUserToUserModel = (
 ): UserModel | undefined =>
   user
     ? {
+        id: user.id,
         username: user.username,
         name: user.name,
+        email: user.email,
         bio: user.bio,
-        image: user.image,
+        profileImage: user.profileImage,
+        headerImage: user.headerImage,
+        urls: [],
       }
     : undefined;
 
@@ -19,10 +23,14 @@ const mapDbAuthUserToUserModel = (
 ): UserModel | undefined =>
   user
     ? {
+        id: user.id,
         username: user.username ?? "unknownuser",
         name: user.name ?? "Unknown User",
+        email: user.email,
         bio: user.bio,
-        image: user.image,
+        profileImage: user.profileImage,
+        headerImage: user.headerImage,
+        urls: [],
       }
     : undefined;
 

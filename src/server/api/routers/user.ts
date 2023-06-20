@@ -1,7 +1,4 @@
-import {
-  mapAuthUserToUserModel,
-  mapDbAuthUserToUserModel,
-} from "@/lib/utils/mappers/userMapper";
+import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -47,4 +44,43 @@ export const userRouter = createTRPCRouter({
 
       return user;
     }),
+  updateUser: protectedProcedure
+    .input(
+      z.object({
+        username: z.string(),
+        email: z.string().email(),
+        bio: z.string().nullable(),
+        urls: z.array(z.string()),
+        profileImage: z.string().nullable(),
+        headerImage: z.string().nullable(),
+      })
+    )
+    .mutation(
+      async ({
+        input: { username, email, bio, urls, profileImage, headerImage },
+        ctx,
+      }) => {
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: ctx.session.id },
+        });
+        if (!user) {
+          throw new trpc.TRPCError({
+            code: "FORBIDDEN",
+            message: "User is not authenticated.",
+          });
+        }
+        await ctx.prisma.user.update({
+          where: { id: ctx.session.id },
+          data: {
+            ...user,
+            username,
+            email,
+            bio,
+            urls,
+            profileImage,
+            headerImage,
+          },
+        });
+      }
+    ),
 });

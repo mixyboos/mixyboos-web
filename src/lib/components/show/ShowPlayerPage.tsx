@@ -58,7 +58,7 @@ const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
           <div className="flex items-center justify-between bg-white px-4 py-4 dark:bg-slate-800">
             <div className="flex min-w-0 items-center">
               <UserImage
-                src={show.user.image || ""}
+                src={show.user.profileImage || ""}
                 status={"offline"}
                 size={"md"}
               />
