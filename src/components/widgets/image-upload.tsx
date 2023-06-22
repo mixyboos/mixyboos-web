@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Dropzone, { type DropzoneRef } from "react-dropzone";
 
 type ImageUploadProps = {
@@ -6,9 +6,16 @@ type ImageUploadProps = {
   onImageChanged: (image: File) => void;
 };
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onImageChanged }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({
+  imageUrl,
+  onImageChanged,
+}) => {
   const dropzoneRef = React.createRef<DropzoneRef>();
-
+  useEffect(() => {
+    if (imageUrl) {
+      console.log("image-upload", "imageUrl", imageUrl);
+    }
+  }, [imageUrl]);
   return (
     <Dropzone
       accept={{
@@ -30,19 +37,23 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageChanged }) => {
               {...getRootProps({ className: "dropzone" })}
               onClick={(e) => e.stopPropagation()}
             >
-              {acceptedFiles?.length ? (
+              {acceptedFiles?.length || imageUrl ? (
                 <div
                   id="preview"
                   className="flex w-full items-center justify-center"
                 >
-                  {acceptedFiles[0] && (
+                  {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       className="object-cover h-64 w-64 rounded-md border-muted border-2"
-                      src={URL.createObjectURL(acceptedFiles[0])}
+                      src={
+                        acceptedFiles[0]
+                          ? URL.createObjectURL(acceptedFiles[0])
+                          : imageUrl
+                      }
                       alt="image preview"
                     />
-                  )}
+                  }
                 </div>
               ) : (
                 <div id="drop">

@@ -11,6 +11,7 @@ const config = {
     domains: [
       "cloudflare-ipfs.com",
       "avatars.githubusercontent.com",
+      "mixyboos.twic.pics",
       "uploadthing.com",
     ],
   },

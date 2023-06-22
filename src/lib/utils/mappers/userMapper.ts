@@ -25,10 +25,12 @@ const mapDbAuthUserToUserModel = (
     ? {
         id: user.id,
         username: user.username ?? "unknownuser",
-        name: user.name ?? "Unknown User",
+        name: user.name ?? user.username ?? "Unknown User",
         email: user.email,
         bio: user.bio,
-        profileImage: user.profileImage,
+        profileImage: user.profileImage
+          ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
+          : "/img/default-avatar.png",
         headerImage: user.headerImage,
         urls: [],
       }

@@ -108,7 +108,6 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   };
   return (
     <Form {...form}>
-      <p>{JSON.stringify(form.formState.errors, null, 2)}</p>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
