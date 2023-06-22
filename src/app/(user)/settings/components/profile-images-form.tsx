@@ -16,11 +16,12 @@ import { uploadFile } from "@/lib/services/azure/upload";
 import { getFileExtension } from "@/lib/services/utils/fileUtils";
 import { api } from "@/lib/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
-const MAX_FILE_SIZE = 5242880;
+const MAX_PROFILE_IMAGE_SIZE = 5242880;
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -31,36 +32,15 @@ const ACCEPTED_IMAGE_TYPES = [
 type ProfileImageEditFormProps = {
   profile: UserModel;
 };
-const formSchema = z.object({
-  profileImage: z
-    .any()
-    .refine((file: File) => {
-      const ret = file?.size <= MAX_FILE_SIZE;
-      console.log("profile-images-form", "profileImage_refine", ret);
-      return ret;
-    }, `Max image size is 5MB.`)
-    .refine(
-      (file: File) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    )
-    .optional(),
-  // headerImage: z
-  //   .any()
-  //   .refine((file: File) => {
-  //     const ret = file === null ?? file?.size <= MAX_FILE_SIZE;
-  //     return ret;
-  //   }, `Max image size is 5MB.`)
-  //   .refine(
-  //     (file: File) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-  //     "Only .jpg, .jpeg, .png and .webp formats are supported."
-  //   )
-  //   .nullable()
-  //   .optional(),
-});
-type FormValues = z.infer<typeof formSchema>;
+
 const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   profile,
 }) => {
+  const { update } = useSession();
+
+  const [profileImageChanged, setProfileImageChanged] = React.useState(false);
+  const [headerImageChanged, setHeaderImageChanged] = React.useState(false);
+
   const uploader = api.upload.getSASToken.useQuery({ containerName: "images" });
   const updateUser = api.user.updateUser.useMutation({
     onSuccess: (result) => {
@@ -68,10 +48,40 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
       notice("Success", "Profile updated successfully");
     },
   });
+  const formSchema = z.object({
+    profileImage: z
+      .any()
+      .refine((file: File) => {
+        const ret =
+          !profileImageChanged || file?.size <= MAX_PROFILE_IMAGE_SIZE;
+        console.log("profile-images-form", "profileImage_refine", ret);
+        return ret;
+      }, `Max image size is 5MB.`)
+      .refine(
+        (file: File) =>
+          !profileImageChanged || ACCEPTED_IMAGE_TYPES.includes(file?.type),
+        "Only .jpg, .jpeg, .png and .webp formats are supported."
+      )
+      .optional(),
+    headerImage: z
+      .any()
+      .refine((file: File) => {
+        const ret =
+          !headerImageChanged || file?.size <= MAX_PROFILE_IMAGE_SIZE * 3;
+        return ret;
+      }, `Max image size is 15MB.`)
+      .refine(
+        (file: File) =>
+          !headerImageChanged || ACCEPTED_IMAGE_TYPES.includes(file?.type),
+        "Only .jpg, .jpeg, .png and .webp formats are supported."
+      )
+      .optional(),
+  });
+  type FormValues = z.infer<typeof formSchema>;
 
   const defaultValues: Partial<FormValues> = {
     profileImage: profile.profileImage,
-    // headerImage: profile.headerImage,
+    headerImage: profile.headerImage,
   };
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -80,34 +90,59 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   });
   const onSubmit = async (data: FormValues) => {
     console.log("profile-images-form", "onSubmit", data);
-    if (data.profileImage && data.profileImage instanceof File) {
+    if (profileImageChanged || headerImageChanged) {
       const token = uploader.data;
       if (!token) {
         notice("Error", "Unable to upload at this time");
         return;
       }
 
-      const form = new FormData();
-      form.append("image", data.profileImage);
-      console.log("profile-images-form", "token", token);
-      const result = await uploadFile(
-        data.profileImage,
-        "images",
-        `profile/avatars/${profile.id}.${getFileExtension(
-          data.profileImage.name
-        )}`,
-        token
-      );
-      if (result) {
-        await updateUser.mutateAsync({
-          ...profile,
-          profileImage: result,
-        });
+      if (
+        profileImageChanged &&
+        data.profileImage &&
+        data.profileImage instanceof File
+      ) {
+        const image = await uploadFile(
+          data.profileImage,
+          "images",
+          `profile/avatars/${profile.id}.${getFileExtension(
+            data.profileImage.name
+          )}`,
+          token
+        );
+        if (image) {
+          await updateUser.mutateAsync({
+            ...profile,
+            profileImage: image,
+          });
+        }
       }
+      if (
+        headerImageChanged &&
+        data.headerImage &&
+        data.headerImage instanceof File
+      ) {
+        const image = await uploadFile(
+          data.headerImage,
+          "images",
+          `profile/headers/${profile.id}.${getFileExtension(
+            data.headerImage.name
+          )}`,
+          token
+        );
+        if (image) {
+          await updateUser.mutateAsync({
+            ...profile,
+            headerImage: image,
+          });
+        }
+      }
+      await update();
     }
   };
   return (
     <Form {...form}>
+      {/* <p>{JSON.stringify(form.formState.errors, null, 2)}</p> */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
@@ -126,21 +161,13 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
                         {...field}
                         imageUrl={value as string}
                         onImageChanged={(image) => {
+                          setProfileImageChanged(true);
                           onChange(image);
                         }}
                       />
                     );
                   }}
                 />
-                {/* <ImageUpload
-                    onImageChanged={(image) => {
-                      console.log(
-                        "profile-images-form",
-                        "onImageChanged",
-                        image
-                      );
-                    }}
-                  /> */}
               </div>
               <FormDescription>
                 {
@@ -151,15 +178,29 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
             </FormItem>
           )}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
           name="headerImage"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Header Image</FormLabel>
-              <FormControl>
-
-              </FormControl>
+              <Controller
+                control={form.control}
+                name={"headerImage"}
+                render={({ field: { value, onChange, ...field } }) => {
+                  return (
+                    <ImageUpload
+                      {...field}
+                      className="w-full"
+                      imageUrl={value as string}
+                      onImageChanged={(image) => {
+                        setHeaderImageChanged(true);
+                        onChange(image);
+                      }}
+                    />
+                  );
+                }}
+              />
               <FormDescription>
                 This is the image that will show at the top of your profile
                 page.
@@ -167,16 +208,10 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
         <Button type="submit">Update profile images</Button>
       </form>
     </Form>
-    //   <ImageUpload
-    //     onImageChanged={(image) => {
-    //       console.log("profile-images-form", "onImageChanged", image);
-    //     }}
-    //   />
-    // </div>
   );
 };
 

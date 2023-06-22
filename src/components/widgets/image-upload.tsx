@@ -1,14 +1,17 @@
+import { cn } from "@/lib/utils/styles";
 import React, { useEffect } from "react";
 import Dropzone, { type DropzoneRef } from "react-dropzone";
 
-type ImageUploadProps = {
+interface ImageUploadProps extends React.BaseHTMLAttributes<HTMLDivElement> {
   imageUrl: string | undefined;
   onImageChanged: (image: File) => void;
-};
+}
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   imageUrl,
   onImageChanged,
+  className,
+  ...props
 }) => {
   const dropzoneRef = React.createRef<DropzoneRef>();
   useEffect(() => {
@@ -32,20 +35,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => {
         return (
-          <div className="w-64 h-64">
+          <div className={cn("w-64 h-64", className)}>
             <div
               {...getRootProps({ className: "dropzone" })}
               onClick={(e) => e.stopPropagation()}
             >
               {acceptedFiles?.length || imageUrl ? (
-                <div
-                  id="preview"
-                  className="flex w-full items-center justify-center"
-                >
+                <div id="preview" className="flex h-56 w-3/4">
                   {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      className="object-cover h-64 w-64 rounded-md border-muted border-2"
+                      className="object-cover  rounded-md border-muted border-2"
                       src={
                         acceptedFiles[0]
                           ? URL.createObjectURL(acceptedFiles[0])

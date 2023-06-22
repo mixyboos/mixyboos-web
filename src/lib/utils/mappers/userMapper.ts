@@ -31,7 +31,9 @@ const mapDbAuthUserToUserModel = (
         profileImage: user.profileImage
           ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
           : "/img/default-avatar.png",
-        headerImage: user.headerImage,
+        headerImage: user.headerImage
+          ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
+          : "/img/default-header.png",
         urls: [],
       }
     : undefined;

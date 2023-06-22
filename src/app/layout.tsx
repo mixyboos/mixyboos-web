@@ -5,8 +5,6 @@ import { cn } from "@/lib/utils/styles";
 import { type Metadata } from "next";
 import Image from "next/image";
 import Providers from "./providers";
-//the order of these matters
-import "@uploadthing/react/styles.css";
 import "@/styles/globals.css";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -36,10 +34,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             />
           </div>
           <div className="hidden flex-col md:flex">
-            <div className="border-b">
+            <div className="border-b bg-background/95 backdrop-blur">
               <Navbar className="mx-6" />
             </div>
-            <div className="flex-1">{children}</div>
+            <div className="flex-1 mt-12 mx-8">{children}</div>
           </div>
         </Providers>
       </body>

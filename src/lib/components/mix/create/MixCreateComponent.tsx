@@ -1,13 +1,14 @@
 "use client";
-import React from "react";
-import { useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
-import { MdOutlineErrorOutline } from "react-icons/md";
 
+import FileUpload from "@/lib/components/widgets/FileUpload";
 import PageHeader from "@/lib/components/widgets/PageHeader";
 import Progress from "@/lib/components/widgets/Progress";
-import FileUpload from "@/lib/components/widgets/FileUpload";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { MdOutlineErrorOutline } from "react-icons/md";
+import { v4 as uuidv4 } from "uuid";
 import MixCreateDetailsComponent from "./MixCreateDetailsComponent";
+
 enum CreateState {
   new,
   editing,
@@ -28,7 +29,6 @@ const MixCreateComponent = () => {
   const [percentageUploaded, setPercentageUploaded] = React.useState(0);
   const [mixId] = React.useState(uuidv4());
   const [fileName, setFilename] = React.useState("");
-  const router = useRouter();
   return (
     <div className="flex flex-col justify-center space-y-4">
       <PageHeader title="Let's create a mix" />

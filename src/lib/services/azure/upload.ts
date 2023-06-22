@@ -26,7 +26,12 @@ const uploadFile = async (
   fileName: string,
   token: string
 ): Promise<string | undefined> => {
-  await createBlobInContainer(file, containerName, fileName, token);
+  await createBlobInContainer(
+    file,
+    containerName,
+    fileName.toLowerCase(),
+    token
+  );
 
   return fileName;
 };

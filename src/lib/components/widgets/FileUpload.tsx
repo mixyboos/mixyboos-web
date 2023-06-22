@@ -1,7 +1,5 @@
-import { FaFileAudio } from "react-icons/fa";
-import { VscCloudUpload } from "react-icons/vsc";
-import React from "react";
 import { getFileNameFromInput } from "@/lib/services/utils/fileUtils";
+import React from "react";
 
 interface IFileUploadProps {
   mixId: string;
@@ -22,18 +20,18 @@ const FileUpload = ({
     if (!event.currentTarget.files) return;
     if (!event.currentTarget.files[0]) return;
 
-    // const uploadService = new UploadService();
+    const uploadService = new UploadService();
 
     const formData = new FormData();
 
     formData.append("file", event.currentTarget.files[0]);
     try {
       onUploadStart(getFileNameFromInput(event.currentTarget.files[0].name));
-      //   const result = await uploadService.uploadAudio(
-      //     mixId,
-      //     formData,
-      //     onUploadProgress
-      //   );
+      const result = await uploadService.uploadAudio(
+        mixId,
+        formData,
+        onUploadProgress
+      );
       onUploadComplete();
     } catch (err) {
       console.error("Upload", "Error", err);
@@ -43,38 +41,30 @@ const FileUpload = ({
     }
   };
   return (
-    <React.Fragment>
-      <div className="shadow-cocoa-100 rounded-2xl p-4 shadow-md dark:shadow-gray-400">
-        <div className="flex items-center">
-          <div className="bg-cocoa-500 dark:bg-cerise-400 inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg text-white">
-            <FaFileAudio className="h-8 w-8" fill="currentColor" />
-          </div>
-          <div className="ml-3 flex-shrink-0">
-            <span className="text-2xl font-bold leading-none text-gray-900 dark:text-gray-200 sm:text-3xl">
-              Choose your file
-            </span>
-            <h3 className="text-base font-normal text-gray-500">
-              And we&lsquo;ll do our best to process it.
-            </h3>
-          </div>
-          <div className="ml-5 flex w-0 flex-1 items-center justify-end text-base font-bold">
-            <label className="text-blue border-blue hover:bg-blue flex w-64 cursor-pointer flex-col items-center rounded-lg border bg-white px-4 py-6 uppercase tracking-wide text-gray-600 shadow-lg hover:text-gray-400">
-              <VscCloudUpload className="h-8 w-8" fill="currentColor" />
-              <span className="mt-2 text-base leading-normal">Browse</span>
-              <input
-                type="file"
-                className="hidden"
-                onChange={(e) => {
-                  startUpload(e).catch((err) => {
-                    console.error("FileUpload", "Error starting upload", err);
-                  });
-                }}
-              />
-            </label>
-          </div>
-        </div>
-      </div>
-    </React.Fragment>
+    <label
+      className="w-full flex flex-col items-center px-4 py-6 bg-primary text-primary-foreground
+                 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer
+                 hover:bg-primary/90 disabled:opacity-50 hover:text-primary-foreground/90"
+    >
+      <svg
+        className="w-8 h-8"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+      >
+        <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+      </svg>
+      <span className="mt-2 text-base leading-normal">gimme a file</span>
+      <input
+        type="file"
+        className="hidden"
+        onChange={(e) => {
+          startUpload(e).catch((err) => {
+            console.error("FileUpload", "Error starting upload", err);
+          });
+        }}
+      />
+    </label>
   );
 };
 export default FileUpload;
