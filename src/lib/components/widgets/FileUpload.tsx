@@ -1,4 +1,6 @@
 import { getFileNameFromInput } from "@/lib/services/utils/fileUtils";
+import axios, { type AxiosProgressEvent, type AxiosRequestConfig } from "axios";
+import { StatusCodes } from "http-status-codes";
 import React from "react";
 
 interface IFileUploadProps {
@@ -20,19 +22,23 @@ const FileUpload = ({
     if (!event.currentTarget.files) return;
     if (!event.currentTarget.files[0]) return;
 
-    const uploadService = new UploadService();
-
     const formData = new FormData();
 
     formData.append("file", event.currentTarget.files[0]);
+    formData.append("mixId", mixId);
     try {
+      const options: AxiosRequestConfig = {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+          onUploadProgress(progressEvent.total ?? 0, progressEvent.loaded);
+        },
+      };
       onUploadStart(getFileNameFromInput(event.currentTarget.files[0].name));
-      const result = await uploadService.uploadAudio(
-        mixId,
-        formData,
-        onUploadProgress
-      );
-      onUploadComplete();
+      const result = await axios.post("/api/upload", formData, options);
+
+      if (result.status === StatusCodes.OK) {
+        onUploadComplete();
+      }
     } catch (err) {
       console.error("Upload", "Error", err);
       onError(

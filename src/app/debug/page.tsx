@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils/styles";
+import { cn } from "@/lib/utils";
 import { Switch } from "@headlessui/react";
 import { BellRing, Check } from "lucide-react";
 import { useSession } from "next-auth/react";

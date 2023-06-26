@@ -4,7 +4,7 @@ import { Icons, type Icon } from "@/components/icons";
 import Search from "@/components/widgets/search";
 import { ThemeToggle } from "@/components/widgets/theme-toggle";
 import UserNav from "@/components/widgets/user-nav";
-import { cn } from "@/lib/utils/styles";
+import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";

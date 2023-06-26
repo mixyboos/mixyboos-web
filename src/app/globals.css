@@ -55,7 +55,7 @@
     --card: 224 71% 4%;
     --card-foreground: 213 31% 91%;
 
-    --primary:  356, 100%, 64%;
+    --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 1.2%;
 
     --secondary: 222.2 47.4% 11.2%;
@@ -77,23 +77,5 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
-}
-
-@layer utilities {
-  .step {
-    counter-increment: step;
-  }
-
-  .step:before {
-    @apply absolute inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-center -indent-px text-base font-medium;
-    @apply ml-[-41px];
-    content: counter(step);
-  }
-}
-
-@media (max-width: 640px) {
-  .container {
-    @apply px-4;
   }
 }

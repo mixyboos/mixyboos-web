@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/styles";
+import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
 import Dropzone, { type DropzoneRef } from "react-dropzone";
 

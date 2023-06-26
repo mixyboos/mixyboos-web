@@ -24,6 +24,7 @@
     "@trpc/react-query": "^10.31.0",
     "@trpc/server": "^10.31.0",
     "argon2": "^0.30.3",
+    "axios": "^1.4.0",
     "classnames": "^2.3.2",
     "http-status-codes": "^2.2.0",
     "install": "^0.13.0",

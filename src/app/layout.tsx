@@ -1,11 +1,11 @@
 import { fontSans } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
 import Navbar from "@/lib/components/layout/Navbar";
-import { cn } from "@/lib/utils/styles";
+import { cn } from "@/lib/utils";
 import { type Metadata } from "next";
 import Image from "next/image";
 import Providers from "./providers";
-import "@/styles/globals.css";
+import "@/app/globals.css";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (

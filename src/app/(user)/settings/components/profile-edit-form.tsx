@@ -14,7 +14,7 @@ import { toast } from "@/components/ui/use-toast";
 import { notice } from "@/lib/components/notifications/toast";
 import { type UserModel } from "@/lib/models";
 import { api } from "@/lib/utils/api";
-import { cn } from "@/lib/utils/styles";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
