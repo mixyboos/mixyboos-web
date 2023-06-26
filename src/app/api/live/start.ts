@@ -4,7 +4,7 @@ import { createTRPCContext } from "@/server/api/trpc";
 import { StatusCodes } from "http-status-codes";
 import { type NextApiRequest, type NextApiResponse } from "next";
 
-import waitForShow from "@/pages/api/queues/shows/wait";
+import waitForShow from "@/app/api/queues/shows/wait";
 
 export default async function handler(
   req: NextApiRequest,

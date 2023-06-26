@@ -7,7 +7,7 @@ import { StatusCodes } from "http-status-codes";
 import { Queue } from "quirrel/next";
 import superagent from "superagent";
 
-export const waitQueue = Queue(
+export const waitForShowQueue = Queue(
   "api/queues/shows/wait", // 👈 the route it's reachable on
   async (job: { showId: string }) => {
     const rt = createPusherServer();
@@ -83,4 +83,4 @@ export const waitQueue = Queue(
     console.error("waitForShow", "FAILED: show-failure", job.showId);
   }
 );
-export const POST = waitQueue;
+export const POST = waitForShowQueue;
