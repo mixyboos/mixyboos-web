@@ -1,12 +1,13 @@
 "use client";
+
+import type { LiveShowModel } from "@/lib/models";
+import { api } from "@/lib/utils/api";
 import React from "react";
 import ShowStatus from "../../models/ShowStatus";
+import Loading from "../widgets/Loading";
 import CreateShow from "./CreateShow";
 import Show from "./Show";
 import StreamConnector from "./StreamConnector";
-import { api } from "@/lib/utils/api";
-import Loading from "../widgets/Loading";
-import type { LiveShowModel } from "@/lib/models";
 
 type LiveShowWrapperProps = {
   incomingShow: LiveShowModel | undefined | null;
@@ -53,12 +54,7 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
   }
 
   if (show && show?.status === ShowStatus.awaitingStreamConnection) {
-    return (
-      <>
-        Stream Connector
-        <StreamConnector show={show} setShow={setShow} />
-      </>
-    );
+    return <StreamConnector show={show} setShow={setShow} />;
   }
   if (show?.id && show?.status === ShowStatus.inProgress)
     return (

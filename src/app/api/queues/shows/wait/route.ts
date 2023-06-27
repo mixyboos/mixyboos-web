@@ -4,23 +4,23 @@ import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
 import { prisma } from "@/server/db";
 import { LiveShowStatus } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { Queue } from "quirrel/next";
+import { Queue } from "quirrel/next-app";
 import superagent from "superagent";
 
-export default Queue(
+export const waitForShowQueue = Queue(
   "api/queues/shows/wait", // 👈 the route it's reachable on
-  async (job: { showId: string }) => {
+  async (showId: string) => {
     const rt = createPusherServer();
-    const url = `https://live-mixyboos.dev.fergl.ie:9091/hls/${job.showId}/index.m3u8`;
-
+    const url = `https://live-mixyboos.dev.fergl.ie:9091/hls/${showId}/index.m3u8`;
+    console.log("wait", "Checking URL", url);
     const show = await prisma.liveShow.findUnique({
       where: {
-        id: job.showId,
+        id: showId,
       },
     });
 
     if (!show) {
-      throw new Error(`Unable to find show ${job.showId}`);
+      throw new Error(`Unable to find show ${showId}`);
     }
 
     const user = mapDbAuthUserToUserModel(
@@ -69,17 +69,18 @@ export default Queue(
       });
 
       //push status to client
-      await rt.trigger(`ls_${job.showId}`, "show-started", {
+      await rt.trigger(`ls_${showId}`, "show-started", {
         show: mapShowToShowModel(show, user),
       });
-      console.log("waitForShow", "show-started", job.showId);
+      console.log("waitForShow", "show-started", showId);
       return;
     }
 
     //notime
-    await rt.trigger(`ls_${job.showId}`, "show-failure", {
-      id: job.showId,
+    await rt.trigger(`ls_${showId}`, "show-failure", {
+      id: showId,
     });
-    console.error("waitForShow", "FAILED: show-failure", job.showId);
+    console.error("waitForShow", "FAILED: show-failure", showId);
   }
 );
+export const POST = waitForShowQueue;

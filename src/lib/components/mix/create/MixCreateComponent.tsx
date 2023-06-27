@@ -3,7 +3,7 @@
 import FileUpload from "@/lib/components/widgets/FileUpload";
 import PageHeader from "@/lib/components/widgets/PageHeader";
 import Progress from "@/lib/components/widgets/Progress";
-import { useRouter } from "next/navigation";
+import { MixModel } from "@/lib/models";
 import React from "react";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
@@ -34,11 +34,11 @@ const MixCreateComponent = () => {
       <PageHeader title="Let's create a mix" />
       <div className="flex items-center justify-center">
         {errors.length !== 0 && (
-          <div className="mx-auto flex w-full max-w-lg overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">
-            <div className="flex w-12 items-center justify-center bg-red-500">
-              <MdOutlineErrorOutline className="h-6 w-6 fill-current text-white" />
+          <div className="flex w-full max-w-lg mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-slate-800">
+            <div className="flex items-center justify-center w-12 bg-red-500">
+              <MdOutlineErrorOutline className="w-6 h-6 text-white fill-current" />
             </div>
-            <div className="-mx-3 px-4 py-2">
+            <div className="px-4 py-2 -mx-3">
               <div className="mx-3">
                 <span className="font-semibold text-red-500 dark:text-red-400">
                   Ooopsies...
@@ -50,9 +50,10 @@ const MixCreateComponent = () => {
             </div>
           </div>
         )}
-        {uploadState === UploadState.uploading && (
+        <Progress percentage={percentageUploaded} title="Uploading audio" />
+        {/* {uploadState === UploadState.uploading && (
           <Progress percentage={percentageUploaded} title="Uploading audio" />
-        )}
+        )} */}
         {uploadState === UploadState.new && (
           <FileUpload
             mixId={mixId}
@@ -74,10 +75,10 @@ const MixCreateComponent = () => {
         )}
         {createState === CreateState.new && uploadState !== UploadState.new && (
           <MixCreateDetailsComponent
-          // mix={{ id: mixId, title: fileName } as MixModel}
-          // onMixCreated={(mix) => {
-          //   setCreateState(mix ? CreateState.done : CreateState.error);
-          // }}
+            mix={{ id: mixId, title: fileName } as MixModel}
+            onMixCreated={(mix) => {
+              setCreateState(mix ? CreateState.done : CreateState.error);
+            }}
           />
         )}
       </div>

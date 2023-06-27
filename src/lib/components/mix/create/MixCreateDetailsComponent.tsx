@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/widgets/image-upload";
+import { MixModel } from "@/lib/models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -27,8 +28,15 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/png",
   "image/webp",
 ];
+type MixCreateDetailsComponentProps = {
+  mix: MixModel;
+  onMixCreated: (mix: MixModel) => void;
+};
 
-const MixCreateDetailsComponent = () => {
+const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
+  mix,
+  onMixCreated,
+}) => {
   const formSchema = z.object({
     title: z
       .string()
@@ -51,7 +59,7 @@ const MixCreateDetailsComponent = () => {
   });
   type FormValues = z.infer<typeof formSchema>;
   const defaultValues: Partial<FormValues> = {
-    title: "",
+    title: mix.title,
     description: "",
     mixImage: null,
   };
@@ -120,6 +128,7 @@ const MixCreateDetailsComponent = () => {
                         return (
                           <ImageUpload
                             {...field}
+                            className="w-64 h-64"
                             imageUrl={value as string}
                             onImageChanged={(image) => {
                               onChange(image);
@@ -137,7 +146,7 @@ const MixCreateDetailsComponent = () => {
           </div>
           <Separator className="my-0 bg-muted-foreground" />
           <Button type="submit" variant={"default"}>
-            <Icons.save className="mr-2 h-4 w-4" />
+            <Icons.save className="w-4 h-4 mr-2" />
             Save mix
           </Button>
         </form>
