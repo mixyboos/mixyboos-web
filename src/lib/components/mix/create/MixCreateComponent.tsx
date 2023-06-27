@@ -51,9 +51,9 @@ const MixCreateComponent = () => {
           </div>
         )}
         <Progress percentage={percentageUploaded} title="Uploading audio" />
-        {uploadState === UploadState.uploading && (
+        {/* {uploadState === UploadState.uploading && (
           <Progress percentage={percentageUploaded} title="Uploading audio" />
-        )}
+        )} */}
         {uploadState === UploadState.new && (
           <FileUpload
             mixId={mixId}

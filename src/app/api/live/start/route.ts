@@ -44,6 +44,12 @@ export async function POST(req: NextRequest) {
       { status: StatusCodes.BAD_REQUEST }
     );
   }
-  await waitForShowQueue.enqueue({ showId: show.id }, { delay: 1 });
-  NextResponse.redirect(show.id, StatusCodes.MOVED_TEMPORARILY);
+  await waitForShowQueue.enqueue(show.id, { delay: 1 });
+  return new NextResponse("Redirecting.....", {
+    status: StatusCodes.MOVED_TEMPORARILY,
+    headers: {
+      "Content-Type": "text/plain",
+      Location: show.id,
+    },
+  });
 }
