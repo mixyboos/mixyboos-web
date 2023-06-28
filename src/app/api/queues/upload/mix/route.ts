@@ -42,7 +42,7 @@ export const processMixQueue = Queue(
       generateSasToken("mixyboos", "audio")
         .then((token) => {
           console.log("upload/mix/route", "SAS TOKEN", token);
-          uploadFolder(token, outputDir, "audio", mixId);
+          uploadFolder(outputDir, "audio", mixId, token);
         })
         .catch((err) => {
           console.log("route", "Error uploading folder", err);

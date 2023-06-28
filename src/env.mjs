@@ -29,6 +29,7 @@ export const env = createEnv({
 
     AZURE_ACCOUNT_NAME: z.string(),
     AZURE_ACCOUNT_KEY: z.string(),
+    AZURE_ACCOUNT_URL: z.string(),
   },
   client: {
     NEXT_PUBLIC_PUSHER_KEY: z.string().min(1),
@@ -47,6 +48,7 @@ export const env = createEnv({
 
     AZURE_ACCOUNT_NAME: process.env.AZURE_ACCOUNT_NAME,
     AZURE_ACCOUNT_KEY: process.env.AZURE_ACCOUNT_KEY,
+    AZURE_ACCOUNT_URL: process.env.AZURE_ACCOUNT_URL,
 
     NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
     PUSHER_APPID: process.env.PUSHER_APPID,

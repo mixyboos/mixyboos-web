@@ -48,3 +48,6 @@ yarn-error.log*
 yarn.lock
 .pnp.cjs
 .pnp.loader.mjs
+
+# Sentry Auth Token
+.sentryclirc

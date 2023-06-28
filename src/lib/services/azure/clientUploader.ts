@@ -1,4 +1,4 @@
-import fs from "fs";
+import { env } from "@/env.mjs";
 import { BlobServiceClient, type ContainerClient } from "@azure/storage-blob";
 
 const createBlobInContainer = async (
@@ -7,7 +7,7 @@ const createBlobInContainer = async (
   fileName: string,
   token: string
 ) => {
-  const uploadUrl = `https://mixyboos.blob.core.windows.net/?${token}`;
+  const uploadUrl = `${env.AZURE_ACCOUNT_URL}/?${token}`;
   const blobService = new BlobServiceClient(uploadUrl);
 
   const containerClient: ContainerClient =
@@ -35,14 +35,4 @@ const uploadFile = async (
   return fileName;
 };
 
-const uploadFolder = (
-  token: string,
-  dir: string,
-  container: string,
-  subFolder: string
-) => {
-  fs.readdir(dir, (resolve, reject) => {
-    console.log("upload", "uploadFolder", resolve, reject);
-  });
-};
-export { uploadFile, uploadFolder };
+export { uploadFile };
