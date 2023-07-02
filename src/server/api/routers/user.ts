@@ -1,10 +1,13 @@
+import { users } from "@/db/schema";
 import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { db } from "@/server/db";
 import * as trpc from "@trpc/server";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const userRouter = createTRPCRouter({
@@ -16,11 +19,11 @@ export const userRouter = createTRPCRouter({
       });
     }
 
-    const user = await ctx.prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
+    const results = await db
+      .selectDistinct()
+      .from(users)
+      .where(eq(users.id, userId));
+    const user = results[0];
     if (!user) {
       throw new trpc.TRPCError({
         code: "UNAUTHORIZED",
@@ -36,11 +39,11 @@ export const userRouter = createTRPCRouter({
       })
     )
     .query(async ({ input: { streamKey }, ctx }) => {
-      const user = ctx.prisma.user.findUnique({
-        where: {
-          streamKey: streamKey,
-        },
-      });
+      const results = await db
+        .selectDistinct()
+        .from(users)
+        .where(eq(users.streamKey, streamKey));
+      const user = results[0];
 
       return user;
     }),
@@ -60,18 +63,21 @@ export const userRouter = createTRPCRouter({
         input: { username, email, bio, urls, profileImage, headerImage },
         ctx,
       }) => {
-        const user = await ctx.prisma.user.findUnique({
-          where: { id: ctx.session.id },
-        });
+        const results = await db
+          .selectDistinct()
+          .from(users)
+          .where(eq(users.id, ctx.session.id));
+        const user = results[0];
+
         if (!user) {
           throw new trpc.TRPCError({
             code: "FORBIDDEN",
             message: "User is not authenticated.",
           });
         }
-        await ctx.prisma.user.update({
-          where: { id: ctx.session.id },
-          data: {
+        await db
+          .update(users)
+          .set({
             ...user,
             username,
             email,
@@ -79,8 +85,8 @@ export const userRouter = createTRPCRouter({
             urls,
             profileImage,
             headerImage,
-          },
-        });
+          })
+          .where(eq(users.id, ctx.session.id));
       }
     ),
 });

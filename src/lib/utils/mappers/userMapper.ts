@@ -1,5 +1,5 @@
+import { type User as DbUser } from "@/db/schema";
 import { type UserModel } from "@/lib/models";
-import { type User as DbUser } from "@prisma/client";
 import { type User as AuthUser } from "next-auth";
 
 const mapAuthUserToUserModel = (
@@ -23,15 +23,15 @@ const mapDbAuthUserToUserModel = (
 ): UserModel | undefined =>
   user
     ? {
-        id: user.id,
+        id: user.id as string,
         username: user.username ?? "unknownuser",
-        name: user.name ?? user.username ?? "Unknown User",
-        email: user.email,
-        bio: user.bio,
-        profileImage: user.profileImage
+        name: (user.name as string) ?? (user.name as string) ?? "Unknown User",
+        email: user.email as string,
+        bio: user.bio as string,
+        profileImage: (user.profileImage as string)
           ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
           : "/img/default-avatar.png",
-        headerImage: user.headerImage
+        headerImage: (user.headerImage as string)
           ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
           : "/img/default-header.png",
         urls: [],

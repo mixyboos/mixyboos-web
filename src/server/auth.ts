@@ -1,7 +1,8 @@
+import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { eq } from "drizzle-orm";
 import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
-import { prisma } from "@/server/db";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { db } from "@/server/db";
 import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
 import {
@@ -12,6 +13,7 @@ import {
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { DrizzleAdapter } from "./adapters/drizzleAdapter";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -28,11 +30,12 @@ export const authOptions: NextAuthOptions = {
       if (!token.email) {
         return token;
       }
-      const user = await prisma.user.findFirst({
-        where: {
-          email: token.email,
-        },
-      });
+      const qry = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, token.email))
+        .limit(1);
+      const user = qry[0];
       if (user) {
         return {
           id: token.sub,
@@ -42,7 +45,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
-  adapter: PrismaAdapter(prisma),
+  adapter: DrizzleAdapter(db),
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -63,10 +66,12 @@ export const authOptions: NextAuthOptions = {
           if (!credentials?.email || !credentials?.password) {
             return null;
           }
-
-          const user = await prisma.user.findFirst({
-            where: { email: credentials.email },
-          });
+          const qry = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, credentials.email))
+            .limit(1);
+          const user = qry[0];
 
           if (!user || !user.password) {
             return null;
