@@ -1,4 +1,4 @@
-import { getFileNameFromInput } from "@/lib/services/utils/fileUtils";
+import { getFilename } from "@/lib/utils/fileUtils";
 import axios, { type AxiosProgressEvent, type AxiosRequestConfig } from "axios";
 import { StatusCodes } from "http-status-codes";
 import React from "react";
@@ -33,7 +33,7 @@ const FileUpload = ({
           onUploadProgress(progressEvent.total ?? 0, progressEvent.loaded);
         },
       };
-      onUploadStart(getFileNameFromInput(event.currentTarget.files[0].name));
+      onUploadStart(getFilename(event.currentTarget.files[0].name));
       const result = await axios.post("/api/upload", formData, options);
 
       if (result.status === StatusCodes.OK) {

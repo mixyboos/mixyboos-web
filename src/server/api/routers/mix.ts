@@ -1,4 +1,9 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
+import * as z from "zod";
 
 export const mixRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -8,4 +13,13 @@ export const mixRouter = createTRPCRouter({
     });
     return mixes;
   }),
+  createMix: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        tags: z.array(z.string()).optional(),
+      })
+    )
+    .mutation(async ({ input: { title, description, tags }, ctx }) => {}),
 });

@@ -1,35 +1,55 @@
-import { env } from "@/env.mjs";
+import fs from "fs/promises";
+import path from "path";
+import * as Sentry from "@sentry/nextjs";
+
 import {
-  BlockBlobClient,
+  BlobServiceClient,
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
+import { StatusCodes } from "http-status-codes";
 
-const uploadFile = (container: string) => {
-  const client = new BlockBlobClient(
-    `${env.AZURE_ACCOUNT_URL}/${container}`,
+const uploadFile = async (
+  file: string,
+  container: string,
+  destination: string
+): Promise<boolean> => {
+  const client = new BlobServiceClient(
+    `${process.env.AZURE_ACCOUNT_URL as string}`,
     new StorageSharedKeyCredential(
-      env.AZURE_ACCOUNT_NAME,
-      env.AZURE_ACCOUNT_KEY
+      process.env.AZURE_ACCOUNT_NAME as string,
+      process.env.AZURE_ACCOUNT_KEY as string
     )
   );
+  const containerClient = client.getContainerClient(container);
+  const blockBlobClient = containerClient.getBlockBlobClient(destination);
 
+  const response = await blockBlobClient.uploadFile(file);
+  return response._response.status === StatusCodes.OK;
 };
 
-// const uploadFolder = (dir: string, container: string, subFolder: string) => {
-//   fs.readdir(dir, (err, files) => {
-//     console.log("upload", "uploadFolder", err, files);
+const uploadFolder = async (
+  dir: string,
+  container: string,
+  subFolder: string
+) => {
+  const files = await fs.readdir(dir);
+  console.log("upload", "uploadFolder", files);
+  for (const file of files) {
+    try {
+      const destinationFile = path.join(subFolder, file);
+      const r = await uploadFile(
+        path.join(dir, file),
+        container,
+        destinationFile
+      );
+      console.log("upload", "File uploaded", r);
+    } catch (err) {
+      Sentry.captureException(err);
+      console.log("upload", "Error uploading", err);
+      return false;
+    }
+  }
+  return true;
+};
 
-//     files.forEach((file) => {
-//       const f = new File(file);
-//       uploadFile(f, containerName, `${subFolder}/${f.name}`)
-//         .then((r) => {
-//           console.log("upload", "File uploaded", r);
-//         })
-//         .catch((err) => {
-//           console.log("upload", "Error uploading", err);
-//         });
-//     });
-//   });
-// };
-
-export { uploadFolder };
+export { uploadFolder, uploadFile };

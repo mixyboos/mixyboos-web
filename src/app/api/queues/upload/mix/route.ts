@@ -2,8 +2,7 @@ import { spawn } from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import { generateSasToken } from "@/lib/services/azure/sas-token";
-import { uploadFile, uploadFolder } from "@/lib/services/azure/upload";
+import { uploadFolder } from "@/lib/services/azure/serverUploader";
 import { Queue } from "quirrel/next-app";
 
 export const processMixQueue = Queue(
@@ -39,13 +38,13 @@ export const processMixQueue = Queue(
       if (code !== 0) {
         return;
       }
-      generateSasToken("mixyboos", "audio")
-        .then((token) => {
-          console.log("upload/mix/route", "SAS TOKEN", token);
-          uploadFolder(outputDir, "audio", mixId, token);
+
+      uploadFolder(outputDir, "audio", path.join("mixes", mixId))
+        .then((r) => {
+          //probably need to tag the mix in some way here?
         })
         .catch((err) => {
-          console.log("route", "Error uploading folder", err);
+          console.log("route", "error uploading output folder", err);
         });
     });
   }

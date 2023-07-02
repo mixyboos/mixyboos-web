@@ -13,7 +13,7 @@ import ImageUpload from "@/components/widgets/image-upload";
 import { notice } from "@/lib/components/notifications/toast";
 import { type UserModel } from "@/lib/models";
 import { uploadFile } from "@/lib/services/azure/upload";
-import { getFileExtension } from "@/lib/services/utils/fileUtils";
+import { getFileExtension } from "@/lib/utils/fileUtils";
 import { api } from "@/lib/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
