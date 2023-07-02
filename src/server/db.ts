@@ -1,16 +1,13 @@
-import { PrismaClient } from "@prisma/client";
-
 import { env } from "@/env.mjs";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool, type PoolConfig } from "pg";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+if (!env.DATABASE_URL) {
+  throw new Error("DATABASE_URL cannot be found");
+}
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+const pool = new Pool({
+  connectionString: env.DATABASE_URL,
+} as PoolConfig);
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
-
-if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+export const db = drizzle(pool);
