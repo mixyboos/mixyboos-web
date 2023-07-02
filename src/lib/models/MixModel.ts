@@ -4,8 +4,8 @@ type MixModel = {
   id: string;
   slug?: string;
   title: string;
-  description: string;
-  dateUploaded?: string;
+  description?: string;
+  dateUploaded: string;
   image?: string;
   likeCount?: number;
   playCount?: number;

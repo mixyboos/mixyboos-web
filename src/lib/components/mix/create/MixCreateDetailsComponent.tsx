@@ -15,9 +15,12 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/widgets/image-upload";
-import { MixModel } from "@/lib/models";
+import { type MixModel } from "@/lib/models";
+import { api } from "@/lib/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
+import * as Sentry from "@sentry/nextjs";
+
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -37,6 +40,12 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
   mix,
   onMixCreated,
 }) => {
+  const createMix = api.mix.createMix.useMutation({
+    onSuccess: (result) => {
+      console.log("page", "register_success", result);
+    },
+  });
+
   const formSchema = z.object({
     title: z
       .string()
@@ -70,6 +79,16 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
   });
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("MixCreateDetailsComponent", "onSubmit", values);
+    try {
+      const result = await createMix.mutateAsync({
+        title: values.title,
+        description: values.description,
+        tags: [],
+      });
+      onMixCreated(result as MixModel);
+    } catch (err) {
+      Sentry.captureException(err);
+    }
   };
   return (
     <div className="container w-full">
@@ -128,7 +147,7 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
                         return (
                           <ImageUpload
                             {...field}
-                            className="w-64 h-64"
+                            className="h-64 w-64"
                             imageUrl={value as string}
                             onImageChanged={(image) => {
                               onChange(image);
@@ -146,7 +165,7 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
           </div>
           <Separator className="my-0 bg-muted-foreground" />
           <Button type="submit" variant={"default"}>
-            <Icons.save className="w-4 h-4 mr-2" />
+            <Icons.save className="mr-2 h-4 w-4" />
             Save mix
           </Button>
         </form>
