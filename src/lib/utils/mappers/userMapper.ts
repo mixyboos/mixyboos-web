@@ -23,18 +23,18 @@ const mapDbAuthUserToUserModel = (
 ): UserModel | undefined =>
   user
     ? {
-        id: user.id as string,
+        id: user.id,
         username: user.username ?? "unknownuser",
-        name: (user.name as string) ?? (user.name as string) ?? "Unknown User",
-        email: user.email as string,
-        bio: user.bio as string,
-        profileImage: (user.profileImage as string)
+        name: user.name,
+        email: user.email,
+        bio: user.bio,
+        profileImage: user.profileImage
           ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
           : "/img/default-avatar.png",
-        headerImage: (user.headerImage as string)
+        headerImage: user.headerImage
           ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
           : "/img/default-header.png",
-        urls: [],
+        urls: user.urls,
       }
     : undefined;
 

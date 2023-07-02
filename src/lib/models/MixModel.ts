@@ -2,7 +2,7 @@ import { type UserModel } from ".";
 
 type MixModel = {
   id: string;
-  slug?: string;
+  slug: string;
   title: string;
   description?: string;
   dateUploaded: string;
@@ -11,7 +11,7 @@ type MixModel = {
   playCount?: number;
   shareCount?: number;
   downloadCount?: number;
-  user?: UserModel;
+  user: UserModel;
 
   isProcessed: boolean;
 };

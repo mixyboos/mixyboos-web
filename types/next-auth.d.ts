@@ -11,10 +11,10 @@ declare module "next-auth" {
     id: string;
     username: string;
     email: string;
-    name: string | undefined;
-    bio: string | undefined;
-    profileImage: string | undefined;
-    headerImage: string | undefined;
+    name: string | null;
+    bio: string | null;
+    profileImage: string | null;
+    headerImage: string | null;
     urls: string[] | undefined;
   }
 }

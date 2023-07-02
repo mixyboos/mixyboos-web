@@ -5,7 +5,10 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { eq } from "drizzle-orm";
+import { slugifyWithCounter } from "@sindresorhus/slugify";
+const slugify = slugifyWithCounter();
+
+import { eq, sql } from "drizzle-orm";
 import { db } from "@/server/db";
 import { desc } from "drizzle-orm";
 import * as z from "zod";
@@ -41,9 +44,19 @@ export const mixRouter = createTRPCRouter({
           message: "User is not authenticated.",
         });
       }
+      let slug;
+      let checkSlugResult;
+      do {
+        slug = slugify(title, { decamelize: false, separator: "-" });
+        checkSlugResult = await db
+          .select({ count: sql<number>`count(*)`.mapWith(Number) })
+          .from(mixes)
+          .where(eq(mixes.slug, slug));
+      } while (checkSlugResult[0]?.count !== 0);
+
       const result = await db
         .insert(mixes)
-        .values({ title, description, userId: ctx.session.id })
+        .values({ title, slug, description, userId: ctx.session.id })
         .returning();
 
       return mapMixToMixModel(result[0], user);
