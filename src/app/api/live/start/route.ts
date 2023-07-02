@@ -1,5 +1,7 @@
 import { waitForShowQueue } from "@/app/api/queues/shows/wait/route";
-import { prisma } from "@/server/db";
+import { LiveShowStatus, liveShows, users } from "@/db/schema";
+import { db } from "@/server/db";
+import { and, eq, or } from "drizzle-orm";
 import { StatusCodes } from "http-status-codes";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -20,24 +22,27 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      streamKey,
-    },
-  });
+  const results = await db
+    .selectDistinct()
+    .from(users)
+    .where(eq(users.streamKey, streamKey));
+  const user = results[0];
   if (!user) {
     return NextResponse.json(
       { message: "Unauthorised!" },
       { status: StatusCodes.UNAUTHORIZED }
     );
   }
-
-  const show = await prisma.liveShow.findFirst({
-    where: {
-      status: { in: ["AWAITING", "STREAMING"] },
-      userId: user.id,
-    },
-  });
+  const showResults = await db
+    .selectDistinct()
+    .from(liveShows)
+    .where(
+      and(
+        eq(liveShows.userId, user.id),
+        or(eq(liveShows.status, "AWAITING"), eq(liveShows.status, "STREAMING"))
+      )
+    );
+  const show = showResults[0];
   if (!show) {
     return NextResponse.json(
       { message: "No in progress show found for user!" },

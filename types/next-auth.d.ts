@@ -10,10 +10,11 @@ declare module "next-auth" {
   interface User {
     id: string;
     username: string;
-    name: string;
-    bio: string;
     email: string;
-    profileImage: string;
-    headerImage: string;
+    name: string | undefined;
+    bio: string | undefined;
+    profileImage: string | undefined;
+    headerImage: string | undefined;
+    urls: string[] | undefined;
   }
 }

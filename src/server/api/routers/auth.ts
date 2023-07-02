@@ -1,3 +1,4 @@
+import { mixes, users } from "@/db/schema";
 import { generateSecretKey } from "@/lib/utils/crypt";
 import {
   createTRPCRouter,
@@ -7,6 +8,7 @@ import {
 import { faker } from "@faker-js/faker";
 import * as trpc from "@trpc/server";
 import { hash } from "argon2";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const authRouter = createTRPCRouter({
@@ -19,11 +21,13 @@ export const authRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input: { email, username, password }, ctx }) => {
-      const exists = await ctx.prisma.user.findFirst({
-        where: { email },
-      });
+      const exists = await ctx.db
+        .selectDistinct()
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1);
 
-      if (exists) {
+      if (exists.length !== 0) {
         throw new trpc.TRPCError({
           code: "CONFLICT",
           message: "User already exists.",
@@ -31,52 +35,50 @@ export const authRouter = createTRPCRouter({
       }
       const hashedPassword = await hash(password);
 
-      const result = await ctx.prisma.user.create({
-        data: {
-          username,
+      const result = await ctx.db
+        .insert(users)
+        .values({
+          username: username,
           email,
           password: hashedPassword,
-          image: faker.image.avatar(),
-        },
-      });
+          profileImage: faker.image.avatar(),
+        })
+        .returning();
 
       return {
         status: 201,
         message: "Account created successfully",
-        result: result.email,
       };
     }),
   getAll: publicProcedure.query(({ ctx }) => {
-    const mixes = ctx.prisma.mix.findMany({
-      take: 10,
-      orderBy: [{ createdAt: "desc" }],
-    });
-    return mixes;
+    const results = ctx.db
+      .select()
+      .from(mixes)
+      .limit(10)
+      .orderBy(desc(mixes.createdAt));
+    return results;
   }),
   getStreamKey: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.id;
     if (!userId) return undefined;
 
-    const user = await ctx.prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
+    const result = await ctx.db
+      .selectDistinct()
+      .from(users)
+      .where(eq(users.id, userId));
 
-    if (!user) return undefined;
+    if (!result || result.length === 0) return undefined;
+    const user = result[0];
 
-    if (!user.streamKey) {
+    if (!user) return;
+    if (!user?.streamKey) {
       const key = generateSecretKey();
       if (key) {
         user.streamKey = key;
-        await ctx.prisma.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            ...user,
-          },
-        });
+        await ctx.db
+          .update(users)
+          .set({ ...user })
+          .where(eq(users.id, userId));
       } else {
         throw new trpc.TRPCError({
           code: "INTERNAL_SERVER_ERROR",

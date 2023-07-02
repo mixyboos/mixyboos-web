@@ -1,11 +1,11 @@
 type UserModel = {
   id: string;
   username: string;
-  name: string;
+  name: string | undefined;
   email: string;
-  bio: string | null;
-  profileImage: string | null;
-  headerImage: string | null;
-  urls: string[];
+  bio: string | undefined;
+  profileImage: string | undefined;
+  headerImage: string | undefined;
+  urls: string[] | undefined;
 };
 export default UserModel;

@@ -1,8 +1,9 @@
+import { liveShows, users } from "@/db/schema";
 import { createPusherServer } from "@/lib/services/realtime";
 import { mapShowToShowModel } from "@/lib/utils/mappers/showMappers";
 import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
-import { prisma } from "@/server/db";
-import { LiveShowStatus } from "@prisma/client";
+import { db } from "@/server/db";
+import { eq } from "drizzle-orm";
 import { StatusCodes } from "http-status-codes";
 import { Queue } from "quirrel/next-app";
 import superagent from "superagent";
@@ -13,24 +14,21 @@ export const waitForShowQueue = Queue(
     const rt = createPusherServer();
     const url = `https://live-mixyboos.dev.fergl.ie:9091/hls/${showId}/index.m3u8`;
     console.log("wait", "Checking URL", url);
-    const show = await prisma.liveShow.findUnique({
-      where: {
-        id: showId,
-      },
-    });
-
+    const results = await db
+      .selectDistinct()
+      .from(liveShows)
+      .where(eq(liveShows.id, showId));
+    const show = results[0];
     if (!show) {
       throw new Error(`Unable to find show ${showId}`);
     }
 
-    const user = mapDbAuthUserToUserModel(
-      await prisma.user.findUnique({
-        where: {
-          id: show.userId,
-        },
-      })
-    );
+    const result = await db
+      .selectDistinct()
+      .from(users)
+      .where(eq(users.id, show.userId));
 
+    const user = mapDbAuthUserToUserModel(result[0]);
     if (!user) {
       throw new Error(`Unable to find user ${show.userId}`);
     }
@@ -61,12 +59,13 @@ export const waitForShowQueue = Queue(
       //showtime
 
       //update mix entry in db
-      await prisma.liveShow.update({
-        where: {
-          id: show.id,
-        },
-        data: { ...show, status: LiveShowStatus.STREAMING },
-      });
+      await db
+        .update(liveShows)
+        .set({
+          ...show,
+          status: "STREAMING",
+        })
+        .where(eq(liveShows.id, show.id));
 
       //push status to client
       await rt.trigger(`ls_${showId}`, "show-started", {

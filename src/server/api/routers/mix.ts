@@ -1,17 +1,23 @@
+import { mixes } from "@/db/schema";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+
+import { db } from "@/server/db";
+import { desc } from "drizzle-orm";
 import * as z from "zod";
 
 export const mixRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    const mixes = ctx.prisma.mix.findMany({
-      take: 10,
-      orderBy: [{ createdAt: "desc" }],
-    });
-    return mixes;
+    const results = db
+      .select()
+      .from(mixes)
+      .orderBy(desc(mixes.createdAt))
+      .limit(10);
+
+    return results;
   }),
   createMix: protectedProcedure
     .input(

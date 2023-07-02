@@ -1,6 +1,6 @@
+import { LiveShow } from "@/db/schema";
 import { ShowStatus, type UserModel } from "@/lib/models";
 import type { LiveShowModel } from "@/lib/models";
-import { type LiveShow } from "@prisma/client";
 import { randomUUID } from "crypto";
 
 const mapShowStatusFromDb = (

@@ -1,13 +1,17 @@
 import { env } from "@/env.mjs";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool, type PoolConfig } from "pg";
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
 
 if (!env.DATABASE_URL) {
   throw new Error("DATABASE_URL cannot be found");
 }
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-const pool = new Pool({
-  connectionString: env.DATABASE_URL,
-} as PoolConfig);
 
-export const db = drizzle(pool);
+// for migrations
+const migrationClient = postgres(env.DATABASE_URL, { max: 1 });
+// await migrate(drizzle(migrationClient), { migrationsFolder: "./drizzle" });
+
+// for query purposes
+const queryClient = postgres(env.DATABASE_URL);
+
+export const db: PostgresJsDatabase = drizzle(queryClient);

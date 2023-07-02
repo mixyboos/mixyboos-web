@@ -10,7 +10,9 @@ import {
   mapNoShowToShowModel,
   mapShowToShowModel,
 } from "@/lib/utils/mappers/showMappers";
-import { LiveShowStatus } from "@prisma/client";
+import { db } from "@/server/db";
+import { liveShows, tags as showTags } from "@/db/schema";
+import { eq, or, and, inArray } from "drizzle-orm";
 
 export const showRouter = createTRPCRouter({
   startShow: protectedProcedure
@@ -28,12 +30,16 @@ export const showRouter = createTRPCRouter({
           code: "FORBIDDEN",
           message: "User is not authenticated.",
         });
-      const inProgressShow = await ctx.prisma.liveShow.findFirst({
-        where: {
-          status: { in: ["SETUP", "AWAITING"] },
-          userId: userId,
-        },
-      });
+      const result = await db
+        .selectDistinct()
+        .from(liveShows)
+        .where(
+          and(
+            eq(liveShows.userId, userId),
+            or(eq(liveShows.status, "SETUP"), eq(liveShows.status, "AWAITING"))
+          )
+        );
+      const inProgressShow = result[0];
       if (inProgressShow)
         throw new trpc.TRPCError({
           code: "PRECONDITION_FAILED",
@@ -42,36 +48,23 @@ export const showRouter = createTRPCRouter({
 
       tags.forEach((element) => {
         async () => {
-          await ctx.prisma.tag.upsert({
-            create: {
-              title,
-            },
-            update: {},
-            where: {
-              title: element,
-            },
-          });
+          await db.insert(showTags).values({ title }).onConflictDoNothing();
         };
       });
 
-      const tagsToAdd = await ctx.prisma.tag.findMany({
-        where: {
-          title: { in: tags },
-        },
-      });
-      const show = await ctx.prisma.liveShow.create({
-        data: {
+      const insertResult = await db
+        .insert(liveShows)
+        .values({
           userId,
           title,
           description,
-          tags: {
-            connect: tagsToAdd,
-          },
-          status: LiveShowStatus.AWAITING,
-        },
-      });
-
-      return mapShowToShowModel(show, ctx.session.user);
+          status: "AWAITING",
+        })
+        .returning();
+      const show = insertResult[0];
+      if (show) {
+        return mapShowToShowModel(show, ctx.session.user);
+      }
     }),
   getInProgress: protectedProcedure.query(
     async ({ ctx }): Promise<LiveShowModel> => {
@@ -82,12 +75,17 @@ export const showRouter = createTRPCRouter({
         });
       }
       const userId = ctx.session.id;
-      const show = await ctx.prisma.liveShow.findFirst({
-        where: {
-          status: { in: ["SETUP", "AWAITING", "STREAMING"] },
-          userId: userId,
-        },
-      });
+      const results = await db
+        .selectDistinct()
+        .from(liveShows)
+        .where(
+          and(
+            eq(liveShows.userId, userId),
+            inArray(liveShows.status, ["SETUP", "AWAITING", "STREAMING"])
+          )
+        );
+      const show = results[0];
+
       if (!show) {
         return mapNoShowToShowModel(ctx.session.user);
       }
@@ -97,25 +95,31 @@ export const showRouter = createTRPCRouter({
   checkForStart: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ input: { userId }, ctx }) => {
-      const show = await ctx.prisma.liveShow.findFirst({
-        where: {
-          status: { in: ["AWAITING", "STREAMING"] },
-          userId: userId,
-        },
-      });
-
+      const results = await db
+        .selectDistinct()
+        .from(liveShows)
+        .where(
+          and(
+            eq(liveShows.userId, userId),
+            inArray(liveShows.status, ["AWAITING", "STREAMING"])
+          )
+        );
+      const show = results[0];
       return show ? mapShowToShowModel(show, undefined) : null;
     }),
   checkForInProgress: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ input: { userId }, ctx }) => {
-      const show = await ctx.prisma.liveShow.findFirst({
-        where: {
-          status: { in: ["STREAMING"] },
-          userId: userId,
-        },
-      });
-
+      const results = await db
+        .selectDistinct()
+        .from(liveShows)
+        .where(
+          and(
+            eq(liveShows.userId, userId),
+            inArray(liveShows.status, ["STREAMING"])
+          )
+        );
+      const show = results[0];
       return show ? mapShowToShowModel(show, undefined) : null;
     }),
 });
