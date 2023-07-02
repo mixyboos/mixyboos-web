@@ -18,24 +18,19 @@ const mapAuthUserToUserModel = (
       }
     : undefined;
 
-const mapDbAuthUserToUserModel = (
-  user: DbUser | undefined | null
-): UserModel | undefined =>
-  user
-    ? {
-        id: user.id,
-        username: user.username ?? "unknownuser",
-        name: user.name,
-        email: user.email,
-        bio: user.bio,
-        profileImage: user.profileImage
-          ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
-          : "/img/default-avatar.png",
-        headerImage: user.headerImage
-          ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
-          : "/img/default-header.png",
-        urls: user.urls,
-      }
-    : undefined;
+const mapDbAuthUserToUserModel = (user: DbUser): UserModel => ({
+  id: user.id,
+  username: user.username,
+  name: user.name,
+  email: user.email,
+  bio: user.bio,
+  profileImage: user.profileImage
+    ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
+    : "/img/default-avatar.png",
+  headerImage: user.headerImage
+    ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
+    : "/img/default-header.png",
+  urls: user.urls,
+});
 
 export { mapAuthUserToUserModel, mapDbAuthUserToUserModel };

@@ -86,7 +86,8 @@ const MixCreateComponent = () => {
             onMixCreated={(mix) => {
               setCreateState(mix ? CreateState.done : CreateState.error);
               if (mix) {
-                router.push(`${mix.user.username}/${mix.slug}`);
+                debugger;
+                router.push(`/${mix.user.username}/${mix.slug}`);
               }
             }}
           />
