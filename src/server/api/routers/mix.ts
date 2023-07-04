@@ -8,7 +8,7 @@ import {
 import { slugifyWithCounter } from "@sindresorhus/slugify";
 const slugify = slugifyWithCounter();
 
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and } from "drizzle-orm";
 import { db } from "@/server/db";
 import { desc } from "drizzle-orm";
 import * as z from "zod";
@@ -24,6 +24,41 @@ export const mixRouter = createTRPCRouter({
 
     return results;
   }),
+  getByUserAndSlug: publicProcedure
+    .input(
+      z.object({
+        userName: z.string(),
+        mixSlug: z.string(),
+      })
+    )
+    .query(async ({ input: { userName, mixSlug }, ctx }) => {
+      //don't like this but it appears we can't query on foreign key columns
+      //in drizzle
+
+      const user = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.username, userName),
+      });
+      if (!user) {
+        throw new trpc.TRPCError({
+          code: "NOT_FOUND",
+          message: "Invalid user.",
+        });
+      }
+      const mix = await db.query.mixes.findFirst({
+        where: (mixes, { eq }) =>
+          and(eq(mixes.slug, mixSlug), eq(mixes.userId, user.id)),
+        with: {
+          user: {},
+        },
+      });
+      if (!mix) {
+        throw new trpc.TRPCError({
+          code: "NOT_FOUND",
+          message: "Invalid mix.",
+        });
+      }
+      return mapMixToMixModel(mix);
+    }),
   createMix: protectedProcedure
     .input(
       z.object({
@@ -54,11 +89,18 @@ export const mixRouter = createTRPCRouter({
           .where(eq(mixes.slug, slug));
       } while (checkSlugResult[0]?.count !== 0);
 
-      const result = await db
+      const newMixQuery = await db
         .insert(mixes)
         .values({ title, slug, description, userId: ctx.session.id })
         .returning();
 
-      return mapMixToMixModel(result[0], user);
+      const newMix = await db.query.mixes.findFirst({
+        where: eq(mixes.id, newMixQuery.id),
+        with: { user: true },
+      });
+      if (newMix && newMix[0]) {
+        const mix = newMix[0];
+        return mapMixToMixModel(mix);
+      }
     }),
 });

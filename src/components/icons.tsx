@@ -1,3 +1,4 @@
+import { PauseCircleIcon, PlayCircleIcon } from "lucide-react";
 import {
   Activity,
   AlertCircle,
@@ -18,6 +19,7 @@ import {
   FileText,
   HelpCircle,
   Image,
+  Heart,
   Laptop,
   Loader2,
   LocateFixed,
@@ -42,6 +44,9 @@ import {
   X,
   type Icon as LucideIcon,
   type LucideProps,
+  Repeat2,
+  Play,
+  PlayCircle,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -62,6 +67,8 @@ export const Icons = {
   ),
   activity: Activity,
   live: RadioTower,
+  heart: Heart,
+  retweet: Repeat2,
   mix: Disc2,
   schedule: CalendarHeart,
   close: X,
@@ -83,6 +90,8 @@ export const Icons = {
   billing: CreditCard,
   ellipsis: MoreVertical,
   add: Plus,
+  play: PlayCircleIcon,
+  pause: PauseCircleIcon,
   warning: AlertTriangle,
   error: AlertCircle,
   user: User,
