@@ -6,10 +6,10 @@ import { api } from "@/lib/utils/api";
 export default function Page({
   params,
 }: {
-  params: { userName: string; mixSlug: string };
+  params: { username: string; mixSlug: string };
 }) {
   const mixQuery = api.mix.getByUserAndSlug.useQuery({
-    userName: params.userName,
+    username: params.username,
     mixSlug: params.mixSlug,
   });
   const mix = mixQuery?.data;

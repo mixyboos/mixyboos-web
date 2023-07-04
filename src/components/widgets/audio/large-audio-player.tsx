@@ -135,7 +135,7 @@ const MainPlayer = ({ mix }: IMainPlayerProps) => {
               </div>
               <div className="flex items-center space-x-3">
                 <div className="flex space-x-0">
-                  <Icons.play />
+                  <Icons.playCircle />
                   <div className="text-xs">{playCount}</div>
                 </div>
                 <div className="mr-2 space-x-1 text-gray-400">

@@ -53,7 +53,7 @@ const PlayPauseButton = ({
         {nowPlaying?.id === mix.id && playState === PlayState.playing ? (
           <Icons.pause className="h-full w-full" />
         ) : (
-          <Icons.play className="h-full w-full" />
+          <Icons.playCircle className="h-full w-full" />
         )}
       </div>
     </div>

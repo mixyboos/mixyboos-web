@@ -27,16 +27,16 @@ export const mixRouter = createTRPCRouter({
   getByUserAndSlug: publicProcedure
     .input(
       z.object({
-        userName: z.string(),
+        username: z.string(),
         mixSlug: z.string(),
       })
     )
-    .query(async ({ input: { userName, mixSlug }, ctx }) => {
+    .query(async ({ input: { username: username, mixSlug }, ctx }) => {
       //don't like this but it appears we can't query on foreign key columns
       //in drizzle
 
       const user = await db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.username, userName),
+        where: (users, { eq }) => eq(users.username, username),
       });
       if (!user) {
         throw new trpc.TRPCError({

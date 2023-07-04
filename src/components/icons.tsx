@@ -1,4 +1,3 @@
-import { PauseCircleIcon, PlayCircleIcon } from "lucide-react";
 import {
   Activity,
   AlertCircle,
@@ -29,10 +28,13 @@ import {
   Moon,
   MoreVertical,
   Pizza,
+  PauseCircleIcon,
+  PlayCircleIcon,
   Plus,
   RadioTower,
   Rocket,
   Save,
+  Share2,
   Settings,
   SunMedium,
   Trash,
@@ -90,7 +92,8 @@ export const Icons = {
   billing: CreditCard,
   ellipsis: MoreVertical,
   add: Plus,
-  play: PlayCircleIcon,
+  play: Play,
+  playCircle: PlayCircleIcon,
   pause: PauseCircleIcon,
   warning: AlertTriangle,
   error: AlertCircle,
@@ -106,7 +109,8 @@ export const Icons = {
   check: Check,
   copy: Copy,
   copyDone: ClipboardCheck,
-  save: SunMedium,
+  save: Save,
+  share: Share2,
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
@@ -134,7 +138,8 @@ export const Icons = {
   ),
   aria: (props: LucideProps) => (
     <svg role="img" viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M13.966 22.624l-1.69-4.281H8.122l3.892-9.144 5.662 13.425zM8.884 1.376H0v21.248zm15.116 0h-8.884L24 22.624Z" />
+      <path
+        d="M13.966 22.624l-1.69-4.281H8.122l3.892-9.144 5.662 13.425zM8.884 1.376H0v21.248zm15.116 0h-8.884L24 22.624Z"/>
     </svg>
   ),
   npm: (props: LucideProps) => (
