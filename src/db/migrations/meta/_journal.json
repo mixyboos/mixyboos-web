@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1688336894767,
+      "tag": "0000_mysterious_sentinels",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1688505145441,
+      "tag": "0001_outgoing_juggernaut",
+      "breakpoints": true
+    }
+  ]
+}

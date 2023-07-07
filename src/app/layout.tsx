@@ -12,7 +12,7 @@ const RootLayout = ({children}: { children: React.ReactNode }) => {
     <html lang="en" suppressHydrationWarning>
     <body
       className={cn(
-        "min-h-screen overflow-y-hidden bg-background font-sans antialiased",
+        "min-h-screen  bg-background font-sans antialiased",
         fontSans.variable
       )}
     >
