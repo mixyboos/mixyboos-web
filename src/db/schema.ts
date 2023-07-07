@@ -101,7 +101,7 @@ export const users = pgTable(
     email: text("email").notNull(),
     emailVerified: timestamp("emailVerified"),
     name: text("name"),
-    bio: varchar("name", { length: 2048 }),
+    bio: varchar("bio", { length: 2048 }),
     profileImage: text("profileImage"),
     headerImage: text("headerImage"),
     password: varchar("password", { length: 1024 }),

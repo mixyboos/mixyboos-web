@@ -49,6 +49,7 @@ import {
   Repeat2,
   Play,
   PlayCircle,
+  Mail,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -91,6 +92,7 @@ export const Icons = {
   settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,
+  follow: UserPlus,
   add: Plus,
   play: Play,
   playCircle: PlayCircleIcon,
@@ -113,6 +115,7 @@ export const Icons = {
   share: Share2,
   sun: SunMedium,
   moon: Moon,
+  message: Mail,
   laptop: Laptop,
   upload: UploadCloud,
   gitHub: (props: LucideProps) => (
@@ -138,8 +141,7 @@ export const Icons = {
   ),
   aria: (props: LucideProps) => (
     <svg role="img" viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path
-        d="M13.966 22.624l-1.69-4.281H8.122l3.892-9.144 5.662 13.425zM8.884 1.376H0v21.248zm15.116 0h-8.884L24 22.624Z"/>
+      <path d="M13.966 22.624l-1.69-4.281H8.122l3.892-9.144 5.662 13.425zM8.884 1.376H0v21.248zm15.116 0h-8.884L24 22.624Z" />
     </svg>
   ),
   npm: (props: LucideProps) => (

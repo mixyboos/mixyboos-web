@@ -44,8 +44,8 @@ const NavLink = ({ href, title, Icon }: NavLinkProps) => {
     <Link
       href={href}
       className={cn(
-        "text-sm font-medium lowercase text-primary hover:opacity-60 transition-opacity",
-        path !== href && "text-primary"
+        "text-sm font-medium lowercase text-primary-foreground hover:opacity-60 transition-opacity",
+        path !== href && "text-primary-foreground"
       )}
     >
       <div className="inline-flex items-center">

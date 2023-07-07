@@ -12,8 +12,12 @@ const mapAuthUserToUserModel = (
         name: user.name,
         email: user.email,
         bio: user.bio,
-        profileImage: user.profileImage,
-        headerImage: user.headerImage,
+        profileImage: user.profileImage
+          ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
+          : "/img/default-avatar.png",
+        headerImage: user.headerImage
+          ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
+          : "/img/default-header.png",
         urls: [],
       }
     : undefined;
@@ -21,7 +25,7 @@ const mapAuthUserToUserModel = (
 const mapDbAuthUserToUserModel = (user: DbUser): UserModel => ({
   id: user.id,
   username: user.username,
-  name: user.name,
+  name: user.name || user.username,
   email: user.email,
   bio: user.bio,
   profileImage: user.profileImage

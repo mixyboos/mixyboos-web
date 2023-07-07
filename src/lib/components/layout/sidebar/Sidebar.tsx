@@ -37,7 +37,11 @@ const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
     <div className="h-full w-60 space-y-2 p-3 ">
       <div className="flex items-center space-x-4 p-2">
         {session.user.profileImage && (
-          <UserImage src={session.user.profileImage} status={"offline"} size={"md"} />
+          <UserImage
+            src={session.user.profileImage}
+            status={"offline"}
+            size={"md"}
+          />
         )}
         <div>
           <h2 className="text-sm font-semibold">
@@ -59,7 +63,7 @@ const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href="dashboard/shows"
+              href={`${session.user.username}/shows`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonVcard className="h-5 w-5 fill-current " />
@@ -69,7 +73,7 @@ const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href="dashboard/mixes"
+              href={`${session.user.username}/mixes`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonBoundingBox className="h-5 w-5 fill-current " />
