@@ -60,7 +60,6 @@ const MixCreateComponent = () => {
         )}
         {uploadState === UploadState.new && (
           <div className="mx-auto my-8 w-3/5">
-            {" "}
             <FileUpload
               mixId={mixId}
               onError={(e) => {
@@ -86,7 +85,6 @@ const MixCreateComponent = () => {
             onMixCreated={(mix) => {
               setCreateState(mix ? CreateState.done : CreateState.error);
               if (mix) {
-                debugger;
                 router.push(`/${mix.user.username}/${mix.slug}`);
               }
             }}

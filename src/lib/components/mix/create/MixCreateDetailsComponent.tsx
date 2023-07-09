@@ -81,11 +81,12 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
     console.log("MixCreateDetailsComponent", "onSubmit", values);
     try {
       const result = await createMix.mutateAsync({
+        id: mix.id,
         title: values.title,
         description: values.description,
         tags: [],
       });
-      onMixCreated(result as MixModel);
+      onMixCreated(result);
     } catch (err) {
       Sentry.captureException(err);
     }

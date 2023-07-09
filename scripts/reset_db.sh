@@ -8,9 +8,9 @@ echo Creating new db
 createdb -h localhost -U postgres mixyboos
 
 #Don't remove migrations now that we have an actual live deployment
-rm -rf $PROJECT_ROOT/drizzle/*
+rm -rf $PROJECT_ROOT/src/db/migrations/*
 
-npx drizzle-kit generate:pg --schema=./src/db/schema.ts
+npx drizzle-kit generate:pg
 
 
 curl --location 'https://mixyboos.dev.fergl.ie:3000/api/trpc/auth.signUp?batch=1' \

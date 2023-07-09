@@ -50,6 +50,8 @@ const MainPlayer = ({ mix }: IMainPlayerProps) => {
                             mix.user?.profileImage ||
                             "/img/streaming-placeholder.jpg"
                           }
+                          width={16}
+                          height={16}
                           alt="Mix"
                         />
                       )}

@@ -4,6 +4,10 @@ import os from "os";
 import path from "path";
 import { uploadFolder } from "@/lib/services/azure/serverUploader";
 import { Queue } from "quirrel/next-app";
+import { db } from "@/server/db";
+import { mixes } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import * as Sentry from "@sentry/nextjs";
 
 export const processMixQueue = Queue(
   "api/queues/upload/mix", // 👈 the route it's reachable on
@@ -12,7 +16,6 @@ export const processMixQueue = Queue(
     const outputDir = `${os.tmpdir()}/${mixId}`;
     fs.mkdirSync(outputDir);
 
-    const command = `ffmpeg `;
     // prettier-ignore
     const process = spawn("ffmpeg", [
       "-i",
@@ -40,11 +43,17 @@ export const processMixQueue = Queue(
       }
 
       uploadFolder(outputDir, "audio", path.join("mixes", mixId))
-        .then((r) => {
-          //probably need to tag the mix in some way here?
+        .then(async (r) => {
+          if (r) {
+            await db
+              .update(mixes)
+              .set({ isProcessed: true })
+              .where(eq(mixes.id, mixId));
+          }
         })
         .catch((err) => {
           console.log("route", "error uploading output folder", err);
+          Sentry.captureException(err);
         });
     });
   }

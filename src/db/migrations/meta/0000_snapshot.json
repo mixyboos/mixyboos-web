@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "3aa3a733-36d0-4095-a8a5-f3436102791a",
+  "id": "5d3b8fec-377f-4959-a07d-00309b6c1da5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "live_shows": {
@@ -151,15 +151,21 @@
           "primaryKey": false,
           "notNull": true
         },
-        "full_name": {
-          "name": "full_name",
-          "type": "text",
+        "title": {
+          "name": "title",
+          "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "description": {
           "name": "description",
           "type": "varchar(2048)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "audioUrl": {
+          "name": "audioUrl",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -340,6 +346,12 @@
         },
         "name": {
           "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bio": {
+          "name": "bio",
           "type": "varchar(2048)",
           "primaryKey": false,
           "notNull": false

@@ -7,6 +7,8 @@ import useAudioStore, {
   PlayState,
 } from "@/lib/services/stores/audio/audioStore";
 import { Icons } from "@/components/icons";
+import { mixService } from "@/lib/services/audio";
+import * as Sentry from "@sentry/nextjs";
 
 interface IPlayPauseButtonProps {
   mix: MixModel;
@@ -30,16 +32,17 @@ const PlayPauseButton = ({
   return (
     <div
       className={classnames(classes)}
-      onClick={() => {
+      onClick={async () => {
         if (
           playState === PlayState.stopped ||
           (mix.id !== nowPlaying?.id && !nowPlayingUrl)
         ) {
-          // mixService.getMixAudioUrl(mix).then((url) => {
-          //   setNowPlaying(mix);
-          //   setNowPlayingUrl(url);
-          //   onPlayStart();
-          // });
+          const url = await mixService.getMixAudioUrl(mix.id);
+          if (url) {
+            setNowPlaying(mix);
+            setNowPlayingUrl(url);
+            onPlayStart();
+          }
         } else {
           togglePlayState();
         }
@@ -47,7 +50,7 @@ const PlayPauseButton = ({
     >
       <div
         className={
-          "cursor-pointer text-gray-500 transition duration-200 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-700"
+          "cursor-pointer text-foreground transition duration-200 hover:text-muted-foreground"
         }
       >
         {nowPlaying?.id === mix.id && playState === PlayState.playing ? (

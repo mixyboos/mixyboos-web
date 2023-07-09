@@ -43,24 +43,6 @@ const UserPage: React.FC<UserPageProps> = ({ user, mixes }) => {
         </div>
       </div>
     </div>
-    // <div>
-    //   <div className="relative">
-    //     <section className="h-[350px]">
-    //       <Image
-    //         alt="User header"
-    //         src={user.headerImage}
-    //         layout="fill"
-    //         objectFit="cover"
-    //       />
-    //     </section>
-    //     <div className="absolute left-5 top-[8em] mx-5 max-w-md rounded-sm bg-muted px-4 shadow-xl">
-    //       <UserBioComponent user={user} />
-    //     </div>
-    //   </div>
-    //   <div className="ml-72">
-    //     <MixListComponent mixes={mixes} />
-    //   </div>
-    // </div>
   );
 };
 

@@ -62,12 +62,13 @@ export const mixRouter = createTRPCRouter({
   createMix: protectedProcedure
     .input(
       z.object({
+        id: z.string(),
         title: z.string(),
         description: z.string(),
         tags: z.array(z.string()).optional(),
       })
     )
-    .mutation(async ({ input: { title, description, tags }, ctx }) => {
+    .mutation(async ({ input: { id, title, description, tags }, ctx }) => {
       const userResult = await db
         .selectDistinct()
         .from(users)
@@ -89,18 +90,19 @@ export const mixRouter = createTRPCRouter({
           .where(eq(mixes.slug, slug));
       } while (checkSlugResult[0]?.count !== 0);
 
-      const newMixQuery = await db
+      const result = await db
         .insert(mixes)
-        .values({ title, slug, description, userId: ctx.session.id })
+        .values({ id, title, slug, description, userId: ctx.session.id })
         .returning();
-
-      const newMix = await db.query.mixes.findFirst({
-        where: eq(mixes.id, newMixQuery.id),
-        with: { user: true },
-      });
-      if (newMix && newMix[0]) {
-        const mix = newMix[0];
-        return mapMixToMixModel(mix);
+      if (result && result[0]) {
+        return mapMixToMixModel({
+          user: user,
+          ...result[0],
+        });
       }
+      throw new trpc.TRPCError({
+        message: "Unable to save mix",
+        code: "INTERNAL_SERVER_ERROR",
+      });
     }),
 });

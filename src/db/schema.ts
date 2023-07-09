@@ -35,9 +35,9 @@ export const tags = pgTable(
 export const mixes = pgTable("mixes", {
   id: uuid("id").primaryKey().defaultRandom(),
   slug: varchar("slug", { length: 50 }).notNull(),
-  title: varchar("full_name", { length: 50 }).notNull(),
+  title: varchar("title", { length: 50 }).notNull(),
   description: varchar("description", { length: 2048 }),
-  audioUrl: text("full_name"),
+  audioUrl: text("audioUrl"),
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

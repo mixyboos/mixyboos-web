@@ -1,6 +1,7 @@
 import { type User as DbUser } from "@/db/schema";
 import { type UserModel } from "@/lib/models";
 import { type User as AuthUser } from "next-auth";
+import mapImage from "./imageMapper";
 
 const mapAuthUserToUserModel = (
   user: AuthUser | undefined | null
@@ -12,12 +13,8 @@ const mapAuthUserToUserModel = (
         name: user.name,
         email: user.email,
         bio: user.bio,
-        profileImage: user.profileImage
-          ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
-          : "/img/default-avatar.png",
-        headerImage: user.headerImage
-          ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
-          : "/img/default-header.png",
+        profileImage: mapImage(user.profileImage, "/img/default-avatar.png"),
+        headerImage: mapImage(user.headerImage, "/img/default-header.png"),
         urls: [],
       }
     : undefined;
@@ -28,12 +25,8 @@ const mapDbAuthUserToUserModel = (user: DbUser): UserModel => ({
   name: user.name || user.username,
   email: user.email,
   bio: user.bio,
-  profileImage: user.profileImage
-    ? `https://mixyboos.twic.pics/${user.profileImage}?twic=v1/resize=256`
-    : "/img/default-avatar.png",
-  headerImage: user.headerImage
-    ? `https://mixyboos.twic.pics/${user.headerImage}?twic=v1/resize=1200x400`
-    : "/img/default-header.png",
+  profileImage: mapImage(user.profileImage, "/img/default-avatar.png"),
+  headerImage: mapImage(user.profileImage, "/img/default-header.png"),
   urls: user.urls,
 });
 
