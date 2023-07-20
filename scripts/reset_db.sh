@@ -7,13 +7,12 @@ dropdb -f --if-exists -h localhost -U postgres mixyboos
 echo Creating new db
 createdb -h localhost -U postgres mixyboos
 
-#Don't remove migrations now that we have an actual live deployment
 rm -rf $PROJECT_ROOT/src/db/migrations/*
 
 npx drizzle-kit generate:pg
 
 
-curl --location 'https://mixyboos.dev.fergl.ie:3000/api/trpc/auth.signUp?batch=1' \
+curl --location 'http://localhost:3000/api/trpc/auth.signUp?batch=1' \
 --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0' \
 --header 'Accept: */*' \
 --header 'Accept-Language: en-GB,en;q=0.5' \

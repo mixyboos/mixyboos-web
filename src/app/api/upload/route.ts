@@ -25,10 +25,11 @@ export async function POST(req: NextRequest) {
   await writeFile(outputFile, buffer);
   console.log(`open ${outputFile} to see the uploaded file`);
   try {
-    await processMixQueue.enqueue(
+    const result = await processMixQueue.enqueue(
       { filePath: outputFile, mixId: id },
       { delay: 1 }
     );
+    console.log('route', 'processMixSendQueueResult', result);
   } catch (err) {
     Sentry.captureException(err);
   }

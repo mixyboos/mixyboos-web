@@ -14,7 +14,7 @@ export default function Page({
   });
   const mix = mixQuery?.data;
   return (
-    <div>
+    <div className="container">
       {mix ? (
         <LargeAudioPlayer mix={mix} />
       ) : (

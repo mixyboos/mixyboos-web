@@ -2,6 +2,7 @@ import { db } from "@/server/db";
 import raise from "@/lib/utils/errors";
 import { mapDbAuthUserToUserModel } from "@/lib/utils/mappers/userMapper";
 import { mapMixToMixModel } from "@/lib/utils/mappers/mixMapper";
+import { notFound } from "next/navigation";
 
 async function getData(username: string) {
   const user = await db.query.users.findFirst({
@@ -9,7 +10,7 @@ async function getData(username: string) {
   });
 
   if (!user) {
-    return raise("User not found");
+    return notFound();
   }
 
   const mixes = await db.query.mixes.findMany({

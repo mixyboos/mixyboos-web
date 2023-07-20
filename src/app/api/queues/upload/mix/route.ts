@@ -13,8 +13,10 @@ export const processMixQueue = Queue(
   "api/queues/upload/mix", // 👈 the route it's reachable on
   async (job: { filePath: string; mixId: string }) => {
     const { filePath, mixId } = job;
-    const outputDir = `${os.tmpdir()}/${mixId}`;
-    fs.mkdirSync(outputDir);
+    const outputDir = `${os.tmpdir()}/podnoms/${mixId}`;
+    fs.mkdirSync(outputDir, {
+      recursive: true,
+    });
 
     // prettier-ignore
     const process = spawn("ffmpeg", [
@@ -45,6 +47,8 @@ export const processMixQueue = Queue(
       uploadFolder(outputDir, "audio", path.join("mixes", mixId))
         .then(async (r) => {
           if (r) {
+            //if client has saved mix then we are processed
+            //if not client will check for file and set processed
             await db
               .update(mixes)
               .set({ isProcessed: true })

@@ -21,20 +21,7 @@ const DashboardPage = ({ prop1 }: DashboardPageProps) => {
   return (
     <>
       <div className="md:hidden">
-        <Image
-          src="/img/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/img/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
+        <h1>Dashboard page {'<'}md</h1>
       </div>
       <div className="hidden flex-col md:flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
