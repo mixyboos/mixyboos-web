@@ -5,20 +5,12 @@ import React, { type PropsWithChildren } from "react";
 import useAudioStore, {
   PlayState,
 } from "@/lib/services/stores/audio/audio-store";
-import type shaka from "shaka-player/dist/shaka-player.ui";
+import Hls from "hls.js";
+interface IAudioProviderProps extends PropsWithChildren {}
 
-export interface IAudioProviderProps extends PropsWithChildren {}
-
-type ShakaForwardRef = {
-  polyfill: any;
-  Player: any;
-};
 const AudioProvider = ({ children }: IAudioProviderProps) => {
-  const shakaRef = React.useRef<ShakaForwardRef>();
-
-  const audioElRef = React.useRef<HTMLVideoElement>(null);
   const timerRef = React.useRef<NodeJS.Timer>();
-  const player = React.useRef<shaka.Player>();
+  const player = React.createRef<HTMLAudioElement>();
 
   const setNowPlaying = useAudioStore((state) => state.setNowPlaying);
   const nowPlaying = useAudioStore((state) => state.nowPlaying);
@@ -33,82 +25,105 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   } = useAudioStore();
 
   React.useEffect(() => {
-    if (audioElRef && navigator) {
-      shakaRef.current = require("shaka-player/dist/shaka-player.ui.js");
-      if (shakaRef.current && shakaRef.current.polyfill) {
-        shakaRef.current.polyfill.installAll();
-        player.current = new shakaRef.current.Player(audioElRef.current);
+    if (!nowPlaying?.audioUrl) return;
+    let hls: Hls;
+    const _startProgressTimer = () => {
+      // const audio = audioElRef.current;
+      // if (!audio) return;
+      // timerRef.current = setInterval(() => {
+      //   setPosition(audio.currentTime);
+      // }, 1000);
+    };
+    const __initPlayer = () => {
+      if (hls) {
+        hls.destroy();
       }
-    }
-  }, [audioElRef]);
 
-  React.useEffect(() => {
-    if (!audioElRef || !shakaRef.current) return;
-    const audio = audioElRef.current;
-    if (audio) {
-      if (!player.current || !nowPlaying || !nowPlayingUrl) return;
-      player.current
-        .load(nowPlayingUrl)
-        .then(() => {
-          audio.play();
-          setDuration(audio.duration ?? 0);
-          setPlayState(PlayState.playing);
-        })
-        .catch((err: any) => {
-          console.error(
-            "AudioProvider",
-            "Unable to initialise Shaka Player",
-            err,
-          );
-          logger.error(
-            "AudioProvider",
-            "Unable to initialise Shaka Player",
-            err,
-          );
-          setNowPlaying(null);
+      const hlsProxy = new Hls({
+        enableWorker: false,
+      });
+
+      if (player.current) {
+        hlsProxy.attachMedia(player.current);
+      }
+
+      hlsProxy.on(Hls.Events.MEDIA_ATTACHED, () => {
+        hlsProxy.loadSource(nowPlaying?.audioUrl as string);
+        hlsProxy.on(Hls.Events.MANIFEST_PARSED, () => {
+          player?.current
+            ?.play()
+            .then(() => {
+              setDuration(player.current?.duration || 0);
+              setPlayState(PlayState.playing);
+            })
+            .catch(() =>
+              console.log(
+                "Unable to autoplay prior to user interaction with the dom.",
+              ),
+            );
         });
-      // player.current.addEventListener('')
-      // player.on(dashjs.MediaPlayer.events.PLAYBACK_STARTED, (e) => {
-      //   setDuration(player.duration() ?? 0)
-      //   setPlayState(PlayState.playing)
-      // })
+      });
+      hlsProxy.on(Hls.Events.ERROR, function (event, data) {
+        logger.error(
+          "AudioProvider",
+          "Unable to initialise audio player",
+          data,
+        );
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              hlsProxy.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              hlsProxy.recoverMediaError();
+              break;
+            default:
+              __initPlayer();
+              break;
+          }
+        }
+        hls = hlsProxy;
+      });
+
       _startProgressTimer();
+    };
+    if (Hls.isSupported()) {
+      __initPlayer();
     }
+
+    return () => {
+      if (hls != null) {
+        hls.destroy();
+      }
+    };
   }, [nowPlaying]);
   React.useEffect(() => {
-    const audio = audioElRef.current;
-    if (!audio) return;
+    if (!player.current) return;
     if (playState === PlayState.paused) {
-      audio.pause();
+      player.current.pause();
     } else if (playState === PlayState.playing) {
-      audio.play();
+      player.current
+        .play()
+        .catch((err) => logger.error("audio-provider", "error resuming", err));
     }
   }, [playState]);
 
-  React.useEffect(() => {
-    const audio = audioElRef.current;
-    if (!audio) return;
-    audio.currentTime = seekPosition;
-  }, [seekPosition]);
+  // React.useEffect(() => {
+  //   const audio = audioElRef.current;
+  //   if (!audio) return;
+  //   audio.currentTime = seekPosition;
+  // }, [seekPosition]);
 
-  React.useEffect(() => {
-    const audio = audioElRef.current;
-    if (!audio) return;
-    audio.volume = currentVolume / 50;
-  }, [currentVolume]);
-
-  const _startProgressTimer = () => {
-    const audio = audioElRef.current;
-    if (!audio) return;
-    timerRef.current = setInterval(() => {
-      setPosition(audio.currentTime);
-    }, 1000);
-  };
+  // React.useEffect(() => {
+  //   const audio = audioElRef.current;
+  //   if (!audio) return;
+  //   audio.volume = currentVolume / 50;
+  // }, [currentVolume]);
 
   return (
     <>
       {children}
-      <video ref={audioElRef} />
+      <audio ref={player} />
     </>
   );
 };

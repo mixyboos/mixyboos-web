@@ -14,7 +14,7 @@ const mapMixToMixModel = (mix: Mix & { user: User }): MixModel => ({
   shareCount: 6,
   downloadCount: 2,
   user: mapDbAuthUserToUserModel(mix.user),
-  audioUrl: `https://mixyboos.blob.core.windows.net/audio/mixes/${mix.id}/${mix.id}.m3u8`,
+  audioUrl: `https://cdn.mixyboos.com/audio/mixes/${mix.id}/${mix.id}.m3u8`,
   isProcessed: mix.isProcessed,
 });
 
