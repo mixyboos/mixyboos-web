@@ -1,5 +1,6 @@
 "use client";
 import { ThemeProvider } from "@/components/theme-provider";
+import AudioProvider from "@/lib/providers/audio-provider";
 import { api } from "@/lib/utils/api";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
@@ -11,7 +12,7 @@ const Providers = ({ children }: ProvidersProps) => {
   return (
     <SessionProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        {children}
+        <AudioProvider>{children}</AudioProvider>
       </ThemeProvider>
     </SessionProvider>
   );

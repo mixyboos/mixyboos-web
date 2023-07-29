@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { type MixModel } from "@/lib/models";
-import useAudioStore from "@/lib/services/stores/audio/audioStore";
+import useAudioStore from "@/lib/services/stores/audio/audio-store";
 import ActionButton from "../buttons/action-button";
 import Loading from "@/lib/components/widgets/Loading";
 import { Icons } from "@/components/icons";

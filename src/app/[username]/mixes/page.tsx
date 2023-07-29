@@ -15,7 +15,7 @@ const MixesPage: React.FC<MixesPageProps> = async ({
                                                    }: MixesPageProps) => {
   const {user, mixes} = await getData(params.username)
   return (<div>
-    <div className="flex items-center justify-between space-y-2"><h2
+    <div className="flex items-center justify-between space-y-2 m-8"><h2
       className="text-3xl font-bold tracking-tight">Mixes for {user.name || user.username}</h2>
       <div className="flex items-center space-x-2">
         <div className="grid gap-2">

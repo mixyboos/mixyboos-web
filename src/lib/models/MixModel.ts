@@ -12,7 +12,7 @@ type MixModel = {
   shareCount?: number;
   downloadCount?: number;
   user: UserModel;
-
+  audioUrl?: string;
   isProcessed: boolean;
 };
 export default MixModel;

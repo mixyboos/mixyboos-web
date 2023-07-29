@@ -28,6 +28,10 @@ export const waitForShowQueue = Queue(
       .from(users)
       .where(eq(users.id, show.userId));
 
+    if (!result || !result[0]) {
+      throw new Error(`Unable to find user ${show.userId}`);
+    }
+
     const user = mapDbAuthUserToUserModel(result[0]);
     if (!user) {
       throw new Error(`Unable to find user ${show.userId}`);
@@ -44,7 +48,7 @@ export const waitForShowQueue = Queue(
             new Int32Array(new SharedArrayBuffer(4)),
             0,
             0,
-            2 * 1000
+            2 * 1000,
           );
           return true;
         }
@@ -80,6 +84,6 @@ export const waitForShowQueue = Queue(
       id: showId,
     });
     console.error("waitForShow", "FAILED: show-failure", showId);
-  }
+  },
 );
 export const POST = waitForShowQueue;
