@@ -3,9 +3,9 @@ import { siteConfig } from "@/config/site";
 import Navbar from "@/lib/components/layout/Navbar";
 import { cn } from "@/lib/utils";
 import { type Metadata } from "next";
-import Image from "next/image";
 import Providers from "./providers";
 import "@/app/globals.css";
+import FooterComponent from "@/components/widgets/footer";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -20,11 +20,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="md:hidden">
             <h1>Base Layout page {"<"}md</h1>
           </div>
-          <div className="hidden flex-col md:flex">
+          <div className="relative hidden h-screen w-full flex-col md:flex">
             <div className="border-b bg-background/95 backdrop-blur">
               <Navbar className="mx-6" />
             </div>
             <div className="flex-1">{children}</div>
+            <footer className="text-center ">
+              <FooterComponent />
+            </footer>
           </div>
         </Providers>
       </body>

@@ -16,6 +16,7 @@ import {
   Facebook,
   File,
   FileText,
+  HeartPulse,
   HelpCircle,
   Image,
   Heart,
@@ -50,6 +51,7 @@ import {
   Play,
   PlayCircle,
   Mail,
+  HeartIcon,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -85,6 +87,7 @@ export const Icons = {
   trash: Trash,
   post: FileText,
   page: File,
+  love: HeartIcon,
   login: LogIn,
   logout: LogOut,
   liveStream: MonitorSpeaker,

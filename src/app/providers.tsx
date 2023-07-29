@@ -1,13 +1,13 @@
 "use client";
-import { ThemeProvider } from "@/components/theme-provider";
+import React, { type PropsWithChildren } from "react";
+
+import ThemeProvider from "@/components/theme-provider";
 import AudioProvider from "@/lib/providers/audio-provider";
 import { api } from "@/lib/utils/api";
 import { SessionProvider } from "next-auth/react";
-import React from "react";
 
-type ProvidersProps = {
-  children: React.ReactNode;
-};
+interface ProvidersProps extends PropsWithChildren {}
+
 const Providers = ({ children }: ProvidersProps) => {
   return (
     <SessionProvider>
