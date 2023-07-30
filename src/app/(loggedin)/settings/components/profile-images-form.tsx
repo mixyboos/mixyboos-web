@@ -12,9 +12,9 @@ import { Button } from "@/components/ui/button";
 import ImageUpload from "@/components/widgets/image-upload";
 import { notice } from "@/lib/components/notifications/toast";
 import { type UserModel } from "@/lib/models";
-import { uploadFile } from "@/lib/services/azure/upload";
-import { getFileExtension } from "@/lib/utils/fileUtils";
+import { uploadFile } from "@/lib/services/azure/clientUploader";
 import { api } from "@/lib/utils/api";
+import { getFileExtension } from "@/lib/utils/fileUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -60,7 +60,7 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
       .refine(
         (file: File) =>
           !profileImageChanged || ACCEPTED_IMAGE_TYPES.includes(file?.type),
-        "Only .jpg, .jpeg, .png and .webp formats are supported."
+        "Only .jpg, .jpeg, .png and .webp formats are supported.",
       )
       .optional(),
     headerImage: z
@@ -73,7 +73,7 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
       .refine(
         (file: File) =>
           !headerImageChanged || ACCEPTED_IMAGE_TYPES.includes(file?.type),
-        "Only .jpg, .jpeg, .png and .webp formats are supported."
+        "Only .jpg, .jpeg, .png and .webp formats are supported.",
       )
       .optional(),
   });
@@ -106,14 +106,15 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
           data.profileImage,
           "images",
           `profile/avatars/${profile.id}.${getFileExtension(
-            data.profileImage.name
+            data.profileImage.name,
           )}`,
-          token
+          token,
         );
         if (image) {
           await updateUser.mutateAsync({
             ...profile,
             profileImage: image,
+            urls: [],
           });
         }
       }
@@ -126,9 +127,9 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
           data.headerImage,
           "images",
           `profile/headers/${profile.id}.${getFileExtension(
-            data.headerImage.name
+            data.headerImage.name,
           )}`,
-          token
+          token,
         );
         if (image) {
           await updateUser.mutateAsync({
