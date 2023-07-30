@@ -39,21 +39,32 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
         hls.destroy();
       }
 
-      const hlsProxy = new Hls({
+      hls = new Hls({
         enableWorker: false,
       });
 
-      if (player.current) {
-        hlsProxy.attachMedia(player.current);
-      }
+      if (!player.current) return;
 
-      hlsProxy.on(Hls.Events.MEDIA_ATTACHED, () => {
-        hlsProxy.loadSource(nowPlaying?.audioUrl as string);
-        hlsProxy.on(Hls.Events.MANIFEST_PARSED, () => {
-          player?.current
-            ?.play()
+      hls.attachMedia(player.current);
+
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        hls.loadSource(nowPlaying?.audioUrl as string);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          if (!player?.current) return;
+          player.current.volume = 0.1;
+
+          const p = player.current;
+
+          player.current.ontimeupdate = ($event) => {
+            console.log("audio-provider", "ontimeupdate", $event);
+            console.log("audio-provider", "ontimeupdate", p.currentTime);
+            setPosition(p.currentTime || 0);
+          };
+          player.current
+            .play()
             .then(() => {
-              setDuration(player.current?.duration || 0);
+              if (!player.current) return;
+              setDuration(player.current.duration || 0);
               setPlayState(PlayState.playing);
             })
             .catch(() =>
@@ -63,7 +74,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
             );
         });
       });
-      hlsProxy.on(Hls.Events.ERROR, function (event, data) {
+      hls.on(Hls.Events.ERROR, function (event, data) {
         logger.error(
           "AudioProvider",
           "Unable to initialise audio player",
@@ -72,17 +83,16 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              hlsProxy.startLoad();
+              hls.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              hlsProxy.recoverMediaError();
+              hls.recoverMediaError();
               break;
             default:
               __initPlayer();
               break;
           }
         }
-        hls = hlsProxy;
       });
 
       _startProgressTimer();
@@ -97,8 +107,9 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
       }
     };
   }, [nowPlaying]);
+
   React.useEffect(() => {
-    if (!player.current) return;
+    if (!player?.current) return;
     if (playState === PlayState.paused) {
       player.current.pause();
     } else if (playState === PlayState.playing) {
@@ -106,13 +117,12 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
         .play()
         .catch((err) => logger.error("audio-provider", "error resuming", err));
     }
-  }, [playState]);
+  }, [playState, player]);
 
-  // React.useEffect(() => {
-  //   const audio = audioElRef.current;
-  //   if (!audio) return;
-  //   audio.currentTime = seekPosition;
-  // }, [seekPosition]);
+  React.useEffect(() => {
+    if (!player.current) return;
+    player.current.currentTime = seekPosition;
+  }, [seekPosition]);
 
   // React.useEffect(() => {
   //   const audio = audioElRef.current;

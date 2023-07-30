@@ -1,10 +1,18 @@
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import useAudioStore, {
   PlayState,
 } from "@/lib/services/stores/audio/audio-store";
 import { secondsToReadableString } from "@/lib/utils/timeUtils";
 import React from "react";
+import { Progress } from "@/components/ui/progress";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const MiniPlayer = () => {
   const {
@@ -38,43 +46,54 @@ const MiniPlayer = () => {
         onClick={() => togglePlayState()}
       >
         {playState === PlayState.playing ? (
-          <Icons.pause className="h-full w-full delay-100 hover:text-gray-400" />
+          <Icons.pause className="h-8 w-8 delay-100 hover:text-gray-400" />
         ) : (
-          <Icons.play className="h-full w-full delay-100 hover:text-gray-400" />
+          <Icons.play className="h-8 w-8 delay-100 hover:text-gray-400" />
         )}
       </div>
       <div className="w-16 flex-none p-2">
-        <img src={nowPlaying?.image} alt={nowPlaying?.user?.displayName} />
+        <Image
+          width="64"
+          height="64"
+          src={nowPlaying?.image || "/img/streaming-placeholder.jpg"}
+          alt={nowPlaying?.user?.name || "user profile image"}
+        />
       </div>
-      <div className="flex-none">
-        <div className="flex flex-col px-2 text-sm">
-          <div className="flex-grow font-medium text-gray-200">{}</div>
-          <div className="font-light text-gray-200">{nowPlaying?.title}</div>
-        </div>
+      <div className="w-60 flex-none">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="line-clamp-1 font-light text-gray-200">
+                {nowPlaying?.title}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{nowPlaying?.title}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div
         id="left-button-bar"
         className="flex flex-row space-x-1 px-1 text-gray-400"
       >
-        Todo Favourites
-        <Button variant={"outline"} size={"icon"}>
-          <Icons.heart className="h-4 w-4" />
+        <Button variant={"ghost"} size={"icon"}>
+          <Icons.heart className="h-6 w-6" />
         </Button>
-        {/* <MiniActionButton
-          tooltip="Add to favourites"
-          onClick={() => console.log("MiniPlayer", "Favey")}
-        >
-          <MdFavoriteBorder />
-        </MiniActionButton>
-        <MiniActionButton onClick={() => alert("Play next")}>
-          <MdSkipNext />
-        </MiniActionButton> */}
+        <Button variant={"ghost"} size={"icon"}>
+          <Icons.next className="h-6 w-6" />
+        </Button>
       </div>
       <div className="flex w-full flex-grow items-center px-1">
         <div className="mr-4 text-sm text-gray-400">
           {secondsToReadableString(position)}
         </div>
-        <div className="progress h-full w-full">
+        <Progress
+          value={progressPercentage}
+          className="w-[60%]"
+          onClick={_handleTimeClick}
+        />
+        {/* <div className="progress h-full w-full">
           <div
             className="h-3 rounded-full bg-indigo-100"
             onClick={_handleTimeClick}
@@ -85,7 +104,7 @@ const MiniPlayer = () => {
               style={{ width: `${progressPercentage}%` }}
             ></div>
           </div>
-        </div>
+        </div> */}
         <div className="ml-4 text-sm text-gray-400">
           {secondsToReadableString(duration)}
         </div>
