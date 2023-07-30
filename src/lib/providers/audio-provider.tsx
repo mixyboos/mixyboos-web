@@ -9,14 +9,11 @@ import Hls from "hls.js";
 interface IAudioProviderProps extends PropsWithChildren {}
 
 const AudioProvider = ({ children }: IAudioProviderProps) => {
-  const timerRef = React.useRef<NodeJS.Timer>();
   const player = React.createRef<HTMLAudioElement>();
 
-  const setNowPlaying = useAudioStore((state) => state.setNowPlaying);
-  const nowPlaying = useAudioStore((state) => state.nowPlaying);
-  const nowPlayingUrl = useAudioStore((state) => state.nowPlayingUrl);
   const {
     currentVolume,
+    nowPlaying,
     setPosition,
     setDuration,
     seekPosition,
@@ -27,13 +24,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   React.useEffect(() => {
     if (!nowPlaying?.audioUrl) return;
     let hls: Hls;
-    const _startProgressTimer = () => {
-      // const audio = audioElRef.current;
-      // if (!audio) return;
-      // timerRef.current = setInterval(() => {
-      //   setPosition(audio.currentTime);
-      // }, 1000);
-    };
+
     const __initPlayer = () => {
       if (hls) {
         hls.destroy();
@@ -92,8 +83,6 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
           }
         }
       });
-
-      _startProgressTimer();
     };
     if (Hls.isSupported()) {
       __initPlayer();
