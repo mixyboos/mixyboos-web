@@ -11,6 +11,7 @@ interface IAudioState {
   nowPlaying?: MixModel;
   nowPlayingUrl?: string;
   position: number;
+  progressPercentage: number;
   seekPosition: number;
   duration: number;
   playState: PlayState;
@@ -39,8 +40,12 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   playState: PlayState.stopped,
   currentVolume: 50,
   muted: false,
+  progressPercentage: 0,
 
-  setPosition: (position: number) => set((state) => ({ position })),
+  setPosition: (position: number) => {
+    const progressPercentage = (position / get().duration) * 100;
+    set({ position, progressPercentage });
+  },
   setSeekPosition: (seekPosition: number) => set((state) => ({ seekPosition })),
   setDuration: (duration: number) => set((state) => ({ duration })),
   setNowPlaying: (mix: MixModel) => set((state) => ({ nowPlaying: mix })),

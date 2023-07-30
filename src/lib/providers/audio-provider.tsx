@@ -55,9 +55,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
 
           const p = player.current;
 
-          player.current.ontimeupdate = ($event) => {
-            console.log("audio-provider", "ontimeupdate", $event);
-            console.log("audio-provider", "ontimeupdate", p.currentTime);
+          player.current.ontimeupdate = () => {
             setPosition(p.currentTime || 0);
           };
           player.current

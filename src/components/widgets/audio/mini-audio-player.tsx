@@ -23,13 +23,14 @@ const MiniPlayer = () => {
     playState,
     setSeekPosition,
     togglePlayState,
+    progressPercentage
   } = useAudioStore();
-  const [progressPercentage, setProgressPercentage] = React.useState(0);
 
   const seekBarElem = React.useRef<HTMLDivElement>(null);
   const _handleTimeClick: React.MouseEventHandler<HTMLDivElement> = (
     $event: React.MouseEvent<HTMLDivElement>,
   ) => {
+    console.log("mini-audio-player", "_handleTimeClick", progressPercentage);
     const { pageX: eventOffsetX } = $event;
 
     if (seekBarElem.current) {
@@ -92,6 +93,7 @@ const MiniPlayer = () => {
           value={progressPercentage}
           className="w-[60%]"
           onClick={_handleTimeClick}
+          ref={seekBarElem}
         />
         {/* <div className="progress h-full w-full">
           <div
