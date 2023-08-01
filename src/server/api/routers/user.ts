@@ -36,9 +36,9 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         streamKey: z.string(),
-      })
+      }),
     )
-    .query(async ({ input: { streamKey }, ctx }) => {
+    .query(async ({ input: { streamKey } }) => {
       const results = await db
         .selectDistinct()
         .from(users)
@@ -56,7 +56,7 @@ export const userRouter = createTRPCRouter({
         urls: z.array(z.string()),
         profileImage: z.string().nullable(),
         headerImage: z.string().nullable(),
-      })
+      }),
     )
     .mutation(
       async ({
@@ -87,6 +87,6 @@ export const userRouter = createTRPCRouter({
             headerImage,
           })
           .where(eq(users.id, ctx.session.id));
-      }
+      },
     ),
 });

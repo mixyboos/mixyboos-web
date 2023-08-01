@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   if (!session) return <Loading />;
   return (

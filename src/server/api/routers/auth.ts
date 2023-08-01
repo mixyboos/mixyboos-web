@@ -18,7 +18,7 @@ export const authRouter = createTRPCRouter({
         email: z.string(),
         username: z.string(),
         password: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input: { email, username, password }, ctx }) => {
       const exists = await ctx.db
@@ -44,7 +44,12 @@ export const authRouter = createTRPCRouter({
           profileImage: faker.image.avatar(),
         })
         .returning();
-
+      if (!result[0]?.id) {
+        return {
+          status: 500,
+          message: "Unable to create account",
+        };
+      }
       return {
         status: 201,
         message: "Account created successfully",

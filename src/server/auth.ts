@@ -13,14 +13,14 @@ import {
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { DrizzleAdapter } from "./adapters/drizzleAdapter";
+import { pgDrizzleAdapter } from "./adapters/drizzle/pg";
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    session: ({ session, token }) => {
+    session: ({ token }) => {
       return {
         id: token.id,
         user: token.user,
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
-  adapter: DrizzleAdapter(db),
+  adapter: pgDrizzleAdapter(db),
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -79,7 +79,7 @@ export const authOptions: NextAuthOptions = {
 
           const isValidPassword = await verify(
             user.password,
-            credentials.password
+            credentials.password,
           );
 
           if (!isValidPassword) {

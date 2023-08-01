@@ -13,9 +13,10 @@ import { db } from "@/server/db";
 import { desc } from "drizzle-orm";
 import * as z from "zod";
 import { mapMixToMixModel } from "@/lib/utils/mappers/mixMapper";
+import logger from "@/lib/logger";
 
 export const mixRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
+  getAll: publicProcedure.query(({}) => {
     const results = db
       .select()
       .from(mixes)
@@ -29,9 +30,9 @@ export const mixRouter = createTRPCRouter({
       z.object({
         username: z.string(),
         mixSlug: z.string(),
-      })
+      }),
     )
-    .query(async ({ input: { username: username, mixSlug }, ctx }) => {
+    .query(async ({ input: { username: username, mixSlug } }) => {
       //don't like this but it appears we can't query on foreign key columns
       //in drizzle
 
@@ -66,9 +67,10 @@ export const mixRouter = createTRPCRouter({
         title: z.string(),
         description: z.string(),
         tags: z.array(z.string()).optional(),
-      })
+      }),
     )
     .mutation(async ({ input: { id, title, description, tags }, ctx }) => {
+      logger.debug("mix", "TODO: use tags", tags);
       const userResult = await db
         .selectDistinct()
         .from(users)

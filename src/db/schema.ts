@@ -51,7 +51,7 @@ export const mixes = pgTable("mixes", {
 
 export const liveShows = pgTable("live_shows", {
   id: uuid("id").primaryKey().defaultRandom(),
-  slug: varchar("slug", { length: 50 }).notNull(),
+  slug: varchar("slug", { length: 50 }),
   title: text("full_name"),
   description: varchar("description", { length: 256 }),
   status: LiveShowStatus("status"),

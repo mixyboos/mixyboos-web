@@ -21,7 +21,7 @@ export const showRouter = createTRPCRouter({
         title: z.string(),
         description: z.string(),
         tags: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ input: { title, description, tags }, ctx }) => {
       const userId = ctx.session.id;
@@ -36,8 +36,8 @@ export const showRouter = createTRPCRouter({
         .where(
           and(
             eq(liveShows.userId, userId),
-            or(eq(liveShows.status, "SETUP"), eq(liveShows.status, "AWAITING"))
-          )
+            or(eq(liveShows.status, "SETUP"), eq(liveShows.status, "AWAITING")),
+          ),
         );
       const inProgressShow = result[0];
       if (inProgressShow)
@@ -46,7 +46,7 @@ export const showRouter = createTRPCRouter({
           message: "User already has show in progress.",
         });
 
-      tags.forEach((element) => {
+      tags.forEach((title) => {
         async () => {
           await db.insert(showTags).values({ title }).onConflictDoNothing();
         };
@@ -81,8 +81,8 @@ export const showRouter = createTRPCRouter({
         .where(
           and(
             eq(liveShows.userId, userId),
-            inArray(liveShows.status, ["SETUP", "AWAITING", "STREAMING"])
-          )
+            inArray(liveShows.status, ["SETUP", "AWAITING", "STREAMING"]),
+          ),
         );
       const show = results[0];
 
@@ -90,34 +90,34 @@ export const showRouter = createTRPCRouter({
         return mapNoShowToShowModel(ctx.session.user);
       }
       return mapShowToShowModel(show, ctx.session.user);
-    }
+    },
   ),
   checkForStart: publicProcedure
     .input(z.object({ userId: z.string() }))
-    .query(async ({ input: { userId }, ctx }) => {
+    .query(async ({ input: { userId } }) => {
       const results = await db
         .selectDistinct()
         .from(liveShows)
         .where(
           and(
             eq(liveShows.userId, userId),
-            inArray(liveShows.status, ["AWAITING", "STREAMING"])
-          )
+            inArray(liveShows.status, ["AWAITING", "STREAMING"]),
+          ),
         );
       const show = results[0];
       return show ? mapShowToShowModel(show, undefined) : null;
     }),
   checkForInProgress: publicProcedure
     .input(z.object({ userId: z.string() }))
-    .query(async ({ input: { userId }, ctx }) => {
+    .query(async ({ input: { userId } }) => {
       const results = await db
         .selectDistinct()
         .from(liveShows)
         .where(
           and(
             eq(liveShows.userId, userId),
-            inArray(liveShows.status, ["STREAMING"])
-          )
+            inArray(liveShows.status, ["STREAMING"]),
+          ),
         );
       const show = results[0];
       return show ? mapShowToShowModel(show, undefined) : null;
