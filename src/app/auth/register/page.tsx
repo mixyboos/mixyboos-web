@@ -185,7 +185,7 @@ const LoginPage = () => {
               )}
             />
             <div className="w-full">
-              <Button type="submit" variant={"outline"} size={"fullWidth"}>
+              <Button type="submit" variant={"outline"} size={"lg"}>
                 <div className="inline-flex items-center">
                   <Icons.register className="mr-2 h-4 w-4" />
                   <span>Register</span>

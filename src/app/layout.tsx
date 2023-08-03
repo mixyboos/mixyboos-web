@@ -12,7 +12,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen  bg-background font-sans antialiased",
+          "bg-background  min-h-screen font-sans antialiased",
           fontSans.variable,
         )}
       >
@@ -21,7 +21,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <h1>Base Layout page {"<"}md</h1>
           </div>
           <div className="relative hidden h-screen w-full flex-col md:flex">
-            <div className="border-b bg-background/95 backdrop-blur">
+            <div className="bg-background/95 border-b backdrop-blur">
               <Navbar className="mx-6" />
             </div>
             <div className="flex-1">{children}</div>

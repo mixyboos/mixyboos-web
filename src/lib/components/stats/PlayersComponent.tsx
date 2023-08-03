@@ -183,7 +183,7 @@ const PlayersComponent = () => {
                   />
                   <div className="ml-3">
                     <p className="truncate font-medium text-gray-900 dark:text-white">
-                      Apple iMac 27"
+                      {'Apple iMac 27"'}
                     </p>
                     <div className="flex flex-1 items-center justify-end text-sm text-green-500 dark:text-green-400">
                       <svg
@@ -291,7 +291,7 @@ const PlayersComponent = () => {
                   />
                   <div className="ml-3">
                     <p className="truncate font-medium text-gray-900 dark:text-white">
-                      Apple iMac 24"
+                      {'Apple iMac 24"'}
                     </p>
                     <div className="flex flex-1 items-center justify-end text-sm text-red-600 dark:text-red-500">
                       <svg

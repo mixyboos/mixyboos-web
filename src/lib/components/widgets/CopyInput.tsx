@@ -1,3 +1,9 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { HiOutlineDuplicate } from "react-icons/hi";
@@ -51,13 +57,18 @@ const Input = ({
           data-tooltip-target="tooltip-default"
           type="submit"
           title={label}
-          className="ho absolute bottom-2.5  right-2.5 rounded-lg px-4 py-2 text-sm font-medium focus:ring-0 focus:ring-4 focus:ring-offset-0 "
+          className="ho absolute bottom-2.5  right-2.5 rounded-lg px-4 py-2 text-sm font-medium focus:ring-0 focus:ring-offset-0 "
         >
-          <Tooltip content="Copy" animation="duration-300">
-            <CopyToClipboard text={value} onCopy={() => alert("Copied")}>
-              <HiOutlineDuplicate className="h-6 w-6 text-gray-400 hover:text-gray-600 focus:ring-0 focus:ring-offset-0" />
-            </CopyToClipboard>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>Copy text to clipboard</TooltipTrigger>
+              <TooltipContent>
+                <CopyToClipboard text={value} onCopy={() => alert("Copied")}>
+                  <HiOutlineDuplicate className="h-6 w-6 text-gray-400 hover:text-gray-600 focus:ring-0 focus:ring-offset-0" />
+                </CopyToClipboard>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </button>
       </div>
     </div>

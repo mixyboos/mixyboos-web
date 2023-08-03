@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSession } from 'next-auth/react';
+import React from "react";
+import { useSession } from "next-auth/react";
 interface ITaggedInputProps {
   id: string;
   label: string;
@@ -21,14 +21,14 @@ const TaggedInput = ({
   const [tags, setTags] = React.useState<string[]>(value);
   const [searchResults, setSearchResults] = React.useState<string[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState("");
 
   let timer: NodeJS.Timer;
   const __addTag = (tag: string) => {
     setTags([...tags, tag]);
     setSearchResults([]);
     setIsSearching(false);
-    setSearchValue('');
+    setSearchValue("");
     onChange && onChange(tags);
     // searchField.focus();
   };
@@ -37,7 +37,7 @@ const TaggedInput = ({
   };
   const doResultClick = ($event: any) => __addTag($event.target.textContent);
   const doKeypress = ($event: any) => {
-    if ($event.key === 'Enter') {
+    if ($event.key === "Enter") {
       __addTag($event.target.value);
       $event.preventDefault();
     }
@@ -52,12 +52,14 @@ const TaggedInput = ({
     }
     setIsSearching(true);
     clearTimeout(timer);
+    //TODO: Why is this happening?
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     timer = setTimeout(async () => {
       try {
         const service = new TagService();
         setSearchResults(await service.searchTags(query));
       } catch (err) {
-        console.log('TaggedInput', 'Error doing search', err);
+        console.log("TaggedInput", "Error doing search", err);
       }
       setIsSearching(false);
     }, 750);
@@ -66,14 +68,14 @@ const TaggedInput = ({
     <>
       <label
         htmlFor="id"
-        className="block mb-2 text-sm font-bold text-gray-500"
+        className="mb-2 block text-sm font-bold text-gray-500"
       >
         {label}
       </label>
-      <div className="flex flex-col shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg\n            focus:ring-blue-500 focus:border-blue-500 w-full p-2.5\n            dark:bg-slate-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500\n            dark:focus:border-blue-500 dark:shadow-sm-light">
+      <div className="rounded-lg\n p-2.5\n dark:focus:ring-blue-500\n dark:shadow-sm-light flex w-full flex-col border border-gray-300            bg-gray-50 text-sm text-gray-900 shadow-sm            focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-slate-700 dark:text-white            dark:placeholder-gray-400 dark:focus:border-blue-500">
         <input
           placeholder={placeholder}
-          className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-slate-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           id={id}
           value={searchValue}
           onInput={doSearch}
@@ -81,18 +83,18 @@ const TaggedInput = ({
         />
         {tags.length !== 0 && (
           <div
-            className="inline-flex m-2 space-x-2 rounded-md shadow-sm"
+            className="m-2 inline-flex space-x-2 rounded-md shadow-sm"
             role="group"
           >
             {tags?.map((tag) => (
               <button
                 key={tag}
                 type="button"
-                className="inline-flex items-center px-4 py-2 text-sm font-medium
-              text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none  font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900"
+                className="mb-2 mr-2 inline-flex items-center rounded-full bg-yellow-400
+              px-4 px-5 py-2 py-2.5  text-center text-sm text-sm font-medium font-medium text-white hover:bg-yellow-500 focus:outline-none dark:focus:ring-yellow-900"
               >
                 <svg
-                  className="w-3 h-3 mr-2 hover:text-gray-200"
+                  className="mr-2 h-3 w-3 hover:text-gray-200"
                   onClick={() => removeTag(tag)}
                   stroke="currentColor"
                   fill="none"
@@ -112,13 +114,10 @@ const TaggedInput = ({
       </div>
 
       {isSearching && (
-        <div
-          role="status"
-          className="z-50 ml-5 -mt-3"
-        >
+        <div role="status" className="z-50 -mt-3 ml-5">
           <svg
             aria-hidden="true"
-            className="w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="mr-2 h-4 w-4 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -136,18 +135,18 @@ const TaggedInput = ({
         </div>
       )}
       {searchResults.length !== 0 && (
-        <div className={`ml-5 z-50 ${!isSearching && '-mt-6'} mb-4 flex`}>
+        <div className={`z-50 ml-5 ${!isSearching && "-mt-6"} mb-4 flex`}>
           <aside
             role="menu"
             aria-labelledby="menu-heading"
-            className="absolute z-50 flex flex-col items-start mt-1 text-sm bg-white border rounded-md shadow-md w-72"
+            className="absolute z-50 mt-1 flex w-72 flex-col items-start rounded-md border bg-white text-sm shadow-md"
           >
-            <ul className="flex flex-col w-full">
+            <ul className="flex w-full flex-col">
               {searchResults.map((result) => (
                 <li
                   key={result}
                   onClick={doResultClick}
-                  className="px-2 py-1 space-x-2 cursor-pointer hover:bg-indigo-500 hover:text-white focus:bg-indigo-500 focus:text-white focus:outline-none"
+                  className="cursor-pointer space-x-2 px-2 py-1 hover:bg-indigo-500 hover:text-white focus:bg-indigo-500 focus:text-white focus:outline-none"
                 >
                   {result}
                 </li>

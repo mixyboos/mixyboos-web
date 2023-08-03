@@ -53,7 +53,7 @@ export const userRouter = createTRPCRouter({
         username: z.string(),
         email: z.string().email(),
         bio: z.string().nullable(),
-        urls: z.array(z.string()),
+        urls: z.array(z.string()).nullable(),
         profileImage: z.string().nullable(),
         headerImage: z.string().nullable(),
       }),

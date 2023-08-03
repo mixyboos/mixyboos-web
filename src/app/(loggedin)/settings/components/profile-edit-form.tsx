@@ -33,12 +33,12 @@ const formSchema = z.object({
       message: "Username must not be longer than 30 characters.",
     }),
   email: z.string().email(),
-  bio: z.string().max(160).min(0).nullable(),
+  bio: z.string().max(160).min(0),
   urls: z
     .array(
       z.object({
         value: z.string().url({ message: "Please enter a valid URL." }),
-      })
+      }),
     )
     .optional(),
 });
