@@ -7,13 +7,11 @@ import { SessionProvider } from "next-auth/react";
 
 const Providers: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <ClientProvider>
-      <SessionProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AudioProvider>{children}</AudioProvider>
-        </ThemeProvider>
-      </SessionProvider>
-    </ClientProvider>
+    <SessionProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <AudioProvider>{children}</AudioProvider>
+      </ThemeProvider>
+    </SessionProvider>
   );
 };
 
