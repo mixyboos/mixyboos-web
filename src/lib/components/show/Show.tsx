@@ -1,7 +1,7 @@
 import React from "react";
 import ShowPlayerPage from "./ShowPlayerPage";
 import type { LiveShowModel } from "@/lib/models";
-import ShowStatus from "../../models/ShowStatus";
+import ShowStatus from "../../models/show-status";
 import { Chat } from "../chat";
 import { createPusherClient } from "@/lib/services/realtime";
 

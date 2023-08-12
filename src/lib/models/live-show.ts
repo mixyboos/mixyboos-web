@@ -1,5 +1,5 @@
-import type ShowStatus from "./ShowStatus";
-import type UserModel from "./UserModel";
+import type ShowStatus from "./show-status";
+import type UserModel from "./user";
 
 type LiveShowModel = {
   id: string;

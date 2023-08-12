@@ -1,6 +1,7 @@
-import { authOptions } from "@/server/auth";
+import { authOptions } from "@/lib/services/api/config";
 import NextAuth from "next-auth";
 
-const handler: any = NextAuth(authOptions);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
