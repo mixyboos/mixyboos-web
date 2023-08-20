@@ -16,13 +16,14 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/widgets/image-upload";
 import { type MixModel } from "@/lib/models";
-import { api } from "@/lib/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import * as Sentry from "@sentry/nextjs";
 
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+import MixService from "@/lib/services/api/mix-service";
+import UploadService from "@/lib/services/api/upload-service";
 
 const MAX_IMAGE_SIZE = 5242880;
 const ACCEPTED_IMAGE_TYPES = [
@@ -40,12 +41,8 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
   mix,
   onMixCreated,
 }) => {
-  const createMix = api.mix.createMix.useMutation({
-    onSuccess: (result) => {
-      console.log("page", "register_success", result);
-    },
-  });
-
+  const mixService = new MixService();
+  const uploadService = new UploadService();
   const formSchema = z.object({
     title: z
       .string()
@@ -63,7 +60,7 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
       }, `Max image size is 5MB.`)
       .refine(
         (file: File) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-        "Only .jpg, .jpeg, .png and .webp formats are supported."
+        "Only .jpg, .jpeg, .png and .webp formats are supported.",
       ),
   });
   type FormValues = z.infer<typeof formSchema>;
@@ -80,12 +77,24 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("MixCreateDetailsComponent", "onSubmit", values);
     try {
-      const result = await createMix.mutateAsync({
+      const result = await mixService.createMix({
         id: mix.id,
         title: values.title,
         description: values.description,
-        tags: [],
+        isProcessed: false,
       });
+      if (result && values.mixImage) {
+        const data = new FormData();
+        data.append("file", values.mixImage);
+        uploadService.uploadImage(mix.id, data, "MixImage", undefined);
+      }
+
+      // const result = await createMix.mutateAsync({
+      //   id: mix.id,
+      //   title: values.title,
+      //   description: values.description,
+      //   tags: [],
+      // });
       onMixCreated(result);
     } catch (err) {
       Sentry.captureException(err);
@@ -94,7 +103,7 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
   return (
     <div className="container w-full">
       <h2 className="mb-2 text-xl font-bold">Mix info</h2>
-      <Separator className="my-2 bg-muted-foreground" />
+      <Separator className="bg-muted-foreground my-2" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid w-full grid-cols-1 lg:grid-cols-2 ">
@@ -164,7 +173,7 @@ const MixCreateDetailsComponent: React.FC<MixCreateDetailsComponentProps> = ({
               />
             </div>
           </div>
-          <Separator className="my-0 bg-muted-foreground" />
+          <Separator className="bg-muted-foreground my-0" />
           <Button type="submit" variant={"default"}>
             <Icons.save className="mr-2 h-4 w-4" />
             Save mix

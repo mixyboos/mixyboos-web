@@ -1,13 +1,13 @@
 "use client";
 
 import { Progress } from "@/components/ui/progress";
-import FileUpload from "@/lib/components/widgets/FileUpload";
+import FileUpload from "@/components/widgets/file-upload";
 import PageHeader from "@/lib/components/widgets/PageHeader";
 import { type MixModel } from "@/lib/models";
 import React from "react";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
-import MixCreateDetailsComponent from "./MixCreateDetailsComponent";
+import MixCreateDetailsComponent from "./mix-create-details";
 import { useRouter } from "next/navigation";
 
 enum CreateState {
@@ -54,7 +54,7 @@ const MixCreateComponent = () => {
         )}
         {uploadState === UploadState.uploading && (
           <div className="mx-auto my-8 w-3/5">
-            <h3 className="mb-2 text-sm text-muted-foreground">Uploading..</h3>
+            <h3 className="text-muted-foreground mb-2 text-sm">Uploading..</h3>
             <Progress value={percentageUploaded} title="Uploading audio" />
           </div>
         )}

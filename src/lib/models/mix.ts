@@ -2,16 +2,16 @@ import { type ProfileModel } from ".";
 
 type MixModel = {
   id: string;
-  slug: string;
+  slug?: string;
   title: string;
   description: string | null;
-  dateUploaded: string;
+  dateUploaded?: string;
   image?: string;
   likeCount?: number;
   playCount?: number;
   shareCount?: number;
   downloadCount?: number;
-  user: ProfileModel;
+  user?: ProfileModel;
   audioUrl?: string;
   isProcessed: boolean;
 };

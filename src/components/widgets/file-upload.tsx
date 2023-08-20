@@ -42,18 +42,18 @@ const FileUpload = ({
     } catch (err) {
       console.error("Upload", "Error", err);
       onError(
-        "Error uploading file, please refresh your browser and try again!"
+        "Error uploading file, please <button onClick={() => window. location. reload()}> your browser and try again!",
       );
     }
   };
   return (
     <label
-      className="w-full flex flex-col items-center px-4 py-6 bg-primary text-primary-foreground
-                 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer
-                 hover:bg-primary/90 disabled:opacity-50 hover:text-primary-foreground/90"
+      className="bg-primary text-primary-foreground border-blue hover:bg-primary/90 hover:text-primary-foreground/90 flex w-full cursor-pointer
+                 flex-col items-center rounded-lg border px-4 py-6 uppercase
+                 tracking-wide shadow-lg disabled:opacity-50"
     >
       <svg
-        className="w-8 h-8"
+        className="h-8 w-8"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
