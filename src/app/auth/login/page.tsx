@@ -29,6 +29,7 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import logger from "@/lib/logger";
 
 const LoginPage = () => {
   const [loginError, setLoginError] = React.useState(false);
@@ -45,10 +46,10 @@ const LoginPage = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    logger.debug(values);
     setLoginError(false);
     signIn("credentials", {
-      email: values.usernameOrEmail,
+      username: values.usernameOrEmail,
       password: values.password,
       callbackUrl:
         searchParams?.get("callbackUrl") ||
@@ -57,14 +58,16 @@ const LoginPage = () => {
       redirect: false,
     })
       .then((result) => {
-        if (result?.ok) {
+        //TODO: have to check result?.error rather than result.ok
+        //TODO: https://github.com/nextauthjs/next-auth/issues/7725#issuecomment-1649310412
+        if (!result?.error) {
           router.push(searchParams?.get("returnUrl") || "/");
         } else {
           setLoginError(true);
         }
       })
       .catch((err) => {
-        console.error("login", "handleLogin", err);
+        logger.error("login", "handleLogin", err);
         setLoginError(true);
       });
   }
@@ -109,6 +112,13 @@ const LoginPage = () => {
           </button>
         </div>
         <div className="border-sm mt-4 text-center shadow-lg">or</div>
+        {loginError && (
+          <Alert variant="destructive">
+            <Icons.error className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>Unable to sign you in</AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -155,15 +165,7 @@ const LoginPage = () => {
                 </div>
               </Button>
             </div>
-            {loginError && (
-              <div>
-                <Alert variant="destructive">
-                  <Icons.error className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>Unable to sign you in</AlertDescription>
-                </Alert>
-              </div>
-            )}
+
             <div className="text-sm font-medium text-gray-500">
               Not registered?
               <Link

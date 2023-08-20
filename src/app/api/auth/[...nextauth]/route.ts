@@ -1,4 +1,4 @@
-import { authOptions } from "@/lib/services/api/config";
+import { authOptions } from "@/lib/services/auth/config";
 import NextAuth from "next-auth";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

@@ -5,5 +5,12 @@ type AuthTokenModel = {
   expires_in: number;
   token_type: string;
   expiration_date: string;
+
+  id: string;
+  email: string;
+  name: string;
+  displayName: string;
+  slug: string;
+  profileImage: string;
 };
 export default AuthTokenModel;

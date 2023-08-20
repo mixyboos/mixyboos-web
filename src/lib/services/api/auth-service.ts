@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import ApiService from "./api-service";
-import { type AuthTokenModel, UserModel } from "@/lib/models";
+import type { AuthTokenModel, UserModel } from "@/lib/models";
 import logger from "@/lib/logger";
 
 class AuthService extends ApiService {
@@ -78,15 +78,15 @@ class AuthService extends ApiService {
     return Promise.reject("Unable to log in");
   };
   registerUser = async (
-    userName: string,
+    email: string,
     password: string,
     confirmPassword: string,
-    displayName: string,
+    username: string = "",
   ): Promise<boolean> => {
     const url = "/account/register";
     const result = await this._client.post(
       url,
-      { userName, password, confirmPassword, displayName },
+      { username: email, password, confirmPassword, displayName: username },
       this.jsonConfig,
     );
 
@@ -97,6 +97,7 @@ class AuthService extends ApiService {
     }
     return false;
   };
+
   loginUser = async (
     username: string,
     password: string,
@@ -106,7 +107,6 @@ class AuthService extends ApiService {
     const params = new URLSearchParams();
     params.append("username", username);
     params.append("password", password);
-    UserModel;
     params.append("grant_type", process.env.AUTH_GRANT_TYPE as string);
     params.append("scope", process.env.AUTH_SCOPE as string);
     params.append("client_id", process.env.AUTH_CLIENT_ID as string);

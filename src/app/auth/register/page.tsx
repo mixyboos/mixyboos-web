@@ -19,9 +19,12 @@ import { Icons } from "@/components/icons";
 import { notice } from "@/lib/components/notifications/toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { api } from "@/lib/utils/api";
+import AuthService from "@/lib/services/api/auth-service";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import logger from "@/lib/logger";
 
 const LoginPage = () => {
+  const [hasErrors, setHasErrors] = React.useState(false);
   const schema = z
     .object({
       username: z
@@ -42,33 +45,35 @@ const LoginPage = () => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-    },
-  });
-  const register = api.auth.signUp.useMutation({
-    onSuccess: (result) => {
-      console.log("page", "register_success", result);
+      username: "superawesomedjperson",
+      email: "fergal.moran+mixyboos@gmail.com",
+      password: "secret",
+      confirmPassword: "secret",
     },
   });
 
   async function onSubmit(values: z.infer<typeof schema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    logger.debug(values);
+    setHasErrors(false);
     try {
-      const result = await register.mutateAsync({
-        email: values.email,
-        username: values.username,
-        password: values.password,
-      });
-      console.log("page", "handleRegister", result);
-      if (result?.status === 201) {
-        await signIn();
+      const result = await new AuthService().registerUser(
+        values.email,
+        values.password,
+        values.confirmPassword,
+        values.username,
+      );
+      if (result) {
+        const response = await signIn("credentials", {
+          username: values.username,
+          password: values.password,
+          callbackUrl: "/",
+          redirect: true,
+        });
+        logger.debug("RegisterPage", "signin_credentials", response);
       }
     } catch (err) {
-      console.error("RegisterPage", "handleLogin", err);
+      logger.error("RegisterPage", "handleLogin", err);
+      setHasErrors(true);
     }
   }
   return (
@@ -114,6 +119,22 @@ const LoginPage = () => {
         <div className="border-sm mt-4 text-center shadow-lg">
           or create a new account
         </div>
+        {hasErrors && (
+          <Alert variant="destructive">
+            <Icons.error className="h-4 w-4" />
+            <AlertTitle>Yikes! Something went wrong...</AlertTitle>
+            <AlertDescription>
+              Please try again, or
+              <Link
+                href="/auth/login"
+                className="ml-2 text-fuchsia-600 hover:underline"
+              >
+                login{" "}
+              </Link>
+              if you already have an account?
+            </AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField

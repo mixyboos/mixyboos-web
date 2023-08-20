@@ -1,19 +1,17 @@
-"use client";
 import LargeAudioPlayer from "@/components/widgets/audio/large-audio-player";
 import React from "react";
-import { api } from "@/lib/utils/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import MixService from "@/lib/services/api/mix-service";
 
-export default function Page({
+export default async function Page({
   params,
 }: {
   params: { username: string; mixSlug: string };
 }) {
-  const mixQuery = api.mix.getByUserAndSlug.useQuery({
-    username: params.username,
-    mixSlug: params.mixSlug,
-  });
-  const mix = mixQuery?.data;
+  const mix = await new MixService().getByUserAndSlug(
+    params.username,
+    params.mixSlug,
+  );
   return (
     <div className="container p-5">
       {mix ? (
