@@ -1,10 +1,10 @@
 import { AxiosError } from "axios";
 import ApiService from "./api-service";
-import type { AuthTokenModel, UserModel } from "@/lib/models";
+import type { AuthTokenModel, ProfileModel } from "@/lib/models";
 import logger from "@/lib/logger";
 
 class AuthService extends ApiService {
-  getUser = async (): Promise<UserModel | undefined> => {
+  getUser = async (): Promise<ProfileModel | undefined> => {
     try {
       const result = await this._client.get("/profile/me");
       if (result?.status === 200) {
@@ -101,7 +101,7 @@ class AuthService extends ApiService {
   loginUser = async (
     username: string,
     password: string,
-  ): Promise<UserModel | null> => {
+  ): Promise<ProfileModel | null> => {
     const url = "/connect/token";
 
     const params = new URLSearchParams();
@@ -115,7 +115,7 @@ class AuthService extends ApiService {
       const result = await this._client.post(url, params, this.noauthConfig);
       if (result?.status === 200) {
         const model: AuthTokenModel = result.data.token;
-        const user: UserModel = result.data.user;
+        const user: ProfileModel = result.data.user;
         console.log("authService", "loginUser", result);
         // _storeToken(model);
         return user;

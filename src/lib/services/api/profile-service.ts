@@ -1,4 +1,4 @@
-import type { UserModel } from "@/lib/models";
+import type { ProfileModel } from "@/lib/models";
 import ApiService from "./api-service";
 import logger from "@/lib/logger";
 
@@ -6,7 +6,7 @@ class ProfileService extends ApiService {
   /**
    * Get the currently logged in user's profile
    */
-  getProfile = async (): Promise<UserModel | undefined> => {
+  getProfile = async (): Promise<ProfileModel | undefined> => {
     try {
       const results = await this._client.get("/profile/me");
       if (results.status === 200) {
@@ -18,7 +18,7 @@ class ProfileService extends ApiService {
     return undefined;
   };
 
-  getProfileBySlug = async (slug: string): Promise<UserModel | undefined> => {
+  getProfileBySlug = async (slug: string): Promise<ProfileModel | undefined> => {
     try {
       const results = await this._client.get(`/profile?slug=${slug}`);
       if (results.status === 200) {
@@ -36,8 +36,8 @@ class ProfileService extends ApiService {
   };
 
   updateProfile = async (
-    profile: UserModel,
-  ): Promise<UserModel | undefined> => {
+    profile: ProfileModel,
+  ): Promise<ProfileModel | undefined> => {
     try {
       const result = await this._client.post(
         `/profile`,
@@ -45,7 +45,7 @@ class ProfileService extends ApiService {
         this.jsonConfig,
       );
 
-      return result.data as UserModel;
+      return result.data as ProfileModel;
     } catch (err) {}
     return undefined;
   };

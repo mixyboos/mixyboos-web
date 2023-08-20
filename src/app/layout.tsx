@@ -13,7 +13,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body
         className={cn(
           "bg-background  min-h-screen font-sans antialiased",
-          fontSans.variable,
+          fontSans.className,
         )}
       >
         <Providers>

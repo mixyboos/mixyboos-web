@@ -1,10 +1,10 @@
-import { type UserModel } from "@/lib/models";
+import { type ProfileModel } from "@/lib/models";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 type UserBioComponentProps = {
-  user: UserModel;
+  user: ProfileModel;
 };
 
 const UserBioComponent: React.FC<UserBioComponentProps> = ({ user }) => {

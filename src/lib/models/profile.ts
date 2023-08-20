@@ -1,4 +1,4 @@
-type UserModel = {
+type ProfileModel = {
   id: string;
   username: string;
   name: string | null;
@@ -8,4 +8,4 @@ type UserModel = {
   headerImage: string;
   urls: string[] | null;
 };
-export default UserModel;
+export default ProfileModel;

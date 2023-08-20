@@ -1,5 +1,5 @@
 import { LiveShow } from "@/db/schema";
-import { ShowStatus, type UserModel } from "@/lib/models";
+import { ShowStatus, type ProfileModel } from "@/lib/models";
 import type { LiveShowModel } from "@/lib/models";
 import { randomUUID } from "crypto";
 
@@ -20,7 +20,7 @@ const mapShowStatusFromDb = (
   }
 };
 
-const mapNoShowToShowModel = (user: UserModel): LiveShowModel => {
+const mapNoShowToShowModel = (user: ProfileModel): LiveShowModel => {
   return {
     id: randomUUID().toString(),
     title: "",
@@ -33,7 +33,7 @@ const mapNoShowToShowModel = (user: UserModel): LiveShowModel => {
 };
 const mapShowToShowModel = (
   show: LiveShow,
-  user: UserModel | undefined
+  user: ProfileModel | undefined
 ): LiveShowModel => ({
   ...show,
   tags: ["House"],

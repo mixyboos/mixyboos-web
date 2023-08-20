@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import ImageUpload from "@/components/widgets/image-upload";
 import { notice } from "@/lib/components/notifications/toast";
-import { type UserModel } from "@/lib/models";
+import { type ProfileModel } from "@/lib/models";
 import { uploadFile } from "@/lib/services/azure/clientUploader";
 import { api } from "@/lib/utils/api";
 import { getFileExtension } from "@/lib/utils/fileUtils";
@@ -30,7 +30,7 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 type ProfileImageEditFormProps = {
-  profile: UserModel;
+  profile: ProfileModel;
 };
 
 const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({

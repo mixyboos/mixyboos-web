@@ -1,5 +1,5 @@
 import type ShowStatus from "./show-status";
-import type UserModel from "./user";
+import type ProfileModel from "./profile";
 
 type LiveShowModel = {
   id: string;
@@ -10,6 +10,6 @@ type LiveShowModel = {
   startDate: Date;
   status: ShowStatus;
 
-  user: UserModel | undefined;
+  user: ProfileModel | undefined;
 };
 export default LiveShowModel;

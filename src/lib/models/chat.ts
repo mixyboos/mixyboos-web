@@ -1,9 +1,9 @@
-import type UserModel from "./user";
+import type ProfileModel from "./profile";
 
 type ChatModel = {
   id: string;
-  fromUser: UserModel;
-  toUser: UserModel;
+  fromUser: ProfileModel;
+  toUser: ProfileModel;
   timestamp: Date;
   message: string;
 };

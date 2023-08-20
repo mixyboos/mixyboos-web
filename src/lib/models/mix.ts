@@ -1,4 +1,4 @@
-import { type UserModel } from ".";
+import { type ProfileModel } from ".";
 
 type MixModel = {
   id: string;
@@ -11,7 +11,7 @@ type MixModel = {
   playCount?: number;
   shareCount?: number;
   downloadCount?: number;
-  user: UserModel;
+  user: ProfileModel;
   audioUrl?: string;
   isProcessed: boolean;
 };

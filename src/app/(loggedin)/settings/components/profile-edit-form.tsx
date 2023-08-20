@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { notice } from "@/lib/components/notifications/toast";
-import { type UserModel } from "@/lib/models";
+import { type ProfileModel } from "@/lib/models";
 import { api } from "@/lib/utils/api";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +21,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
 
 type ProfileEditFormProps = {
-  profile: UserModel;
+  profile: ProfileModel;
 };
 const formSchema = z.object({
   username: z

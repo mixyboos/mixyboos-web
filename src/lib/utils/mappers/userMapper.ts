@@ -1,11 +1,11 @@
 import { type User as DbUser } from "@/db/schema";
-import { type UserModel } from "@/lib/models";
+import { type ProfileModel } from "@/lib/models";
 import { type User as AuthUser } from "next-auth";
 import mapImage from "./imageMapper";
 
 const mapAuthUserToUserModel = (
   user: AuthUser | undefined | null
-): UserModel | undefined =>
+): ProfileModel | undefined =>
   user
     ? {
         id: user.id,
@@ -19,7 +19,7 @@ const mapAuthUserToUserModel = (
       }
     : undefined;
 
-const mapDbAuthUserToUserModel = (user: DbUser): UserModel => ({
+const mapDbAuthUserToUserModel = (user: DbUser): ProfileModel => ({
   id: user.id,
   username: user.username,
   name: user.name || user.username,

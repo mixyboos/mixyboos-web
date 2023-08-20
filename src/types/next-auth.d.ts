@@ -1,4 +1,4 @@
-import { type UserModel } from "@lib/data/models";
+import { type ProfileModel } from "@lib/data/models";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import NextAuth from "next-auth";
 
@@ -18,6 +18,6 @@ declare module "next-auth" {
     profileImage: string;
     name: string;
     slug: string;
-    profile: UserModel | undefined;
+    profile: ProfileModel | undefined;
   }
 }

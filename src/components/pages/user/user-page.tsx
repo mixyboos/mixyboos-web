@@ -2,10 +2,10 @@ import Image from "next/image";
 import React from "react";
 import UserBioComponent from "./user-bio-component";
 import MixListComponent from "@/components/widgets/mix-list-component";
-import type { MixModel, UserModel } from "@/lib/models";
+import type { MixModel, ProfileModel } from "@/lib/models";
 
 type UserPageProps = {
-  user: UserModel;
+  user: ProfileModel;
   mixes: MixModel[];
 };
 

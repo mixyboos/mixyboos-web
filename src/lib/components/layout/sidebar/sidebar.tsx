@@ -43,7 +43,7 @@ const Sidebar = () => {
         )}
         <div>
           <h2 className="text-sm font-semibold">
-            {session.user.name || "Argle Bargle"}
+            {session.user.displayName || "Argle Bargle"}
           </h2>
           <span className="flex items-center space-x-1">
             <a
@@ -51,7 +51,7 @@ const Sidebar = () => {
               href="#"
               className="text-xs hover:underline "
             >
-              {session.user.bio || "Hello Lover"}
+              {session.user.profile.bio || "Hello, Lover"}
             </a>
           </span>
         </div>
@@ -61,7 +61,7 @@ const Sidebar = () => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href={`${session.user.username}/shows`}
+              href={`${session.user.profile.slug}/shows`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonVcard className="h-5 w-5 fill-current " />
@@ -71,7 +71,7 @@ const Sidebar = () => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href={`${session.user.username}/mixes`}
+              href={`${session.user.profile.slug}/mixes`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonBoundingBox className="h-5 w-5 fill-current " />
