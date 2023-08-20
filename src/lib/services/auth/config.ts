@@ -22,7 +22,7 @@ export const authOptions: AuthOptions = {
     CredentialsProvider({
       name: "Email and Password",
       credentials: {
-        userName: {
+        username: {
           label: "Username",
           type: "text",
           placeholder: "Username or email address",
@@ -40,7 +40,7 @@ export const authOptions: AuthOptions = {
             return false;
           }
           const token = await new AuthService().getAuthToken(
-            credentials.userName,
+            credentials.username,
             credentials.password,
           );
 
@@ -82,6 +82,7 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async session({ session, token }) {
+      session.id = token.sub as string;
       session.user.accessToken = token.accessToken as string;
       session.user.displayName = token.displayName as string;
       session.user.profileImage = token.profileImage as string;

@@ -15,14 +15,12 @@ import { CgSandClock } from "react-icons/cg";
 import { BiCategoryAlt } from "react-icons/bi";
 import Loading from "../../widgets/Loading";
 import UserImage from "../../widgets/UserImage";
-import { type Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
-type DashboardSidebarProps = {
-  session: Session | undefined;
-};
-
-const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
+const Sidebar = () => {
   const router = useRouter();
+  const { data: session } = useSession();
+
   const _sidebarItemClick = (path: string | undefined): void => {
     if (!path) return;
     if (path.includes("dashboard")) {
@@ -170,4 +168,4 @@ const DashboardSidebar = ({ session }: DashboardSidebarProps) => {
   );
 };
 
-export default DashboardSidebar;
+export default Sidebar;

@@ -10,6 +10,7 @@ const config = {
   reactStrictMode: true,
   images: {
     domains: [
+      "mixyboos.dev.fergl.ie",
       "cloudflare-ipfs.com",
       "avatars.githubusercontent.com",
       "mixyboos.twic.pics",
