@@ -1,23 +1,22 @@
+import { type UserModel } from "@lib/data/models";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import NextAuth, { type DefaultSession } from "next-auth";
-import type { UserModel } from "@/lib/models";
+import NextAuth from "next-auth";
 
 declare module "next-auth" {
   /**
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session {
-    id: string;
-    accessToken: string;
-    user: User & DefaultSession["user"];
+    user: User;
   }
-
   interface User {
-    username: string;
-    slug: string;
+    accessToken: string;
+    accessTokenExpires: number;
     email: string;
-    name: string | null;
-    profileImage: string | null;
-    profile?: UserModel;
+    displayName: string;
+    profileImage: string;
+    name: string;
+    slug: string;
+    profile: UserModel | undefined;
   }
 }

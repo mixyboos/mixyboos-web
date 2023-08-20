@@ -1,29 +1,28 @@
-import { type AuthTokenModel } from "@/lib/models";
-import type { Session, AuthOptions } from "next-auth";
-import AuthService from "../api/auth-service";
-import jwt_decode, { type JwtPayload } from "jwt-decode";
+import NextAuth, { type AuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import ProfileService from "../api/profile-service";
-import { type JWT } from "next-auth/jwt";
+import jwt_decode, { type JwtPayload } from "jwt-decode";
 import logger from "@/lib/logger";
+import AuthService from "../api/auth-service";
+import { TokenPayload } from "@/lib/models";
 
 export const authOptions: AuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
   session: {
     maxAge: 30 * 24 * 60 * 60, //30 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
   pages: {
     signIn: "/auth/login",
-    newUser: "/auth/register",
-    signOut: "/",
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
     CredentialsProvider({
       name: "Email and Password",
       credentials: {
-        username: {
+        userName: {
           label: "Username",
           type: "text",
           placeholder: "Username or email address",
@@ -38,47 +37,35 @@ export const authOptions: AuthOptions = {
         logger.info({ authorize: "Authorizing" });
         try {
           if (!credentials) {
-            return null;
+            return false;
           }
           const token = await new AuthService().getAuthToken(
-            credentials.username,
+            credentials.userName,
             credentials.password,
           );
 
           if (!token) {
             return null;
           }
-
-          const decodedToken = jwt_decode<JwtPayload & AuthTokenModel>(
+          const decodedToken = jwt_decode<JwtPayload & TokenPayload>(
             token.access_token,
           );
 
-          if (decodedToken && decodedToken.sub) {
-            // const session: Session = {
-            //   id: decodedToken.sub as string,
-            //   accessToken: token.access_token,
-            //   expires: `${token.expires_in}`,
-            //   user: {
-            //     id: decodedToken.id,
-            //     email: decodedToken.email,
-            //     username: decodedToken.name,
-            //     name: decodedToken.displayName,
-            //     slug: decodedToken.slug,
-            //     profileImage: decodedToken.profileImage,
-            //     accessToken: token.access_token,
-            //   },
-            // };
-            const r = {
-              id: decodedToken.id,
+          if (decodedToken) {
+            const profile = {
+              id: decodedToken.sub,
+              name: decodedToken.name,
+              displayName: decodedToken.displayName,
               email: decodedToken.email,
-              username: decodedToken.name,
-              name: decodedToken.displayName,
-              slug: decodedToken.slug,
               profileImage: decodedToken.profileImage,
+              slug: decodedToken.slug,
               accessToken: token.access_token,
+              accessTokenExpires: token.expires_in,
             };
-            logger.debug("config", "authorize_returns", r);
-            return Promise.resolve(r);
+
+            return profile;
+          } else {
+            return false;
           }
         } catch (err) {
           logger.error(`Error authorizing: ${err}`);
@@ -88,23 +75,40 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session, token }: { session: Session; token: JWT }) {
-      const profile = await new ProfileService(
-        session.accessToken,
-      ).getProfile();
-      if (!profile) {
-        return Promise.resolve(session);
+    async signIn({ account, profile }) {
+      if (account && account.provider === "google") {
+        return false;
       }
-      session.user.profile = profile;
-      logger.debug("config", "callback_session_Returns", session);
+      return true;
+    },
+    async session({ session, token }) {
+      session.user.accessToken = token.accessToken as string;
+      session.user.displayName = token.displayName as string;
+      session.user.profileImage = token.profileImage as string;
+      session.user.slug = token.slug as string;
+
+      if (session.user.accessToken) {
+        const authService = new AuthService(session.user.accessToken);
+        const profile = await authService.getUser();
+        session.user.profile = profile;
+      }
+      // session.user.refreshToken = token.refreshToken;
+      // session.user.accessTokenExpires = token.accessTokenExpires;
       return session;
     },
-    jwt: async ({ user, token }): Promise<JWT> => {
-      if (user) {
-        token.user = user;
+    jwt: async ({ token, user, account }) => {
+      if (account && user) {
+        return {
+          ...token,
+          accessToken: user.accessToken,
+          displayName: user.displayName,
+          profileImage: user.profileImage,
+          slug: user.slug,
+        };
       }
-      logger.debug("config", "callback_jwt_Returns", token);
-      return Promise.resolve(token);
+      return token;
     },
   },
 };
+
+export default NextAuth(authOptions);
