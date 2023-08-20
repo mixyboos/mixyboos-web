@@ -3,7 +3,7 @@
 import type { LiveShowModel } from "@/lib/models";
 import { api } from "@/lib/utils/api";
 import React from "react";
-import ShowStatus from "../../models/ShowStatus";
+import ShowStatus from "../../models/show-status";
 import Loading from "../widgets/Loading";
 import CreateShow from "./CreateShow";
 import Show from "./Show";
