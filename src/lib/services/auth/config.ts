@@ -1,10 +1,10 @@
-import NextAuth, { type AuthOptions } from "next-auth";
+import { type AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import jwt_decode, { type JwtPayload } from "jwt-decode";
 import logger from "@/lib/logger";
 import AuthService from "../api/auth-service";
-import { TokenPayload } from "@/lib/models";
+import { type TokenPayload } from "@/lib/models";
 
 export const authOptions: AuthOptions = {
   session: {
@@ -112,4 +112,4 @@ export const authOptions: AuthOptions = {
   },
 };
 
-export default NextAuth(authOptions);
+export default authOptions;

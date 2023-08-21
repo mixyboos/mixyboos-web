@@ -5,4 +5,6 @@ const getFileExtension = (fileName: string): string =>
 
 const getFilename = (fullPath: string): string => path.basename(fullPath);
 
+
+
 export { getFileExtension, getFilename };

@@ -1,6 +1,6 @@
 import {
-  Space_Mono as FontMono,
-  Space_Mono as FontSans,
+  Cormorant as FontMono,
+  Cormorant as FontSans,
 } from "next/font/google";
 
 export const fontSans = FontSans({

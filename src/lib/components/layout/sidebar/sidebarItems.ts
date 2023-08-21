@@ -20,7 +20,7 @@ const sidebarItems: ISidebarItem[] = [
     id: 0,
     icon: HiShoppingBag,
     path: "dashboard/shows",
-    title: "My Shows",
+    title: "My Farts",
   },
   {
     id: 2,

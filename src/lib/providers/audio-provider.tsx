@@ -14,6 +14,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   const {
     currentVolume,
     nowPlaying,
+    nowPlayingUrl,
     setPosition,
     setDuration,
     seekPosition,
@@ -22,7 +23,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   } = useAudioStore();
 
   React.useEffect(() => {
-    if (!nowPlaying?.audioUrl) return;
+    if (!nowPlayingUrl) return;
     let hls: Hls;
 
     const __initPlayer = () => {
@@ -39,7 +40,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
       hls.attachMedia(player.current);
 
       hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-        hls.loadSource(nowPlaying?.audioUrl as string);
+        hls.loadSource(nowPlayingUrl);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           if (!player?.current) return;
           player.current.volume = 0.1;
@@ -93,7 +94,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
         hls.destroy();
       }
     };
-  }, [nowPlaying]);
+  }, [nowPlayingUrl]);
 
   React.useEffect(() => {
     if (!player?.current) return;

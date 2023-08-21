@@ -1,3 +1,4 @@
+import UploadService from "@/lib/services/api/upload-service";
 import { getFilename } from "@/lib/utils/fileUtils";
 import axios, { type AxiosProgressEvent, type AxiosRequestConfig } from "axios";
 import { StatusCodes } from "http-status-codes";
@@ -20,29 +21,31 @@ const FileUpload = ({
 }: IFileUploadProps) => {
   const startUpload = async (event: React.FormEvent<HTMLInputElement>) => {
     if (!event.currentTarget.files) return;
+    if (!event.currentTarget.files) return;
     if (!event.currentTarget.files[0]) return;
 
+    const uploadService = new UploadService();
     const formData = new FormData();
 
     formData.append("file", event.currentTarget.files[0]);
-    formData.append("mixId", mixId);
     try {
-      const options: AxiosRequestConfig = {
-        headers: { "Content-Type": "multipart/form-data" },
-        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-          onUploadProgress(progressEvent.total ?? 0, progressEvent.loaded);
-        },
-      };
       onUploadStart(getFilename(event.currentTarget.files[0].name));
-      const result = await axios.post("/api/upload", formData, options);
-
-      if (result.status === StatusCodes.OK) {
+      const result = await uploadService.uploadAudio(
+        mixId,
+        formData,
+        onUploadProgress,
+      );
+      if (result) {
         onUploadComplete();
+      } else {
+        onError(
+          "Error uploading file, please refresh your browser and try again!",
+        );
       }
     } catch (err) {
       console.error("Upload", "Error", err);
       onError(
-        "Error uploading file, please <button onClick={() => window. location. reload()}> your browser and try again!",
+        "Error uploading file, please refresh your browser and try again!",
       );
     }
   };

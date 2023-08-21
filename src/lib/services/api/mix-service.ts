@@ -10,7 +10,7 @@ class MixService extends ApiService {
         return result.data;
       }
     } catch (err) {
-      console.log("authService", "getMixes_error", err);
+      console.log("userService", "getMixes_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number))
           throw new Error(err as any);
@@ -26,7 +26,7 @@ class MixService extends ApiService {
         return result.data;
       }
     } catch (err) {
-      console.log("authService", "getMixes_error", err);
+      console.log("userService", "getMixes_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number))
           throw new Error(err as any);
@@ -44,7 +44,7 @@ class MixService extends ApiService {
         return [];
       }
     } catch (err) {
-      console.log("authService", "getMixes_error", err);
+      console.log("userService", "getMixes_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number))
           throw new Error(err as any);
@@ -65,7 +65,7 @@ class MixService extends ApiService {
         return result.data;
       }
     } catch (err) {
-      console.log("authService", "getMixes_error", err);
+      console.log("userService", "getMixes_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number))
           throw new Error(err as any);
@@ -81,7 +81,7 @@ class MixService extends ApiService {
         return result.data;
       }
     } catch (err) {
-      console.log("authService", "getUser_error", err);
+      console.log("userService", "createMix_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number))
           throw new Error(err as any);
@@ -97,7 +97,7 @@ class MixService extends ApiService {
         return result.data;
       }
     } catch (err) {
-      console.log("authService", "getUser_error", err);
+      console.log("userService", "updateMix_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number)) {
           throw new Error(err as any);
@@ -115,7 +115,7 @@ class MixService extends ApiService {
       const result = await this._client.delete(`/mix?id=${mix.id}`);
       return result.status === 200;
     } catch (err) {
-      console.log("authService", "getUser_error", err);
+      console.log("userService", "deleteMix_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number)) {
           throw new Error(err as any);
@@ -129,7 +129,7 @@ class MixService extends ApiService {
       const result = await this._client.get(`/mix/audiourl?id=${mix.id}`);
       return result.data;
     } catch (err) {
-      console.log("authService", "getUser_error", err);
+      console.log("userService", "getMixAudioUrl_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number)) {
           throw new Error(err as any);

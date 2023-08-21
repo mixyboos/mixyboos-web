@@ -33,9 +33,12 @@ class ApiService {
 
   private _tokenRequestInterceptor = async (config: any) => {
     const session = await getSession();
+    logger.debug("api-service", "_tokenRequestInterceptor__session", session);
     if (session || this._token) {
       config.headers = {
-        Authorization: `Bearer ${session ? session.accessToken : this._token}`,
+        Authorization: `Bearer ${
+          session ? session.user.accessToken : this._token
+        }`,
         Accept: "application/json",
       };
     }

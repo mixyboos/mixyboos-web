@@ -1,6 +1,7 @@
 type ProfileModel = {
   id: string;
   username: string;
+  slug: string | null;
   name: string | null;
   email: string;
   bio: string | null;

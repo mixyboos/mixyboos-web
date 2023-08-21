@@ -17,7 +17,7 @@ interface IAudioState {
   playState: PlayState;
   currentVolume: number;
   muted: boolean;
-  setNowPlaying: (mix: MixModel) => void;
+  setNowPlaying: (mix?: MixModel | undefined) => void;
   setNowPlayingUrl: (url: string) => void;
   setPosition: (position: number) => void;
   setDuration: (duration: number) => void;
