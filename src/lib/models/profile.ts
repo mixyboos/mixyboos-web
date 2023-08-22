@@ -2,7 +2,7 @@ type ProfileModel = {
   id: string;
   username: string;
   slug: string | null;
-  name: string | null;
+  displayName: string | null;
   email: string;
   bio: string | null;
   profileImage: string;

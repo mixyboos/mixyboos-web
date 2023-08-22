@@ -1,6 +1,6 @@
 import React from "react";
 import getData from "./data";
-import MainPlayer from "@/components/widgets/audio/large-audio-player";
+import ListPlayer from "@/components/widgets/audio/list-audio-player";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
@@ -35,7 +35,7 @@ const MixesPage: React.FC<MixesPageProps> = async ({
         {mixes.map((mix) => (
           <div key={mix.id}>
             <div className="border-b-2">
-              <MainPlayer mix={mix} />
+              <ListPlayer mix={mix} />
             </div>
           </div>
         ))}

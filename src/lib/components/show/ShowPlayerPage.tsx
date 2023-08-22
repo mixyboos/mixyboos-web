@@ -65,7 +65,7 @@ const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
 
               <div className="ml-3">
                 <p className="truncate font-medium text-gray-900 dark:text-white">
-                  {show.user.name}
+                  {show.user.displayName}
                 </p>
                 <div className="flex flex-1 items-center justify-end text-sm text-red-600 dark:text-red-500">
                   <span className="text-gray-500">

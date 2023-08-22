@@ -23,7 +23,7 @@ const UserPage: React.FC<UserPageProps> = ({ user, mixes }) => {
           />
           <div className="absolute inset-0 rounded-md bg-gray-700 opacity-60" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <h2 className="text-3xl font-bold text-white">{user.name}</h2>
+            <h2 className="text-3xl font-bold text-white">{user.displayName}</h2>
           </div>
         </div>
       </div>

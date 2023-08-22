@@ -57,7 +57,7 @@ const MiniPlayer = () => {
           width="64"
           height="64"
           src={nowPlaying?.image || "/img/streaming-placeholder.jpg"}
-          alt={nowPlaying?.user?.name || "user profile image"}
+          alt={nowPlaying?.user?.displayName || "user profile image"}
         />
       </div>
       <div className="w-60 flex-none">
