@@ -274,6 +274,9 @@ devDependencies:
   vitest:
     specifier: ^0.34.2
     version: 0.34.2
+  wavesurfer.js:
+    specifier: ^7.1.5
+    version: 7.1.5
 
 packages:
 
@@ -7982,6 +7985,10 @@ packages:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
+
+  /wavesurfer.js@7.1.5:
+    resolution: {integrity: sha512-2zb82LxQzeFn5/O5JhEs1uytdlkksUDALWt7TPN8ppP4jrajuigwcM2g4wx6b+SO4Frweg/r99L1hznr0lsBEg==}
+    dev: true
 
   /webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
