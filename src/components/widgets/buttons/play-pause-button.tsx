@@ -7,7 +7,6 @@ import useAudioStore, {
   PlayState,
 } from "@/lib/services/stores/audio/audio-store";
 import { Icons } from "@/components/icons";
-import { mixService } from "@/lib/services/audio";
 import MixService from "@/lib/services/api/mix-service";
 
 interface IPlayPauseButtonProps {

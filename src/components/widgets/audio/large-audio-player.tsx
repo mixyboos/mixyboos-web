@@ -58,7 +58,7 @@ const MainPlayer = ({ mix }: IMainPlayerProps) => {
                     </div>
                     <div className="px-2 text-gray-600">
                       <span className="font-bold">
-                        {mix.user.name || mix.user.username}
+                        {mix?.user?.name || mix?.user?.username}
                       </span>
                       <span className="text-gray-400"> listened</span>
                     </div>
@@ -80,7 +80,7 @@ const MainPlayer = ({ mix }: IMainPlayerProps) => {
                 )}
                 <div className="mt-2">
                   <Link
-                    href={`/${mix.user.username}/${mix.slug}`}
+                    href={`/${mix?.user?.slug}/${mix.slug}`}
                     className="block text-lg font-medium leading-tight text-gray-900 hover:underline"
                   >
                     <div className="flex flex-row space-x-1">
@@ -95,7 +95,7 @@ const MainPlayer = ({ mix }: IMainPlayerProps) => {
                             onProcessingFinished={() => {
                               console.log(
                                 "large-audio-player",
-                                "onProcessingFinished"
+                                "onProcessingFinished",
                               );
                             }}
                           />
