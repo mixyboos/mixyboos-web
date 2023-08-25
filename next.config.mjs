@@ -11,9 +11,11 @@ const config = {
   images: {
     domains: [
       "mixyboos.dev.fergl.ie",
+      "mixyboos.blob.core.windows.net",
       "cloudflare-ipfs.com",
       "avatars.githubusercontent.com",
       "mixyboos.twic.pics",
+      "cdn.mixyboos.com",
     ],
   },
 };

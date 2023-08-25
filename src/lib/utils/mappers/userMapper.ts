@@ -10,7 +10,7 @@ const mapAuthUserToUserModel = (
     ? {
         id: user.id,
         username: user.username,
-        name: user.name,
+        displayName: user.name,
         email: user.email,
         bio: user.bio,
         profileImage: mapImage(user.profileImage, "/img/default-avatar.png"),
@@ -22,7 +22,7 @@ const mapAuthUserToUserModel = (
 const mapDbAuthUserToUserModel = (user: DbUser): ProfileModel => ({
   id: user.id,
   username: user.username,
-  name: user.name || user.username,
+  displayName: user.name || user.username,
   email: user.email,
   bio: user.bio,
   profileImage: mapImage(user.profileImage, "/img/default-avatar.png"),

@@ -59,7 +59,7 @@ const Chat = ({ show }: ChatProps) => {
             key={item.id}
             img={item.fromUser.profileImage}
             date={item.timestamp}
-            from={item.fromUser.name}
+            from={item.fromUser.displayName}
             message={item.message}
             isMe={item.fromUser.username === session?.user.username}
             status={"Delivered"}

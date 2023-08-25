@@ -1,6 +1,6 @@
 import React from "react";
 import getData from "./data";
-import MainPlayer from "@/components/widgets/audio/large-audio-player";
+import ListPlayer from "@/components/widgets/audio/list-audio-player";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
@@ -15,7 +15,7 @@ const MixesPage: React.FC<MixesPageProps> = async ({
 }: MixesPageProps) => {
   const mixes = await getData(params.username);
   return (
-    <div>
+    <div className="px-8">
       <div className="m-8 flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">
           Mixes for {params.username || params.username}
@@ -31,11 +31,11 @@ const MixesPage: React.FC<MixesPageProps> = async ({
           </Button>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 px-12">
         {mixes.map((mix) => (
           <div key={mix.id}>
             <div className="border-b-2">
-              <MainPlayer mix={mix} />
+              <ListPlayer mix={mix} />
             </div>
           </div>
         ))}

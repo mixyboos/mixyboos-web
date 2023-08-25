@@ -1,4 +1,3 @@
-import { fontSans } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
 import Navbar from "@/lib/components/layout/Navbar";
 import { cn } from "@/lib/utils";
@@ -6,6 +5,7 @@ import { type Metadata } from "next";
 import Providers from "./providers";
 import "@/app/globals.css";
 import FooterComponent from "@/components/widgets/footer";
+import { fontSans } from "@/config/fonts";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (

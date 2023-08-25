@@ -1,24 +1,25 @@
 "use client";
 import React from "react";
 
-import classnames from "classnames";
 import { type MixModel } from "@/lib/models";
 import useAudioStore, {
   PlayState,
 } from "@/lib/services/stores/audio/audio-store";
 import { Icons } from "@/components/icons";
 import MixService from "@/lib/services/api/mix-service";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-interface IPlayPauseButtonProps {
+interface IPlayPauseButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   mix: MixModel;
   onPlayStart: () => void;
-  classes?: string;
 }
 
 const PlayPauseButton = ({
   mix,
   onPlayStart,
-  classes = "w-6",
+  className,
 }: IPlayPauseButtonProps) => {
   const {
     playState,
@@ -29,8 +30,9 @@ const PlayPauseButton = ({
     nowPlayingUrl,
   } = useAudioStore();
   return (
-    <div
-      className={classnames(classes)}
+    <Button
+      variant="ghost"
+      className={className}
       onClick={async () => {
         if (
           playState === PlayState.stopped ||
@@ -47,18 +49,12 @@ const PlayPauseButton = ({
         }
       }}
     >
-      <div
-        className={
-          "text-foreground hover:text-muted-foreground cursor-pointer transition duration-200"
-        }
-      >
-        {nowPlaying?.id === mix.id && playState === PlayState.playing ? (
-          <Icons.pause className="h-full w-full" />
-        ) : (
-          <Icons.playCircle className="h-full w-full" />
-        )}
-      </div>
-    </div>
+      {nowPlaying?.id === mix.id && playState === PlayState.playing ? (
+        <Icons.pause className="h-full w-full" />
+      ) : (
+        <Icons.playCircle className="h-full w-full" />
+      )}
+    </Button>
   );
 };
 

@@ -1,7 +1,7 @@
-import LargeAudioPlayer from "@/components/widgets/audio/large-audio-player";
 import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import MixService from "@/lib/services/api/mix-service";
+import MixDetailsComponent from "@/components/pages/mix/mix-details-component";
 
 export default async function Page({
   params,
@@ -15,7 +15,7 @@ export default async function Page({
   return (
     <div className="container p-5">
       {mix ? (
-        <LargeAudioPlayer mix={mix} />
+        <MixDetailsComponent mix={mix} />
       ) : (
         <div className="flex items-center space-x-4">
           <Skeleton className="h-36 w-36 rounded-full" />
