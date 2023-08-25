@@ -158,7 +158,13 @@ const LoginPage = () => {
             />
 
             <div className="w-full">
-              <Button type="submit" variant={"outline"} size={"lg"}>
+              <Button className="w-full">Set Goal</Button>
+              <Button
+                type="submit"
+                variant={"outline"}
+                size={"lg"}
+                className="w-full"
+              >
                 <div className="inline-flex items-center">
                   <Icons.login className="mr-2 h-4 w-4" />
                   <span>Login</span>

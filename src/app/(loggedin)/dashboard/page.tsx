@@ -24,7 +24,7 @@ const DashboardPage = () => {
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             <div className="flex items-center space-x-2">
               {/* <CalendarDateRangePicker /> */}
-              <Button size="sm">
+              <Button size="sm" variant={"ghost"}>
                 <Icons.download className="mr-2 h-4 w-4" />
                 Download
               </Button>

@@ -34,9 +34,7 @@ const MixesPage: React.FC<MixesPageProps> = async ({
       <div className="space-y-4 px-12">
         {mixes.map((mix) => (
           <div key={mix.id}>
-            <div className="border-b-2">
-              <ListPlayer mix={mix} />
-            </div>
+            <ListPlayer mix={mix} />
           </div>
         ))}
       </div>

@@ -9,10 +9,10 @@ import { fontSans } from "@/config/fonts";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <body
         className={cn(
-          "bg-background  min-h-screen font-sans antialiased",
+          "bg-background min-h-screen font-sans antialiased",
           fontSans.className,
         )}
       >
@@ -24,7 +24,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="bg-background/95 border-b backdrop-blur">
               <Navbar className="mx-6" />
             </div>
-            <div className="flex-1">{children}</div>
+            <div className="mx-12 my-4 flex-1">{children}</div>
             <footer className="text-center ">
               <FooterComponent />
             </footer>
