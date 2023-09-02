@@ -1,8 +1,16 @@
 import React from "react";
-import { MdLiveTv } from "react-icons/md";
-import { RiRecordMailLine } from "react-icons/ri";
 import LoginButton from "@/lib/components/widgets/LoginButton";
-import Link from "next/link";
+import { Icons } from "@/components/icons";
+import { LinkButton } from "@/components/widgets/link-button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const testimonials = [
   {
@@ -36,58 +44,52 @@ const testimonials = [
 ];
 const HeroPage = () => {
   return (
-    <div className="container mx-auto -mt-32 px-4 text-center lg:px-0 xl:px-32">
-      <h1 className="mb-3 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl sm:leading-none md:tracking-wide">
-        Welcome to MixyBoos
-      </h1>
-      <p className="mb-6 text-lg font-normal text-gray-500 sm:text-xl xl:px-80">
-        A new way to create and share music with those you love
-      </p>
-      <div className="mx-auto flex max-w-fit space-x-2 rounded-lg p-1 sm:mt-8">
-        <button
-          type="button"
-          className="inline-flex items-center whitespace-nowrap rounded-md border-gray-200 bg-white py-2 text-sm font-medium text-gray-900 shadow shadow-gray-300 focus:outline-none sm:w-auto sm:px-8"
-        >
-          <RiRecordMailLine className="mr-2 h-5 w-5 rounded-full bg-white text-green-800" />
-          <span>Pre-record</span>
-        </button>
-        <Link
-          href="/live/create"
-          className="inline-flex items-center whitespace-nowrap rounded-md border-gray-200 bg-white py-2 text-sm font-medium text-gray-900 shadow shadow-gray-300 focus:outline-none sm:w-auto sm:px-8"
-        >
-          <MdLiveTv className="mr-2 h-5 w-5 rounded-full bg-white text-green-800" />
-          Go Live
-        </Link>
+    <div className="mt-8 px-4  lg:px-0 xl:px-32">
+      <div className="text-center">
+        <h1 className="mb-3 text-3xl font-bold tracking-tight text-accent-foreground sm:text-5xl sm:leading-none md:tracking-wide">
+          Welcome to MixyBoos
+        </h1>
+        <p className="mb-6 text-lg font-normal text-muted-foreground sm:text-xl xl:px-80">
+          A new way to create and share music with those you love
+        </p>
+        <div className="mx-auto flex max-w-fit space-x-2 rounded-lg p-1 sm:mt-8">
+          <LinkButton size={"lg"} variant="default" href="/live/create">
+            <Icons.record className="mr-2 h-5 w-5 rounded-full " />
+            <span>Pre-record</span>
+          </LinkButton>
+          <LinkButton size={"lg"} href="/live/create" variant="default">
+            <Icons.broadcast className="mr-2 h-5 w-5 rounded-full" />
+            Go Live
+          </LinkButton>
+        </div>
       </div>
-      <div className="mt-6 grid rounded-lg border border-gray-200 shadow-md dark:border-gray-700 md:grid-cols-2">
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
         {testimonials.map((t) => (
-          <figure
-            key={t.from}
-            className="flex flex-col rounded-t-lg border-b border-gray-200 bg-white p-8 dark:border-gray-700 dark:bg-slate-800 md:rounded-t-none md:rounded-tl-lg md:border-r"
-          >
-            <blockquote className="mx-auto mb-1 max-w-2xl text-gray-500 dark:text-gray-400 lg:mb-2">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t.headline}
-              </h3>
-              <p className="text-sm font-medium">{t.text}</p>
-            </blockquote>
-            <figcaption className="mt-2 flex items-center justify-end space-x-3">
-              <img
-                className="h-9 w-9 rounded-full"
-                src={t.fromAvatar}
-                alt="profile picture"
-              />
-              <div className="space-y-0.5 text-left font-medium dark:text-white">
-                <div>{t.from}</div>
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  {t.fromTitle}
+          <Card key={t.from}>
+            <CardHeader>
+              <CardTitle>
+                <h3 className="text-xl font-medium">{t.headline}</h3>
+              </CardTitle>
+              <CardDescription>
+                <p className="text-sm text-muted-foreground">{t.text}</p>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="flex items-center space-x-4">
+                <Avatar>
+                  <AvatarImage src={t.fromAvatar} />
+                  <AvatarFallback>OM</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-medium leading-none">{t.from}</p>
+                  <p className="text-sm text-muted-foreground">{t.fromTitle}</p>
                 </div>
               </div>
-            </figcaption>
-          </figure>
+            </CardContent>
+          </Card>
         ))}
       </div>
-      <div className="mt-8">
+      <div className="mt-8 text-center">
         <LoginButton />
       </div>
     </div>

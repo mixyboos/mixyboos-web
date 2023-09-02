@@ -2,7 +2,7 @@ import type ShowStatus from "./show-status";
 import type ProfileModel from "./profile";
 
 type LiveShowModel = {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   tags: string[];

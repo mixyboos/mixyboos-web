@@ -42,6 +42,7 @@ import {
 
 const LoginPage = () => {
   const [loginError, setLoginError] = React.useState(false);
+  const [isSending, setIsSending] = React.useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -53,9 +54,8 @@ const LoginPage = () => {
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     logger.debug(values);
+    setIsSending(true);
     setLoginError(false);
     signIn("credentials", {
       username: values.usernameOrEmail,
@@ -67,6 +67,7 @@ const LoginPage = () => {
       redirect: false,
     })
       .then((result) => {
+        setIsSending(false);
         //TODO: have to check result?.error rather than result.ok
         //TODO: https://github.com/nextauthjs/next-auth/issues/7725#issuecomment-1649310412
         if (!result?.error) {
@@ -77,6 +78,7 @@ const LoginPage = () => {
       })
       .catch((err) => {
         logger.error("login", "handleLogin", err);
+        setIsSending(false);
         setLoginError(true);
       });
   }
@@ -106,10 +108,10 @@ const LoginPage = () => {
               </div>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border-t text-muted-foreground" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className=" px-2 text-muted-foreground">
                     Or continue with
                   </span>
                 </div>
@@ -162,16 +164,23 @@ const LoginPage = () => {
             </CardContent>
             <CardFooter>
               <div className="flex w-full flex-col space-y-4">
-                <Button type="submit" size={"lg"} className="w-full">
+                <Button
+                  type="submit"
+                  variant={"default"}
+                  size={"lg"}
+                  className="w-full"
+                  disabled={isSending}
+                >
+                  {isSending && (
+                    <Icons.loading className="mr-2 h-4 w-4 animate-spin" />
+                  )}
                   <div className="inline-flex items-center">
                     <Icons.login className="mr-2 h-4 w-4" />
                     <span>Login</span>
                   </div>
                 </Button>
                 <div className="text-sm font-medium">
-                  <span className="text-primary-foreground">
-                    Not registered?
-                  </span>
+                  <span className="text-muted-foreground">Not registered?</span>
                   <Link
                     href="/auth/register"
                     className="ml-2 text-primary hover:underline"

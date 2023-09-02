@@ -13,6 +13,7 @@ const config = {
       "mixyboos.dev.fergl.ie",
       "mixyboos.blob.core.windows.net",
       "cloudflare-ipfs.com",
+      "i.pravatar.cc",
       "avatars.githubusercontent.com",
       "mixyboos.twic.pics",
       "cdn.mixyboos.com",

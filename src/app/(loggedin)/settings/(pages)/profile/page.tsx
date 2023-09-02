@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/lib/components/widgets/Loading";
+import Loading from "@/components/widgets/loading";
 import { type NextPage } from "next";
 import React from "react";
 import ProfileEditForm from "../../components/profile-edit-form";

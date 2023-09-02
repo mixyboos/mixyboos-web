@@ -1,8 +1,23 @@
-import type { ProfileModel } from "@/lib/models";
+import type { ApiKeyModel, ProfileModel } from "@/lib/models";
 import ApiService from "./api-service";
 import logger from "@/lib/logger";
 
 class ProfileService extends ApiService {
+  getStreamKey = async (): Promise<ApiKeyModel | undefined> => {
+    try {
+      const results = await this._client.get("/profile/apikey");
+      if (results.status === 200) {
+        return results.data;
+      }
+    } catch (err) {
+      logger.error(
+        "profile-service.ts",
+        "Unable to get user's stream key.",
+        err,
+      );
+    }
+    return undefined;
+  };
   /**
    * Get the currently logged in user's profile
    */
@@ -18,7 +33,9 @@ class ProfileService extends ApiService {
     return undefined;
   };
 
-  getProfileBySlug = async (slug: string): Promise<ProfileModel | undefined> => {
+  getProfileBySlug = async (
+    slug: string,
+  ): Promise<ProfileModel | undefined> => {
     try {
       const results = await this._client.get(`/profile?slug=${slug}`);
       if (results.status === 200) {

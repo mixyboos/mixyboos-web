@@ -1,20 +1,19 @@
 "use client";
 
-import type { LiveShowModel } from "@/lib/models";
-import { api } from "@/lib/utils/api";
 import React from "react";
 import ShowStatus from "../../models/show-status";
-import Loading from "../widgets/Loading";
-import CreateShow from "./CreateShow";
-import Show from "./Show";
+import Loading from "@/components/widgets/loading";
+import CreateShow from "./create";
+import Show from "./show";
 import StreamConnector from "./StreamConnector";
+import LiveService from "@/lib/services/api/live-service";
+import { type LiveShowModel } from "@/lib/models";
 
 type LiveShowWrapperProps = {
   incomingShow: LiveShowModel | undefined | null;
 };
 
 const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
-  const startShowApi = api.show.startShow.useMutation();
   const [show, setShow] = React.useState(incomingShow);
 
   React.useEffect(() => {
@@ -24,18 +23,14 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
   const startShow = async (
     title: string,
     description: string,
-    tags: string[]
+    tags: string[],
   ) => {
     if (title && description) {
       try {
-        const result = await startShowApi.mutateAsync({
-          title,
-          description,
-          tags,
-        });
-
-        if (result && show) {
-          setShow(result);
+        const service = new LiveService();
+        const newShow = await service.startShow(title, description, tags);
+        if (newShow) {
+          setShow(newShow);
         }
       } catch (err) {
         alert(err as string);
@@ -45,7 +40,7 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
     }
   };
 
-  if (show?.status === ShowStatus.setup) {
+  if (!show || show.status === ShowStatus.setup) {
     return <CreateShow startShow={startShow} />;
   }
 
@@ -53,7 +48,7 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
     return <Loading message={"Checking stream status"} />;
   }
 
-  if (show && show?.status === ShowStatus.awaitingStreamConnection) {
+  if (!show?.status || show?.status === ShowStatus.awaitingStreamConnection) {
     return <StreamConnector show={show} setShow={setShow} />;
   }
   if (show?.id && show?.status === ShowStatus.inProgress)

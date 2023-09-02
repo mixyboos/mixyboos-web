@@ -1,12 +1,20 @@
-"use client";
 import React from "react";
-import { api } from "@/lib/utils/api";
 import LiveShowWrapper from "@/lib/components/show/LiveShowWrapper";
-import Loading from "@/lib/components/widgets/Loading";
+import LiveService from "@/lib/services/api/live-service";
+import { getServerSession } from "next-auth";
+import authOptions from "@/lib/services/auth/config";
 
-const LivePage = () => {
-  const { isFetching, data: show } = api.show.getInProgress.useQuery();
-  return isFetching ? <Loading /> : <LiveShowWrapper incomingShow={show} />;
+const LivePage = async () => {
+  const session = await getServerSession(authOptions);
+
+  const show = await new LiveService(
+    session?.user.accessToken,
+  ).getMyShowInProgress();
+  return session ? (
+    <LiveShowWrapper incomingShow={show} />
+  ) : (
+    JSON.stringify(session)
+  );
 };
 
 export default LivePage;

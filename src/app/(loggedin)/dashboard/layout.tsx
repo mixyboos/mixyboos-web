@@ -1,6 +1,6 @@
 "use client";
 import Sidebar from "@/lib/components/layout/sidebar";
-import Loading from "@/lib/components/widgets/Loading";
+import Loading from "@/components/widgets/loading";
 import { useSession } from "next-auth/react";
 import React from "react";
 

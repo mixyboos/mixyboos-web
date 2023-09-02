@@ -44,8 +44,8 @@ const NavLink = ({ href, title, Icon }: NavLinkProps) => {
     <Link
       href={href}
       className={cn(
-        "text-sm font-medium lowercase text-muted transition-opacity hover:opacity-60",
-        path !== href && "text-foreground"
+        "text-sm font-medium lowercase text-foreground transition-opacity hover:opacity-60",
+        path !== href && "text-foreground",
       )}
     >
       <div className="inline-flex items-center">
@@ -64,20 +64,13 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
         {...props}
       >
         <Link className="mr-6 flex items-center space-x-2" href="/">
-          <Image
-            className="mr-2 h-6 w-6"
-            src="/img/logo.svg"
-            alt="Mixyboos"
-            width={24}
-            height={24}
-          />
-
+          <Icons.mixyboos className="mr-2 h-44 w-80" />
           <span className="hidden font-bold lowercase sm:inline-block">
             Mixy/Boos
           </span>
         </Link>
         <NavLink href="/discover" title="Discover" Icon={Icons.discover} />
-        <NavLink href="/live/create" title="Go live" Icon={Icons.live} />
+        <NavLink href="/live/create" title="Go live" Icon={Icons.broadcast} />
         <NavLink href="/mix/create" title="Upload" Icon={Icons.mix} />
         <NavLink href="/calendar" title="Upcoming" Icon={Icons.schedule} />
       </nav>

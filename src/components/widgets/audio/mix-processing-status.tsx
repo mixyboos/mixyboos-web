@@ -1,7 +1,7 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { type MixModel } from "@/lib/models";
-import Loading from "@/lib/components/widgets/Loading";
+import Loading from "@/components/widgets/loading";
 
 interface IMixProcessingStatusProps {
   mix: MixModel;

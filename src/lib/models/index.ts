@@ -5,6 +5,7 @@ import type MixModel from "./mix";
 import type ProfileModel from "./profile";
 import type ShowStatus from "./show-status";
 import type TokenPayload from "./token-payload";
+import type ApiKeyModel from "./api-key";
 
 export type {
   LiveShowModel,
@@ -13,5 +14,6 @@ export type {
   MixModel,
   AuthTokenModel,
   TokenPayload,
+  ApiKeyModel,
 };
 export { ShowStatus };

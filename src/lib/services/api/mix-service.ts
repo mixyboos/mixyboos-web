@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import ApiService from "./api-service";
 import { type MixModel } from "@/lib/models";
+import { StatusCodes } from "http-status-codes";
 
 class MixService extends ApiService {
   getMixes = async (): Promise<Array<MixModel>> => {
@@ -56,18 +57,25 @@ class MixService extends ApiService {
   getByUserAndSlug = async (
     userSlug: string,
     mixSlug: string,
-  ): Promise<MixModel> => {
+  ): Promise<MixModel | undefined> => {
     try {
       const result = await this._client.get(
         `/mix/single?user=${userSlug}&mix=${mixSlug}`,
       );
-      if (result?.status === 200) {
+      if (result?.status === StatusCodes.OK) {
         return result.data;
+      }
+      if (result?.status === StatusCodes.NO_CONTENT) {
+        return undefined;
       }
     } catch (err) {
       console.log("userService", "getMixes_error", err);
       if (err instanceof AxiosError) {
-        if (![401, 400].includes(err.status as number))
+        if (
+          ![StatusCodes.UNAUTHORIZED, StatusCodes.BAD_REQUEST].includes(
+            err.status as number,
+          )
+        )
           throw new Error(err as any);
       }
     }

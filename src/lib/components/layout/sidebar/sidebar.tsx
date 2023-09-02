@@ -13,7 +13,7 @@ import {
 } from "react-icons/md";
 import { CgSandClock } from "react-icons/cg";
 import { BiCategoryAlt } from "react-icons/bi";
-import Loading from "../../widgets/Loading";
+import Loading from "@/components/widgets/loading";
 import UserImage from "../../widgets/UserImage";
 import { useSession } from "next-auth/react";
 

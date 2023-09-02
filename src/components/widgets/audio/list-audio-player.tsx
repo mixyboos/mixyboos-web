@@ -5,7 +5,7 @@ import Image from "next/image";
 import { type MixModel } from "@/lib/models";
 import useAudioStore from "@/lib/services/stores/audio/audio-store";
 import ActionButton from "../buttons/action-button";
-import Loading from "@/lib/components/widgets/Loading";
+import Loading from "@/components/widgets/loading";
 import { Icons } from "@/components/icons";
 import MixProcessingStatus from "./mix-processing-status";
 import PlayPauseButton from "../buttons/play-pause-button";

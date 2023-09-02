@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/lib/components/widgets/Loading";
+import Loading from "@/components/widgets/loading";
 import { api } from "@/lib/utils/api";
 import React from "react";
 import ProfileImageEditForm from "../../components/profile-images-form";

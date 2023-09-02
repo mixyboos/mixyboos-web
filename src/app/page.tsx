@@ -9,12 +9,9 @@ const Home = async () => {
 
   if (session) {
     redirect("/dashboard");
+    return;
   }
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      {session ? <h1>Hello Sailor</h1> : <HeroPage />}
-    </main>
-  );
+  return <HeroPage />;
 };
 
 export default Home;
