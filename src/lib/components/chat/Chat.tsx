@@ -16,7 +16,6 @@ const Chat = ({ show }: ChatProps) => {
   const [messages, setMessages] = React.useState<ChatModel[]>([]);
   const [isJoined, setIsJoined] = React.useState(false);
 
-
   const sendMessage = async (message: string): Promise<boolean> => {
     // if (!session || !connection || !message) return false;
     // console.log("Chat", "Sending message", session?.user);
@@ -33,11 +32,11 @@ const Chat = ({ show }: ChatProps) => {
   };
 
   return (
-    <div className="mx-auto flex h-full min-h-full  flex-col justify-between overflow-hidden ">
+    <div className="mx-auto flex h-full min-h-full flex-col justify-between overflow-hidden ">
       <div className="flex justify-between">
         <ChatHeader />
       </div>
-      <div className="flex-grow overflow-scroll bg-white dark:bg-slate-600">
+      <div className="flex-grow overflow-scroll">
         {messages.map((item) => (
           <ChatItem
             key={item.id}
