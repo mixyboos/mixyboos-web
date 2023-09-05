@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import ShowStatus from "../../models/show-status";
 import Loading from "@/components/widgets/loading";
 import CreateShow from "./create";
 import Show from "./show";
-import StreamConnector from "./StreamConnector";
+import StreamConnector from "./stream-connector";
 import LiveService from "@/lib/services/api/live-service";
-import { type LiveShowModel } from "@/lib/models";
+import { ShowStatus, type LiveShowModel } from "@/lib/models";
 
 type LiveShowWrapperProps = {
   incomingShow: LiveShowModel | undefined | null;
@@ -39,36 +38,47 @@ const LiveShowWrapper = ({ incomingShow }: LiveShowWrapperProps) => {
       alert("Please enter a title and description for your live show");
     }
   };
+  const _renderShow = (showToRender: LiveShowModel) => {
+    switch (showToRender.status) {
+      case ShowStatus.awaitingStreamConnection:
+        return (
+          <div>
+            <h2>Stream Connector</h2>
+            <div>{JSON.stringify(show, null, 2)}</div>
+            <StreamConnector show={showToRender} setShow={setShow} />
+          </div>
+        );
 
-  if (!show || show.status === ShowStatus.setup) {
-    return <CreateShow startShow={startShow} />;
-  }
+      case ShowStatus.setup:
+        return <div>Setup????????</div>;
 
-  if (show?.status === ShowStatus.checking) {
-    return <Loading message={"Checking stream status"} />;
-  }
+      case ShowStatus.awaitingStreamConnection:
+        return <StreamConnector show={showToRender} setShow={setShow} />;
 
-  if (!show?.status || show?.status === ShowStatus.awaitingStreamConnection) {
-    return <StreamConnector show={show} setShow={setShow} />;
-  }
-  if (show?.id && show?.status === ShowStatus.inProgress)
-    return (
-      <Show
-        title={show.title || "Unknown show"}
-        show={show}
-        setShow={setShow}
-      />
-    );
+      case ShowStatus.checking:
+        return <Loading message={"Checking stream status"} />;
 
-  return (
-    <div
-      className="mb-4 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-800 dark:text-blue-400"
-      role="alert"
-    >
-      <span className="font-medium">Info alert!</span> Unknown show status:{" "}
-      {show?.status}.
-    </div>
-  );
+      case ShowStatus.inProgress:
+        return (
+          <Show
+            title={showToRender.title || "Unknown show"}
+            show={showToRender}
+            setShow={setShow}
+          />
+        );
+
+      default:
+        return (
+          <div>{`Unknown stream status: ${JSON.stringify(
+            showToRender,
+            null,
+            "\t",
+          )}`}</div>
+        );
+    }
+  };
+
+  return show ? _renderShow(show) : <CreateShow startShow={startShow} />;
 };
 
 export default LiveShowWrapper;

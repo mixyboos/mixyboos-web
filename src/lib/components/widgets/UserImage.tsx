@@ -1,6 +1,14 @@
 import Image from "next/image";
 import React, { ComponentProps, PropsWithChildren } from "react";
 import classNames from "classnames";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { TooltipArrow } from "@radix-ui/react-tooltip";
 export interface AvatarSizes {
   xs: string;
   sm: string;
@@ -26,23 +34,26 @@ const UserImage: React.FC<IUserImageProps> = ({
   status = "gone",
   size = "md",
 }) => {
-  const imgClassName = classNames(sizes[size]);
   return (
-    <div
-      className={classNames(
-        "flex items-center justify-center space-x-4 rounded-full"
-      )}
-    >
-      <div className="relative">
-        <Image
-          width={40}
-          height={40}
-          src={src}
-          alt="Profile Image"
-          className={classNames("rounded-full", imgClassName)}
-        />
-      </div>
-    </div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <Avatar>
+            <AvatarImage
+              src={src}
+              alt="avatar"
+              className={classNames("rounded-full", classNames(sizes[size]))}
+            ></AvatarImage>
+            <AvatarFallback>XX</AvatarFallback>
+          </Avatar>
+        </TooltipTrigger>
+
+        <TooltipContent side="top">
+          Tooltip content
+          <TooltipArrow />
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

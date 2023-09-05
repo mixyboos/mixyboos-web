@@ -4,7 +4,6 @@ import ChatHeader from "./ChatHeader";
 import ChatItem from "./ChatItem";
 import ChatInput from "./ChatInput";
 import type { LiveShowModel, ChatModel } from "@/lib/models";
-import { createPusherClient } from "@/lib/services/realtime";
 
 type ChatProps = {
   show: LiveShowModel;
@@ -17,21 +16,6 @@ const Chat = ({ show }: ChatProps) => {
   const [messages, setMessages] = React.useState<ChatModel[]>([]);
   const [isJoined, setIsJoined] = React.useState(false);
 
-  const pusher = createPusherClient();
-
-  const chatChannel = `ls_chat_${show?.id}`;
-  const channel = pusher.subscribe(chatChannel);
-
-  channel.bind("chat-message", (data: any) => {
-    console.log("StreamConnector", "show-started", data);
-  });
-
-  React.useEffect(() => {
-    return () => {
-      console.log("Chat", "Unsubscribe", chatChannel);
-      pusher.unsubscribe(chatChannel);
-    };
-  });
 
   const sendMessage = async (message: string): Promise<boolean> => {
     // if (!session || !connection || !message) return false;

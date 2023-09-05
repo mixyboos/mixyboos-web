@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, type AxiosResponse } from "axios";
 import ApiService from "./api-service";
 import { type MixModel } from "@/lib/models";
 import { StatusCodes } from "http-status-codes";
@@ -6,7 +6,8 @@ import { StatusCodes } from "http-status-codes";
 class MixService extends ApiService {
   getMixes = async (): Promise<Array<MixModel>> => {
     try {
-      const result = await this._client.get("/mix");
+      const result: AxiosResponse<Array<MixModel>> =
+        await this._client.get("/mix");
       if (result?.status === 200) {
         return result.data;
       }

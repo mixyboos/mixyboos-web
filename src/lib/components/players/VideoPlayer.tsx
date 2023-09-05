@@ -46,8 +46,8 @@ function VideoPlayer({ hlsConfig, src, autoPlay, ...props }: HlsPlayerProps) {
                 ?.play()
                 .catch(() =>
                   console.log(
-                    "Unable to autoplay prior to user interaction with the dom."
-                  )
+                    "Unable to autoplay prior to user interaction with the dom.",
+                  ),
                 );
               playerRef.current.muted = false;
             }
@@ -88,11 +88,7 @@ function VideoPlayer({ hlsConfig, src, autoPlay, ...props }: HlsPlayerProps) {
   return loadError ? (
     <NotFoundImageContainer width={500} height={400} />
   ) : (
-    <video
-      className="videoCentered w-[90%] max-w-[90%]"
-      ref={playerRef}
-      {...props}
-    />
+    <video className="videoCentered" ref={playerRef} {...props} />
   );
 }
 

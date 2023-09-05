@@ -16,11 +16,6 @@ class LiveService extends ApiService {
     return result?.status === 200 ? result.data : undefined;
   };
 
-  getMyShowInProgress = async (): Promise<LiveShowModel | undefined> => {
-    const result = await this._client.get<LiveShowModel>("/live/current");
-    return result?.status === 200 ? result.data : undefined;
-  };
-
   getShowInProgress = async (
     user: string,
   ): Promise<LiveShowModel | undefined> => {
