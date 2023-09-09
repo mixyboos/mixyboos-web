@@ -4,6 +4,12 @@ import ChatHeader from "./ChatHeader";
 import ChatItem from "./ChatItem";
 import ChatInput from "./ChatInput";
 import type { LiveShowModel, ChatModel } from "@/lib/models";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 type ChatProps = {
   show: LiveShowModel;
@@ -32,11 +38,11 @@ const Chat = ({ show }: ChatProps) => {
   };
 
   return (
-    <div className="mx-auto flex h-full min-h-full flex-col justify-between overflow-hidden ">
+    <div className="mx-auto flex h-full flex-col justify-between overflow-hidden  shadow-sm ">
       <div className="flex justify-between">
         <ChatHeader />
       </div>
-      <div className="flex-grow overflow-scroll">
+      <div className="no-scrollbar flex-grow overflow-scroll bg-secondary">
         {messages.map((item) => (
           <ChatItem
             key={item.id}
@@ -49,7 +55,7 @@ const Chat = ({ show }: ChatProps) => {
           />
         ))}
       </div>
-      <div className="w-full flex-none">
+      <div className="w-full ">
         <ChatInput onSendChat={sendMessage} enabled={isJoined} />
       </div>
     </div>

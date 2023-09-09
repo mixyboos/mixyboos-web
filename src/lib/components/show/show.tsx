@@ -27,11 +27,11 @@ const Show = ({ title, show, setShow }: ShowProps) => {
   //   };
   // });
   return (
-    <div className="flex flex-row gap-4">
-      <div className="flex-grow w-3/4">
+    <div className="flex flex-row gap-4 w-full px-24">
+      <div className="w-3/4">
         <ShowPlayerPage show={show} title={title} />
       </div>
-      <div>
+      <div className="flex-grow">
         <Chat show={show} />
       </div>
     </div>

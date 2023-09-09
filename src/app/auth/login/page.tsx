@@ -87,7 +87,7 @@ const LoginPage = () => {
       <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Login to Mixy/Boos</CardTitle>
-          <CardDescription>{"Let's have some fun..."}</CardDescription>
+          <CardDescription>{"Let's play..."}</CardDescription>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

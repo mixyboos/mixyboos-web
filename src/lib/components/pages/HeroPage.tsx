@@ -67,12 +67,10 @@ const HeroPage = () => {
         {testimonials.map((t) => (
           <Card key={t.from}>
             <CardHeader>
-              <CardTitle>
-                <h3 className="text-xl font-medium">{t.headline}</h3>
+              <CardTitle className="text-xl font-medium leading-3">
+                {t.headline}
               </CardTitle>
-              <CardDescription>
-                <p className="text-sm text-muted-foreground">{t.text}</p>
-              </CardDescription>
+              <CardDescription className="text-sm">{t.text}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
               <div className="flex items-center space-x-4">
