@@ -86,7 +86,7 @@ function VideoPlayer({ hlsConfig, src, autoPlay, ...props }: HlsPlayerProps) {
     };
   }, [autoPlay, hlsConfig, playerRef, src]);
   return loadError ? (
-    <NotFoundImageContainer width={500} height={400} />
+    <NotFoundImageContainer width={1024} height={768} />
   ) : (
     <video className="videoCentered" ref={playerRef} {...props} />
   );

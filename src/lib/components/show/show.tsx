@@ -11,23 +11,8 @@ type ShowProps = {
 };
 
 const Show = ({ title, show, setShow }: ShowProps) => {
-  // const showChannel = `ls_${show?.id}`;
-
-  // channel.bind("show-finished", (data: LiveShowModel) => {
-  //   console.log("Show", "Show finished", data);
-  //   setShow({
-  //     ...show,
-  //     status: ShowStatus.ended,
-  //   });
-  // });
-  // React.useEffect(() => {
-  //   return () => {
-  //     pusher.unsubscribe(showChannel);
-  //     channel.disconnect();
-  //   };
-  // });
   return (
-    <div className="flex flex-row gap-4 w-full px-24">
+    <div className="flex w-full flex-row gap-4 px-24">
       <div className="w-3/4">
         <ShowPlayerPage show={show} title={title} />
       </div>

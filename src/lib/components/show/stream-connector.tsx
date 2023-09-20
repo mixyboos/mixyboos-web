@@ -12,7 +12,7 @@ import { HubConnectionState, type HubConnection } from "@microsoft/signalr";
 import Loading from "@/components/widgets/loading";
 import { useSession } from "next-auth/react";
 import logger from "@/lib/logger";
-import { createSignalRConnection } from "@/lib/services/realtime/signalr";
+import  createSignalRConnection from "@/lib/services/realtime/signalr";
 
 type StreamConnectorProps = {
   show: LiveShowModel;

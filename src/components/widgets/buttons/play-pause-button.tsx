@@ -20,6 +20,7 @@ const PlayPauseButton = ({
   mix,
   onPlayStart,
   className,
+  ...props
 }: IPlayPauseButtonProps) => {
   const {
     playState,
@@ -48,6 +49,7 @@ const PlayPauseButton = ({
           togglePlayState();
         }
       }}
+      {...props}
     >
       {nowPlaying?.id === mix.id && playState === PlayState.playing ? (
         <Icons.pause className="h-full w-full" />

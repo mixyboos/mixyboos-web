@@ -29,6 +29,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
         <div className="flex flex-row items-center space-x-2 ">
           <div className="h-32 w-32 flex-none">
             <PlayPauseButton
+              disabled={!mix.isProcessed}
               className="h-full"
               mix={mix}
               onPlayStart={() => {}}
@@ -42,34 +43,46 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
           </div>
         </div>
       </div>
-      <div
-        className="relative h-[150px] w-full cursor-pointer"
-        onClick={_handleTimeClick}
-      >
-        <div id="progress-overlay" className="">
-          <Image
-            alt="Waveform overlay"
-            id="waveform-overlay"
-            style={{
-              width: `${progressPercentage}%`,
-            }}
-            width={1600}
-            height={250}
-            src="https://mixyboos.blob.core.windows.net/waveforms/3f3af6f4-c208-4f68-99bd-5a0c5153184f/3f3af6f4-c208-4f68-99bd-5a0c5153184f.cropped.overlay.png"
-            className="absolute left-0 top-0 z-10 h-full w-full"
-          ></Image>
+      {mix.isProcessed ? (
+        <div
+          className="relative h-[150px] w-full cursor-pointer"
+          onClick={_handleTimeClick}
+        >
+          <div id="progress-overlay" className="">
+            <Image
+              alt="Waveform overlay"
+              id="waveform-overlay"
+              style={{
+                width: `${progressPercentage}%`,
+              }}
+              width={1600}
+              height={250}
+              src="https://mixyboos.blob.core.windows.net/waveforms/3f3af6f4-c208-4f68-99bd-5a0c5153184f/3f3af6f4-c208-4f68-99bd-5a0c5153184f.cropped.overlay.png"
+              className="absolute left-0 top-0 z-10 h-full w-full"
+            ></Image>
+          </div>
+          <div id="full-overlay" className="">
+            <Image
+              alt="Waveform overlay"
+              id="waveform-overlay"
+              width={1600}
+              height={250}
+              src="https://mixyboos.blob.core.windows.net/waveforms/3f3af6f4-c208-4f68-99bd-5a0c5153184f/3f3af6f4-c208-4f68-99bd-5a0c5153184f.cropped.png"
+              className="absolute left-0 top-0 z-0 h-full w-full"
+            ></Image>
+          </div>
         </div>
-        <div id="full-overlay" className="">
+      ) : (
+        <div className="relative h-[150px] w-full cursor-pointer">
           <Image
-            alt="Waveform overlay"
-            id="waveform-overlay"
+            src="/img/processing-waves.gif"
             width={1600}
             height={250}
-            src="https://mixyboos.blob.core.windows.net/waveforms/3f3af6f4-c208-4f68-99bd-5a0c5153184f/3f3af6f4-c208-4f68-99bd-5a0c5153184f.cropped.png"
+            alt="processing"
             className="absolute left-0 top-0 z-0 h-full w-full"
-          ></Image>
+          />
         </div>
-      </div>
+      )}
     </>
   );
 };

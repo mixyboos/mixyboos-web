@@ -8,14 +8,6 @@ import { humanizeDate } from "@/lib/utils/timeUtils";
 import UserImage from "../widgets/UserImage";
 import type { LiveShowModel } from "@/lib/models";
 import VideoPlayer from "../players/VideoPlayer";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 
@@ -26,8 +18,8 @@ type ShowPlayerPageProps = {
 
 const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
   return (
-    <Card>
-      <CardContent>
+    <div className="flex flex-col">
+      <div>
         <VideoPlayer
           src={`${process.env.NEXT_PUBLIC_LIVE_HOST as string}/hls/${
             show.id
@@ -35,10 +27,10 @@ const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
           controls={false}
           autoPlay={true}
         />
-      </CardContent>
-      <CardFooter>
+      </div>
+      <div>
         <div className="w-full flex-none">
-          <div className="w-full rounded-b-md border ">
+          <div className="w-full shadow-sm">
             <div className="flex items-center justify-between border-t px-3 py-2 ">
               <span className="text-md center rounded-lg px-4 py-2.5 text-xl font-bold  ">
                 {title}
@@ -99,8 +91,8 @@ const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
             </div>
           </div>
         </div>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
 

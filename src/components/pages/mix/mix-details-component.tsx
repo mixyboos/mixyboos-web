@@ -1,8 +1,11 @@
-import { Card, CardContent } from "@/components/ui/card";
+import {Card, CardContent} from "@/components/ui/card";
 import AudioPlayerBar from "@/components/widgets/audio/audio-player-bar";
 import LargeAudioPlayer from "@/components/widgets/audio/large-audio-player";
-import { type MixModel } from "@/lib/models";
+import {type MixModel} from "@/lib/models";
 import React from "react";
+import AudioProcessingComponent from "./audio-processing-component";
+import {bool} from "yup";
+import logger from "@/lib/logger";
 
 type MixDetailsComponentProps = {
   mix: MixModel;
@@ -15,10 +18,14 @@ const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
     <div className="flex flex-col">
       <div>
         <div className="px-8">
-          <LargeAudioPlayer mix={mix} />
+          <LargeAudioPlayer mix={mix}/>
         </div>
         <div className="px-8 py-4">
-          <AudioPlayerBar mix={mix} />
+          {mix.isProcessed ? (
+            <AudioPlayerBar mix={mix}/>
+          ) : (
+            <AudioProcessingComponent mix={mix}/>
+          )}
         </div>
       </div>
       <div className="px-8">

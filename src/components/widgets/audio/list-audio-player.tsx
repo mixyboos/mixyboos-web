@@ -2,11 +2,11 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { type MixModel } from "@/lib/models";
+import {type MixModel} from "@/lib/models";
 import useAudioStore from "@/lib/services/stores/audio/audio-store";
 import ActionButton from "../buttons/action-button";
 import Loading from "@/components/widgets/loading";
-import { Icons } from "@/components/icons";
+import {Icons} from "@/components/icons";
 import MixProcessingStatus from "./mix-processing-status";
 import PlayPauseButton from "../buttons/play-pause-button";
 
@@ -14,7 +14,7 @@ interface IListPlayerProps {
   mix: MixModel;
 }
 
-const ListPlayer = ({ mix }: IListPlayerProps) => {
+const ListPlayer = ({mix}: IListPlayerProps) => {
   const [likeCount, setLikeCount] = React.useState(mix.likeCount);
   const [playCount, setPlayCount] = React.useState(mix.playCount);
   const [shareCount, setShareCount] = React.useState(mix.shareCount);
@@ -75,7 +75,7 @@ const ListPlayer = ({ mix }: IListPlayerProps) => {
                     onPlayStart={() =>
                       setPlayCount(playCount ? playCount + 1 : 1)
                     }
-                    classes="w-16 h-16"
+                    className="w-16 h-16"
                   />
                 )}
                 <div className="mt-2">
@@ -118,7 +118,6 @@ const ListPlayer = ({ mix }: IListPlayerProps) => {
               <div className="flex space-x-3">
                 <ActionButton
                   count={likeCount}
-                  size="lg"
                   onClick={() => {
                     // const mixService = new MixService();
                     // mixService
@@ -126,18 +125,18 @@ const ListPlayer = ({ mix }: IListPlayerProps) => {
                     //   .then((r) => r && setLikeCount(likeCount ?? 0 + 1));
                   }}
                 >
-                  <Icons.heart />
+                  <Icons.heart/>
                 </ActionButton>
                 <ActionButton count={shareCount}>
-                  <Icons.retweet />
+                  <Icons.retweet/>
                 </ActionButton>
                 <ActionButton count={downloadCount}>
-                  <Icons.download />
+                  <Icons.download/>
                 </ActionButton>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="flex space-x-0">
-                  <Icons.playCircle />
+                  <Icons.playCircle/>
                   <div className="text-xs">{playCount}</div>
                 </div>
                 <div className="mr-2 space-x-1 text-gray-400">
@@ -151,7 +150,7 @@ const ListPlayer = ({ mix }: IListPlayerProps) => {
       </div>
     </div>
   ) : (
-    <Loading message="Loading mix" />
+    <Loading message="Loading mix"/>
   );
 };
 
