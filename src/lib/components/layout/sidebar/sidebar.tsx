@@ -20,6 +20,9 @@ import { useSession } from "next-auth/react";
 const Sidebar = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  React.useEffect(() => {
+    console.log("sidebar", "session", session);
+  }, [session]);
 
   const _sidebarItemClick = (path: string | undefined): void => {
     if (!path) return;
@@ -29,7 +32,7 @@ const Sidebar = () => {
     }
   };
 
-  if (!session?.user) return <Loading />;
+  if (!session?.user?.profile) return <Loading />;
 
   return (
     <div className="h-full w-60 space-y-2 p-3 ">

@@ -47,26 +47,13 @@ export const authOptions: AuthOptions = {
           if (!token) {
             return null;
           }
-          const decodedToken = jwt_decode<JwtPayload & TokenPayload>(
-            token.access_token,
-          );
 
-          if (decodedToken) {
-            const profile = {
-              id: decodedToken.sub,
-              name: decodedToken.name,
-              displayName: decodedToken.displayName,
-              email: decodedToken.email,
-              profileImage: decodedToken.profileImage,
-              slug: decodedToken.slug,
-              accessToken: token.access_token,
-              accessTokenExpires: token.expires_in,
-            };
-
-            return profile;
-          } else {
-            return false;
+          const profile = await new AuthService(token.accessToken).getProfile();
+          if (!profile) {
+            return null;
           }
+          profile.auth = token;
+          return profile;
         } catch (err) {
           logger.error(`Error authorizing: ${err}`);
         }
@@ -90,21 +77,21 @@ export const authOptions: AuthOptions = {
 
       if (session.user.accessToken) {
         const authService = new AuthService(session.user.accessToken);
-        const profile = await authService.getUser();
+        const profile = await authService.getProfile();
         session.user.profile = profile;
       }
       // session.user.refreshToken = token.refreshToken;
       // session.user.accessTokenExpires = token.accessTokenExpires;
       return session;
     },
-    jwt: async ({ token, user, account }) => {
-      if (account && user) {
+    jwt: async ({ token, account, profile }) => {
+      if (account && account) {
         return {
           ...token,
-          accessToken: user.accessToken,
-          displayName: user.displayName,
-          profileImage: user.profileImage,
-          slug: user.slug,
+          accessToken: account.accessToken,
+          displayName: account.displayName,
+          profileImage: account.profileImage,
+          slug: account.slug,
         };
       }
       return token;
