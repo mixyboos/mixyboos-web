@@ -18,7 +18,7 @@ class UploadService extends ApiService {
       });
       return result?.status === 201;
     } catch (err) {
-      console.log("authService", "getUser_error", err);
+      console.log("uploadService", "uploadAudio_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number))
           throw new Error(err as any);
@@ -45,7 +45,7 @@ class UploadService extends ApiService {
       );
       return result?.status === 201;
     } catch (err) {
-      console.log("authService", "getUser_error", err);
+      console.log("uploadService", "uploadAudio_error", err);
       if (err instanceof AxiosError) {
         if (![401, 400].includes(err.status as number))
           throw new Error(err as any);
