@@ -8,6 +8,7 @@ import { type TokenPayload } from "@/lib/models";
 
 export const authOptions: AuthOptions = {
   session: {
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, //30 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
@@ -47,26 +48,13 @@ export const authOptions: AuthOptions = {
           if (!token) {
             return null;
           }
-          const decodedToken = jwt_decode<JwtPayload & TokenPayload>(
-            token.access_token,
-          );
 
-          if (decodedToken) {
-            const profile = {
-              id: decodedToken.sub,
-              name: decodedToken.name,
-              displayName: decodedToken.displayName,
-              email: decodedToken.email,
-              profileImage: decodedToken.profileImage,
-              slug: decodedToken.slug,
-              accessToken: token.access_token,
-              accessTokenExpires: token.expires_in,
-            };
-
-            return profile;
-          } else {
-            return false;
+          const profile = await new AuthService(token.accessToken).getProfile();
+          if (!profile) {
+            return null;
           }
+          profile.auth = token;
+          return profile;
         } catch (err) {
           logger.error(`Error authorizing: ${err}`);
         }
@@ -82,29 +70,22 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async session({ session, token }) {
-      session.id = token.sub as string;
-      session.user.accessToken = token.accessToken as string;
-      session.user.displayName = token.displayName as string;
-      session.user.profileImage = token.profileImage as string;
-      session.user.slug = token.slug as string;
-
-      if (session.user.accessToken) {
-        const authService = new AuthService(session.user.accessToken);
-        const profile = await authService.getUser();
-        session.user.profile = profile;
-      }
-      // session.user.refreshToken = token.refreshToken;
-      // session.user.accessTokenExpires = token.accessTokenExpires;
-      return session;
+      return token;
     },
-    jwt: async ({ token, user, account }) => {
-      if (account && user) {
+    jwt: async ({ user, token, account, profile }) => {
+      /*
+        This callback is called whenever a JSON Web Token is created (i.e. at sign in) or updated (i.e whenever a session is accessed in the client).
+        The returned value will be encrypted, and it is stored in a cookie.
+
+        Persist the OAuth access_token and or the user id to the token right after signin
+
+        The arguments user, account, profile and isNewUser are only passed the first time this callback is called on a new session,
+        after the user signs in. In subsequent calls, only token will be available
+      */
+      if (user) {
         return {
           ...token,
-          accessToken: user.accessToken,
-          displayName: user.displayName,
-          profileImage: user.profileImage,
-          slug: user.slug,
+          user,
         };
       }
       return token;

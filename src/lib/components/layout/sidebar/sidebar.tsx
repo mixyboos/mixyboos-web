@@ -20,6 +20,9 @@ import { useSession } from "next-auth/react";
 const Sidebar = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  React.useEffect(() => {
+    console.log("sidebar", "session", session);
+  }, [session]);
 
   const _sidebarItemClick = (path: string | undefined): void => {
     if (!path) return;
@@ -29,7 +32,12 @@ const Sidebar = () => {
     }
   };
 
-  if (!session?.user) return <Loading />;
+  if (!session?.user)
+    return (
+      <div className="mt-5">
+        <Loading />
+      </div>
+    );
 
   return (
     <div className="h-full w-60 space-y-2 p-3 ">
@@ -51,7 +59,7 @@ const Sidebar = () => {
               href="#"
               className="text-xs hover:underline "
             >
-              {session.user.profile.bio || "Hello, Lover"}
+              {session.user.bio || "Hello, Lover"}
             </a>
           </span>
         </div>
@@ -61,7 +69,7 @@ const Sidebar = () => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href={`${session.user.profile.slug}/shows`}
+              href={`${session.user.slug}/shows`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonVcard className="h-5 w-5 fill-current " />
@@ -71,7 +79,7 @@ const Sidebar = () => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href={`${session.user.profile.slug}/mixes`}
+              href={`${session.user.slug}/mixes`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonBoundingBox className="h-5 w-5 fill-current " />

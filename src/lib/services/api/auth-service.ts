@@ -4,7 +4,7 @@ import type { AuthTokenModel, ProfileModel } from "@/lib/models";
 import logger from "@/lib/logger";
 
 class AuthService extends ApiService {
-  getUser = async (): Promise<ProfileModel | undefined> => {
+  getProfile = async (): Promise<ProfileModel | undefined> => {
     try {
       const result = await this._client.get("/profile/me");
       if (result?.status === 200) {
@@ -32,19 +32,11 @@ class AuthService extends ApiService {
       },
     });
 
-    const authUrl = `${process.env.API_URL as string}/connect/token`;
-
-    const params = new URLSearchParams();
-    params.append("username", user);
-    params.append("password", password);
-    params.append("grant_type", process.env.API_AUTH_GRANT_TYPE as string);
-    params.append("scope", process.env.API_AUTH_SCOPE as string);
-    params.append("client_id", process.env.API_AUTH_CLIENT_ID as string);
-    const response = await this._client.post(
-      authUrl,
-      params,
-      this.noauthConfig,
-    );
+    const authUrl = `${process.env.API_URL as string}/auth/login`;
+    const response = await this._client.post(authUrl, {
+      email: user,
+      password,
+    });
     logger.info({
       getAuthTokenResponse: {
         code: response.status,
