@@ -5,7 +5,7 @@ interface ILoadingProps {
   title?: string;
   message?: string;
 }
-const Loading = ({ title = "Loading...", message = "" }: ILoadingProps) => {
+const Loading = ({ title = "Loading...", message = "Please wait..." }: ILoadingProps) => {
   return (
     <>
       <div role="status" className="flex flex-row space-x-1">

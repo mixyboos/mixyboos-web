@@ -18,6 +18,7 @@ declare module "next-auth" {
     profileImage: string;
     name: string;
     slug: string;
+    bio: string;
     profile: ProfileModel | undefined;
   }
 }

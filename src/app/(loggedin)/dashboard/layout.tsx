@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   if (!session) return <Loading />;
 
   return (
-    <div className="mx-20 -mb-16 flex h-screen overflow-hidden">
+    <div className="xl:mx-20 -mb-16 flex h-screen overflow-hidden">
       <Sidebar />
       <div className="w-full">{children}</div>
     </div>

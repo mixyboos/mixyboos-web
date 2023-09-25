@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { Icons } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -20,6 +22,9 @@ type UserNavProps = {
 };
 
 const UserNav: React.FC<UserNavProps> = ({ session }) => {
+  React.useEffect(() => {
+    console.log("UserNav", "session", session);
+  }, [session]);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

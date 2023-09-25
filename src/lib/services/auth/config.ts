@@ -8,6 +8,7 @@ import { type TokenPayload } from "@/lib/models";
 
 export const authOptions: AuthOptions = {
   session: {
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, //30 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
@@ -69,29 +70,22 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async session({ session, token }) {
-      session.id = token.sub as string;
-      session.user.accessToken = token.accessToken as string;
-      session.user.displayName = token.displayName as string;
-      session.user.profileImage = token.profileImage as string;
-      session.user.slug = token.slug as string;
-
-      if (session.user.accessToken) {
-        const authService = new AuthService(session.user.accessToken);
-        const profile = await authService.getProfile();
-        session.user.profile = profile;
-      }
-      // session.user.refreshToken = token.refreshToken;
-      // session.user.accessTokenExpires = token.accessTokenExpires;
-      return session;
+      return token;
     },
-    jwt: async ({ token, account, profile }) => {
-      if (account && account) {
+    jwt: async ({ user, token, account, profile }) => {
+      /*
+        This callback is called whenever a JSON Web Token is created (i.e. at sign in) or updated (i.e whenever a session is accessed in the client).
+        The returned value will be encrypted, and it is stored in a cookie.
+
+        Persist the OAuth access_token and or the user id to the token right after signin
+
+        The arguments user, account, profile and isNewUser are only passed the first time this callback is called on a new session,
+        after the user signs in. In subsequent calls, only token will be available
+      */
+      if (user) {
         return {
           ...token,
-          accessToken: account.accessToken,
-          displayName: account.displayName,
-          profileImage: account.profileImage,
-          slug: account.slug,
+          user,
         };
       }
       return token;

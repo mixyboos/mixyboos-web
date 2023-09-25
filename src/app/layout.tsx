@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site";
-import Navbar from "@/lib/components/layout/Navbar";
+import Navbar from "@/lib/components/layout/navbar";
 import { cn } from "@/lib/utils";
 import { type Metadata } from "next";
 import Providers from "./providers";
