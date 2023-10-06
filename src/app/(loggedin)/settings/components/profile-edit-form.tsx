@@ -1,3 +1,4 @@
+"use client";
 import {
   Form,
   FormControl,
@@ -10,21 +11,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/components/ui/use-toast";
 import { notice } from "@/lib/components/notifications/toast";
 import { type ProfileModel } from "@/lib/models";
-import { api } from "@/lib/utils/api";
+import ProfileService from "@/lib/services/api/profile-service";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { useSession } from "next-auth/react";
+import React, { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
 
-type ProfileEditFormProps = {
-  profile: ProfileModel;
-};
 const formSchema = z.object({
-  username: z
+  slug: z
     .string()
     .min(2, {
       message: "Username must be at least 2 characters.",
@@ -32,8 +30,8 @@ const formSchema = z.object({
     .max(30, {
       message: "Username must not be longer than 30 characters.",
     }),
-  email: z.string().email(),
-  bio: z.string().max(160).min(0),
+  displayName: z.string().max(40),
+  biography: z.string().max(160).min(0),
   urls: z
     .array(
       z.object({
@@ -44,19 +42,16 @@ const formSchema = z.object({
 });
 type FormValues = z.infer<typeof formSchema>;
 
-const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
-  profile,
-}: ProfileEditFormProps) => {
-  const updateUser = api.user.updateUser.useMutation({
-    onSuccess: (result) => {
-      console.log("profile-edit-form", "onSuccess", result);
-      notice("Success", "Profile updated successfully");
-    },
-  });
+const ProfileEditForm = () => {
+  const { data: session } = useSession();
+  useEffect(() => {
+    console.log("profile-edit-form", "session", session);
+  }, [session]);
+
   const defaultValues: Partial<FormValues> = {
-    username: profile.username,
-    email: profile.email || "",
-    bio: profile.bio || "",
+    slug: session?.profile.slug,
+    displayName: session?.profile.displayName || "",
+    biography: session?.profile.biography || "",
     urls: [],
   };
   const form = useForm<FormValues>({
@@ -72,13 +67,16 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
 
   const onSubmit = async (data: FormValues) => {
     console.log("profile-edit-form", "onSubmit", data);
-    await updateUser.mutateAsync({
-      ...profile,
-      username: data.username,
-      email: data.email,
-      bio: data.bio,
-      urls: [],
+    const profileService = new ProfileService();
+    const result = await profileService.updateProfile({
+      ...session?.profile,
+      slug: data.slug,
+      displayName: data.displayName,
+      biography: data.biography,
     });
+    if (result) {
+      notice("Success", "Profile updated");
+    }
   };
 
   return (
@@ -86,12 +84,29 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="slug"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input placeholder="username" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your unique profile name, it will be used to generate
+                URLs to your shows & mixes
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="displayName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Display Name</FormLabel>
+              <FormControl>
+                <Input placeholder="displayName" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a
@@ -103,25 +118,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
         />
         <FormField
           control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="me@gmail.com" {...field} />
-              </FormControl>
-              <FormDescription>
-                How we get in touch with you, we will never share or sell your
-                email address
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="bio"
+          name="biography"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>

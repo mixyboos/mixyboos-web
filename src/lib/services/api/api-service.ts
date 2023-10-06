@@ -36,9 +36,7 @@ class ApiService {
     logger.debug("api-service", "_tokenRequestInterceptor__session", session);
     if (session || this._token) {
       config.headers = {
-        Authorization: `Bearer ${
-          session ? session.user.accessToken : this._token
-        }`,
+        Authorization: `Bearer ${session ? session.token : this._token}`,
         Accept: "application/json",
       };
     }

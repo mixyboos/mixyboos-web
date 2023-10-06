@@ -1,10 +1,9 @@
-import { type AuthOptions } from "next-auth";
+import { Session, type AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import jwt_decode, { type JwtPayload } from "jwt-decode";
 import logger from "@/lib/logger";
 import AuthService from "../api/auth-service";
-import { type TokenPayload } from "@/lib/models";
+import ProfileService from "../api/profile-service";
 
 export const authOptions: AuthOptions = {
   session: {
@@ -49,12 +48,22 @@ export const authOptions: AuthOptions = {
             return null;
           }
 
-          const profile = await new AuthService(token.accessToken).getProfile();
+          const profile = await new ProfileService(
+            token.accessToken,
+          ).getProfile();
           if (!profile) {
             return null;
           }
           profile.auth = token;
-          return profile;
+          return {
+            id: profile.id,
+            name: profile?.username,
+            email: profile.email,
+            image: profile.profileImage,
+            accessToken: token.accessToken,
+            refreshToken: token.refreshToken,
+            accessTokenExpires: token.expiresIn,
+          };
         } catch (err) {
           logger.error(`Error authorizing: ${err}`);
         }
@@ -70,7 +79,16 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async session({ session, token }) {
-      return token;
+      const profile = await new ProfileService(
+        (token.token as string) || (token.accessToken as string),
+      ).getProfile();
+      const s: Session = {
+        ...token,
+        ...session,
+        profile,
+      };
+      logger.debug("next-auth", "session", s);
+      return s;
     },
     jwt: async ({ user, token, account, profile }) => {
       /*
@@ -84,8 +102,10 @@ export const authOptions: AuthOptions = {
       */
       if (user) {
         return {
-          ...token,
-          user,
+          name: user.name,
+          email: user.email,
+          token: user.accessToken,
+          tokenExpires: user.accessTokenExpires,
         };
       }
       return token;

@@ -16,13 +16,11 @@ import { BiCategoryAlt } from "react-icons/bi";
 import Loading from "@/components/widgets/loading";
 import UserImage from "../../widgets/UserImage";
 import { useSession } from "next-auth/react";
+import { Icons } from "@/components/icons";
 
 const Sidebar = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  React.useEffect(() => {
-    console.log("sidebar", "session", session);
-  }, [session]);
 
   const _sidebarItemClick = (path: string | undefined): void => {
     if (!path) return;
@@ -32,7 +30,7 @@ const Sidebar = () => {
     }
   };
 
-  if (!session?.user)
+  if (!session?.profile)
     return (
       <div className="mt-5">
         <Loading />
@@ -42,16 +40,16 @@ const Sidebar = () => {
   return (
     <div className="h-full w-60 space-y-2 p-3 ">
       <div className="flex items-center space-x-4 p-2">
-        {session.user.profileImage && (
+        {session.profile.profileImage && (
           <UserImage
-            src={session.user.profileImage}
+            src={session.profile.profileImage as string}
             status={"offline"}
             size={"md"}
           />
         )}
         <div>
           <h2 className="text-sm font-semibold">
-            {session.user.displayName || "Argle Bargle"}
+            {session.profile.displayName || "Argle Bargle"}
           </h2>
           <span className="flex items-center space-x-1">
             <a
@@ -59,7 +57,7 @@ const Sidebar = () => {
               href="#"
               className="text-xs hover:underline "
             >
-              {session.user.bio || "Hello, Lover"}
+              {session.profile.bio || "Hello, Lover"}
             </a>
           </span>
         </div>
@@ -69,7 +67,7 @@ const Sidebar = () => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href={`${session.user.slug}/shows`}
+              href={`${session.profile.slug}/shows`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonVcard className="h-5 w-5 fill-current " />
@@ -79,11 +77,21 @@ const Sidebar = () => {
           <li className="">
             <Link
               rel="noopener noreferrer"
-              href={`${session.user.slug}/mixes`}
+              href={`${session.profile.slug}/mixes`}
               className="flex items-center space-x-3 rounded-md p-2"
             >
               <BsPersonBoundingBox className="h-5 w-5 fill-current " />
               <span>My Mixes</span>
+            </Link>
+          </li>
+          <li className="">
+            <Link
+              rel="noopener noreferrer"
+              href={`settings/profile`}
+              className="flex items-center space-x-3 rounded-md p-2"
+            >
+              <Icons.userSettings className="h-5 w-5 fill-current " />
+              <span>My Profile</span>
             </Link>
           </li>
           <li className=" ">

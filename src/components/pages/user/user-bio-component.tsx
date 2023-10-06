@@ -25,7 +25,7 @@ const UserBioComponent: React.FC<UserBioComponentProps> = ({ user }) => {
         </Button>
       </div>
       <div className="px-6 py-6">
-        <p className="text-sm text-muted-foreground">{user.bio}</p>
+        <p className="text-sm text-muted-foreground">{user.biography}</p>
       </div>
     </div>
   );

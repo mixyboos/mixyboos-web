@@ -22,9 +22,6 @@ type UserNavProps = {
 };
 
 const UserNav: React.FC<UserNavProps> = ({ session }) => {
-  React.useEffect(() => {
-    console.log("UserNav", "session", session);
-  }, [session]);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

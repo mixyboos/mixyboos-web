@@ -4,21 +4,7 @@ import type { AuthTokenModel, ProfileModel } from "@/lib/models";
 import logger from "@/lib/logger";
 
 class AuthService extends ApiService {
-  getProfile = async (): Promise<ProfileModel | undefined> => {
-    try {
-      const result = await this._client.get("/profile/me");
-      if (result?.status === 200) {
-        return result.data;
-      }
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        console.log("authService", "getUser_error", err);
-        if (![401, 400].includes(err.status as number))
-          throw new Error(err as any);
-      }
-    }
-    return undefined;
-  };
+
 
   getAuthToken = async (
     user: string,

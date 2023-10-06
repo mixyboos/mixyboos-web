@@ -56,6 +56,7 @@ import {
   type LucideProps,
   type LucideIcon,
   Voicemail,
+  UserCog,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -125,6 +126,7 @@ export const Icons = {
   save: Save,
   share: Share2,
   send: SendHorizontal,
+  userSettings: UserCog,
   sun: SunMedium,
   moon: Moon,
   message: Mail,

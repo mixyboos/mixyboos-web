@@ -1,6 +1,7 @@
 import type { ApiKeyModel, ProfileModel } from "@/lib/models";
 import ApiService from "./api-service";
 import logger from "@/lib/logger";
+import { AxiosError } from "axios";
 
 class ProfileService extends ApiService {
   getStreamKey = async (): Promise<ApiKeyModel | undefined> => {
@@ -23,12 +24,16 @@ class ProfileService extends ApiService {
    */
   getProfile = async (): Promise<ProfileModel | undefined> => {
     try {
-      const results = await this._client.get("/profile/me");
-      if (results.status === 200) {
-        return results.data;
+      const result = await this._client.get("/profile");
+      if (result?.status === 200) {
+        return result.data;
       }
     } catch (err) {
-      logger.error("profile-service.ts", "Unable to get user's profile.", err);
+      if (err instanceof AxiosError) {
+        console.log("authService", "getUser_error", err);
+        if (![401, 400].includes(err.status as number))
+          throw new Error(err as any);
+      }
     }
     return undefined;
   };
@@ -63,7 +68,9 @@ class ProfileService extends ApiService {
       );
 
       return result.data as ProfileModel;
-    } catch (err) {}
+    } catch (err) {
+      logger.error("profile-service", "updateProfile", profile, err);
+    }
     return undefined;
   };
 }
