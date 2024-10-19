@@ -1,5 +1,5 @@
-const ProfileForm = () => {
+const ProfileAccountForm = () => {
   return <h1>Account Form</h1>;
 };
 
-export default ProfileForm;
+export default ProfileAccountForm;

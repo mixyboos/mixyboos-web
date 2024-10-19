@@ -11,8 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { notice } from "@/lib/components/notifications/toast";
-import { type ProfileModel } from "@/lib/models";
+import {error, notice, success} from '@/lib/components/notifications/toast';
 import ProfileService from "@/lib/services/api/profile-service";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -75,7 +74,9 @@ const ProfileEditForm = () => {
       biography: data.biography,
     });
     if (result) {
-      notice("Success", "Profile updated");
+      success("Success", "Profile updated");
+    } else {
+      error("Error", "Error updating profile");
     }
   };
 

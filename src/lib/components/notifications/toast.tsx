@@ -1,7 +1,17 @@
-import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
 import { TiWarningOutline } from "react-icons/ti";
+import { toast } from "sonner";
 
+export const error = (title: string, body: string) => {
+  toast.error(title, {
+    description: body,
+  });
+};
+export const success = (title: string, body: string) => {
+  toast.success(title, {
+    description: body,
+  });
+};
 export const notice = (title: string, body: string) => {
   toast.custom(
     (t) => (
@@ -33,6 +43,6 @@ export const notice = (title: string, body: string) => {
         </div>
       </div>
     ),
-    { id: "unique-notification", position: "top-center", duration: 4000 }
+    { id: "unique-notification", position: "top-center", duration: 4000 },
   );
 };

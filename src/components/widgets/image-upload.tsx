@@ -35,7 +35,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => {
         return (
-          <div className={cn("w-64 h-64", className)}>
+          <div className={cn("h-64 w-64", className)}>
             <div
               {...getRootProps({ className: "dropzone" })}
               onClick={(e) => e.stopPropagation()}
@@ -45,7 +45,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                   {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      className="object-cover  rounded-md border-muted border-2"
+                      className="rounded-md  border-2 border-muted object-cover"
                       src={
                         acceptedFiles[0]
                           ? URL.createObjectURL(acceptedFiles[0])
@@ -59,7 +59,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 <div id="drop">
                   <label
                     htmlFor="dropzone-file"
-                    className="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-slate-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-muted text-foreground  hover:bg-accent hover:text-accent-foreground"
                   >
                     <div className="flex flex-col items-center justify-center pb-6 pt-5">
                       <svg

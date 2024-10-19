@@ -1,4 +1,4 @@
-import { Session, type AuthOptions } from "next-auth";
+import {Session, type AuthOptions} from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import logger from "@/lib/logger";
@@ -34,7 +34,7 @@ export const authOptions: AuthOptions = {
         },
       },
       authorize: async (credentials, _req): Promise<any> => {
-        logger.info({ authorize: "Authorizing" });
+        logger.info({authorize: "Authorizing"});
         try {
           if (!credentials) {
             return false;
@@ -57,7 +57,7 @@ export const authOptions: AuthOptions = {
           profile.auth = token;
           return {
             id: profile.id,
-            name: profile?.username,
+            name: profile?.displayName,
             email: profile.email,
             image: profile.profileImage,
             accessToken: token.accessToken,
@@ -72,13 +72,15 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({account, profile}) {
+      console.log('Config', 'signIn', account, profile)
       if (account && account.provider === "google") {
         return false;
       }
       return true;
     },
-    async session({ session, token }) {
+    async session({session, token}) {
+      console.log('Config', 'signIn', session, token)
       const profile = await new ProfileService(
         (token.token as string) || (token.accessToken as string),
       ).getProfile();
@@ -90,7 +92,7 @@ export const authOptions: AuthOptions = {
       logger.debug("next-auth", "session", s);
       return s;
     },
-    jwt: async ({ user, token, account, profile }) => {
+    jwt: async ({user, token, account, profile}) => {
       /*
         This callback is called whenever a JSON Web Token is created (i.e. at sign in) or updated (i.e whenever a session is accessed in the client).
         The returned value will be encrypted, and it is stored in a cookie.

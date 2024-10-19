@@ -13,7 +13,6 @@ import ImageUpload from "@/components/widgets/image-upload";
 import { notice } from "@/lib/components/notifications/toast";
 import { type ProfileModel } from "@/lib/models";
 import { uploadFile } from "@/lib/services/azure/clientUploader";
-import { api } from "@/lib/utils/api";
 import { getFileExtension } from "@/lib/utils/fileUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
@@ -41,13 +40,6 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   const [profileImageChanged, setProfileImageChanged] = React.useState(false);
   const [headerImageChanged, setHeaderImageChanged] = React.useState(false);
 
-  const uploader = api.upload.getSASToken.useQuery({ containerName: "images" });
-  const updateUser = api.user.updateUser.useMutation({
-    onSuccess: (result) => {
-      console.log("profile-edit-form", "onSuccess", result);
-      notice("Success", "Profile updated successfully");
-    },
-  });
   const formSchema = z.object({
     profileImage: z
       .any()
@@ -91,54 +83,6 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   const onSubmit = async (data: FormValues) => {
     console.log("profile-images-form", "onSubmit", data);
     if (profileImageChanged || headerImageChanged) {
-      const token = uploader.data;
-      if (!token) {
-        notice("Error", "Unable to upload at this time");
-        return;
-      }
-
-      if (
-        profileImageChanged &&
-        data.profileImage &&
-        data.profileImage instanceof File
-      ) {
-        const image = await uploadFile(
-          data.profileImage,
-          "images",
-          `profile/avatars/${profile.id}.${getFileExtension(
-            data.profileImage.name,
-          )}`,
-          token,
-        );
-        if (image) {
-          await updateUser.mutateAsync({
-            ...profile,
-            profileImage: image,
-            urls: [],
-          });
-        }
-      }
-      if (
-        headerImageChanged &&
-        data.headerImage &&
-        data.headerImage instanceof File
-      ) {
-        const image = await uploadFile(
-          data.headerImage,
-          "images",
-          `profile/headers/${profile.id}.${getFileExtension(
-            data.headerImage.name,
-          )}`,
-          token,
-        );
-        if (image) {
-          await updateUser.mutateAsync({
-            ...profile,
-            headerImage: image,
-          });
-        }
-      }
-      await update();
     }
   };
   return (

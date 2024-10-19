@@ -1,4 +1,4 @@
-import type { ApiKeyModel, LiveShowModel } from "@/lib/models";
+import type {ApiKeyModel, LiveShowModel} from "@/lib/models";
 import ApiService from "./api-service";
 
 class LiveService extends ApiService {

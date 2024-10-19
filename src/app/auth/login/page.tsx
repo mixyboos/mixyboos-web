@@ -1,18 +1,18 @@
 "use client";
 
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {zodResolver} from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
   usernameOrEmail: z
     .string()
-    .min(5, { message: "must be at least 5 characters" })
+    .min(5, {message: "must be at least 5 characters"})
     .max(100),
   password: z.string().min(4),
 });
 
 import React from "react";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -21,16 +21,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
-import { notice } from "@/lib/components/notifications/toast";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {Icons} from "@/components/icons";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {signIn} from "next-auth/react";
+import {useRouter, useSearchParams} from "next/navigation";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import logger from "@/lib/logger";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardHeader,
@@ -49,10 +47,14 @@ const LoginPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      usernameOrEmail: "",
-      password: "",
+      usernameOrEmail:
+        process.env.NODE_ENV === "development"
+          ? "fergal.moran+mixyboos@gmail.com"
+          : "",
+      password: process.env.NODE_ENV === "development" ? "secret" : "",
     },
   });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     logger.debug(values);
     setIsSending(true);
@@ -82,6 +84,7 @@ const LoginPage = () => {
         setLoginError(true);
       });
   }
+
   return (
     <div className="w-full max-w-xl space-y-4">
       <Card>
@@ -94,21 +97,21 @@ const LoginPage = () => {
             <CardContent className="grid gap-6">
               <div className="grid grid-cols-3 gap-6">
                 <Button variant="outline">
-                  <Icons.twitter className="mr-2 h-4 w-4" />
+                  <Icons.twitter className="mr-2 h-4 w-4"/>
                   Twitter
                 </Button>
                 <Button variant="outline">
-                  <Icons.facebook className="mr-2 h-4 w-4" />
+                  <Icons.facebook className="mr-2 h-4 w-4"/>
                   Facebook
                 </Button>
                 <Button variant="outline">
-                  <Icons.google className="mr-2 h-4 w-4" />
+                  <Icons.google className="mr-2 h-4 w-4"/>
                   Google
                 </Button>
               </div>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t text-muted-foreground" />
+                  <span className="w-full border-t text-muted-foreground"/>
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className=" px-2 text-muted-foreground">
@@ -118,7 +121,7 @@ const LoginPage = () => {
               </div>
               {loginError && (
                 <Alert variant="destructive">
-                  <Icons.error className="h-4 w-4" />
+                  <Icons.error className="h-4 w-4"/>
                   <AlertTitle>Error</AlertTitle>
                   <AlertDescription>Unable to sign you in</AlertDescription>
                 </Alert>
@@ -127,7 +130,7 @@ const LoginPage = () => {
                 <FormField
                   control={form.control}
                   name="usernameOrEmail"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Username or Email</FormLabel>
                       <FormControl>
@@ -137,7 +140,7 @@ const LoginPage = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage/>
                     </FormItem>
                   )}
                 />
@@ -146,7 +149,7 @@ const LoginPage = () => {
                 <FormField
                   control={form.control}
                   name="password"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
@@ -156,7 +159,7 @@ const LoginPage = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage/>
                     </FormItem>
                   )}
                 />
@@ -172,10 +175,10 @@ const LoginPage = () => {
                   disabled={isSending}
                 >
                   {isSending && (
-                    <Icons.loading className="mr-2 h-4 w-4 animate-spin" />
+                    <Icons.loading className="mr-2 h-4 w-4 animate-spin"/>
                   )}
                   <div className="inline-flex items-center">
-                    <Icons.login className="mr-2 h-4 w-4" />
+                    <Icons.login className="mr-2 h-4 w-4"/>
                     <span>Login</span>
                   </div>
                 </Button>

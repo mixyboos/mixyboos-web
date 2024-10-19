@@ -1,6 +1,6 @@
 import logger from "@/lib/logger";
-import axios, { type AxiosInstance } from "axios";
-import { getSession } from "next-auth/react";
+import axios, {type AxiosInstance} from "axios";
+import {getSession} from "next-auth/react";
 
 class ApiService {
   protected readonly _client: AxiosInstance;
