@@ -3,19 +3,19 @@
 # dependencies
 /node_modules
 /.pnp
-.pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # testing
 /coverage
 
-# database
-/prisma/db.sqlite
-/prisma/db.sqlite-journal
-
 # next.js
 /.next/
 /out/
-next-env.d.ts
 
 # production
 /build
@@ -28,12 +28,8 @@ next-env.d.ts
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# local env files
-# do not commit any .env files to git, except for the .env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
-.env
-.env*.local
+# env files (can opt-in for commiting if needed)
 .env*
 
 # vercel
@@ -41,15 +37,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-.vscode/
-.idea/
-.krud
-.yarn/
-.yarnrc.yml
-yarn.lock
-.pnp.cjs
-.pnp.loader.mjs
-
-# Sentry Auth Token
-.sentryclirc
-supabase/
+next-env.d.ts
