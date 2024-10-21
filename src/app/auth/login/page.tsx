@@ -51,7 +51,7 @@ const LoginPage = () => {
         process.env.NODE_ENV === "development"
           ? "fergal.moran+mixyboos@gmail.com"
           : "",
-      password: process.env.NODE_ENV === "development" ? "secret" : "",
+      password: process.env.NODE_ENV === "development" ? "SVqVKJWZh5dIaM7JsNY1h0E/xbzPCD7y7Veedxa1Q/k=" : "",
     },
   });
 
