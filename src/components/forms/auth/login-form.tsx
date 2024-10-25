@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { login } from "@/lib/services/auth/auth-service";
 
 const LoginForm: React.FC = () => {
   const formSchema = z.object({
@@ -32,8 +33,10 @@ const LoginForm: React.FC = () => {
     },
   });
 
-  const onSubmit = form.handleSubmit((data) => {
+  const onSubmit = form.handleSubmit(async (data) => {
     console.log(data);
+    const response = await login(data.email, data.password);
+    console.log("login-form", "response", response);
   });
   return (
     <Form {...form}>
