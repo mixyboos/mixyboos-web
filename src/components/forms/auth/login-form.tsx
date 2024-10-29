@@ -14,9 +14,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { login } from "@/lib/services/auth/auth-service";
+import { useAuth } from "@/lib/contexts/auth/auth-context";
 
 const LoginForm: React.FC = () => {
+  const { user, login } = useAuth();
+
   const formSchema = z.object({
     email: z.string().email({
       message: "Invalid email.",
@@ -37,6 +39,11 @@ const LoginForm: React.FC = () => {
     console.log(data);
     const response = await login(data.email, data.password);
     console.log("login-form", "response", response);
+
+    if (response) {
+      console.log("login-form", "login successful");
+      alert("You are logged in sir!!");
+    }
   });
   return (
     <Form {...form}>
