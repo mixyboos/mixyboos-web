@@ -1,14 +1,9 @@
 import ProfileModel from "@/lib/models/profile";
-import axios from "axios";
+import api from "@/lib/services/api/api-client";
 import { AxiosError } from "axios";
-const CHANGEME_API_URL = "https://mixyboos.dev.fergl.ie:5001";
-const instance = axios.create({
-  withCredentials: true,
-  baseURL: CHANGEME_API_URL,
-});
 
 const login = async (username: string, password: string) => {
-  const response = await instance.post(
+  const response = await api.post(
     "/auth/login?useCookies=true",
     {
       email: username,
@@ -19,7 +14,7 @@ const login = async (username: string, password: string) => {
   return response;
 };
 const logout = async (): Promise<boolean> => {
-  const response = await instance.delete("/account/logout", {
+  const response = await api.delete("/account/logout", {
     withCredentials: true,
   });
   if (response.status === 200) {
@@ -33,7 +28,7 @@ const logout = async (): Promise<boolean> => {
 };
 const getProfile = async (): Promise<ProfileModel | null> => {
   try {
-    const result = await instance.get("/profile", {
+    const result = await api.get("/profile", {
       withCredentials: true,
     });
     if (result?.status === 200) {
