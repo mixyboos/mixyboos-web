@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import * as AuthService from "@/lib/services/auth/auth-service";
+import * as AuthService from "@/lib/services/api/auth/auth-service";
 import ProfileModel from "@/lib/models/profile";
 type AuthContextType = {
   profile?: ProfileModel | null;
