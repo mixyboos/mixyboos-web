@@ -1,15 +1,10 @@
-import { type AuthTokenModel } from "@/lib/models";
+import User from "@/lib/models/user";
 type ProfileModel = {
-  id: string;
   slug: string | null;
   displayName: string | null;
-  email: string;
   biography: string | null;
   profileImage: string;
   headerImage: string;
   urls: string[] | null;
-
-  //TODO: this does not need to be here.
-  auth?: AuthTokenModel;
-};
+} & User;
 export default ProfileModel;
