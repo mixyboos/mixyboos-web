@@ -12,12 +12,14 @@ const login = async (username: string, password: string) => {
     },
     { withCredentials: true }
   );
-
-  console.log("auth-service", "login", response);
-
   return response;
 };
-
+const logout = async (): Promise<boolean> => {
+  const response = await axios.delete(`${CHANGEME_API_URL}/account`, {
+    withCredentials: true,
+  });
+  return response.status === 200;
+};
 const getProfile = async (): Promise<ProfileModel | null> => {
   try {
     const result = await axios.get(`${CHANGEME_API_URL}/profile`, {
@@ -36,4 +38,4 @@ const getProfile = async (): Promise<ProfileModel | null> => {
   return null;
 };
 
-export { login, getProfile };
+export { login, getProfile, logout };

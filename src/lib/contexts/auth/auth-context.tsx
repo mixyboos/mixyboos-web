@@ -5,12 +5,11 @@ import ProfileModel from "@/lib/models/profile";
 type AuthContextType = {
   user?: ProfileModel | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login?: (email: string, password: string) => Promise<boolean>;
+  logout?: () => Promise<boolean>;
 };
 const AuthContext = React.createContext<AuthContextType>({
-  user: null,
   loading: false,
-  login: () => Promise.resolve(false),
 });
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -37,13 +36,18 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(false);
     return response.status === 200;
   };
+
+  const logout = async (): Promise<boolean> => {
+    return await AuthService.logout();
+  };
   const memoedValue = React.useMemo(
     () => ({
       user: profile,
       loading,
       login,
+      logout,
     }),
-    [profile, loading, login]
+    [profile, loading, login, logout]
   );
   return (
     <AuthContext.Provider value={memoedValue}>
