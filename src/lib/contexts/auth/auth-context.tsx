@@ -38,7 +38,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = async (): Promise<boolean> => {
-    return await AuthService.logout();
+    const result = await AuthService.logout();
+    if (result) {
+      setProfile(null);
+    }
+    return result;
   };
   const memoedValue = React.useMemo(
     () => ({
