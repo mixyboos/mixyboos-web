@@ -1,14 +1,15 @@
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/contexts/auth/auth-context";
 import logger from "@/lib/logger";
 
 const DebugPage = () => {
-  const { user, logout } = useAuth();
+  const { profile, logout } = useAuth();
   return (
     <div>
-      <h1>Welcome {user?.slug}</h1>
-      <button
+      <h1>Welcome {profile?.slug}</h1>
+      <Button
         onClick={async () => {
-          logger.debug("debug", "logout", user);
+          logger.debug("debug", "logout", profile);
           if (logout) {
             const done = await logout();
             if (done) {
@@ -18,7 +19,7 @@ const DebugPage = () => {
         }}
       >
         Logout
-      </button>
+      </Button>
     </div>
   );
 };

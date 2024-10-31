@@ -3,13 +3,15 @@ import * as React from "react";
 import * as AuthService from "@/lib/services/auth/auth-service";
 import ProfileModel from "@/lib/models/profile";
 type AuthContextType = {
-  user?: ProfileModel | null;
+  profile?: ProfileModel | null;
   loading: boolean;
-  login?: (email: string, password: string) => Promise<boolean>;
-  logout?: () => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => Promise<boolean>;
 };
 const AuthContext = React.createContext<AuthContextType>({
   loading: false,
+  login: () => Promise.resolve(false),
+  logout: () => Promise.resolve(false),
 });
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -25,7 +27,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .catch((_error) => {})
       .finally(() => setInitialLoading(false));
   }, []);
-
   const login = async (
     username: string,
     password: string
@@ -46,7 +47,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
   const memoedValue = React.useMemo(
     () => ({
-      user: profile,
+      profile,
       loading,
       login,
       logout,
