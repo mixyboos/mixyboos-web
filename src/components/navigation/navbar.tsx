@@ -35,7 +35,7 @@ const NavLink = ({ href, title, Icon }: NavLinkProps) => {
 const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
   const { profile } = useAuth();
   return (
-    <div className="flex h-16 items-center px-4">
+    <div className="flex h-16 items-center px-4 py-2">
       <nav
         className={cn("flex items-center space-x-4 lg:space-x-6", className)}
         {...props}

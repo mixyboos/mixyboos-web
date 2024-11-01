@@ -2,6 +2,7 @@ import React, { use } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getByUserAndSlug } from "@/lib/services/api/mix-service";
 import MixDetailsComponent from "@/components/pages/mix/mix-details";
+import { notFound } from "next/navigation";
 
 export default async function Page({
   params,
@@ -10,6 +11,9 @@ export default async function Page({
 }) {
   const { username, mixSlug } = await params;
   const mix = await getByUserAndSlug(username, mixSlug);
+  if (!mix) {
+    notFound();
+  }
   return (
     <div className="container p-5">
       {mix ? (

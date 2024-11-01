@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       {
         hostname: "mixyboos.blob.core.windows.net",
       },
+      {
+        hostname: "loremflickr.com",
+      },
     ],
   },
 };
