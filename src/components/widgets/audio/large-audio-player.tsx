@@ -4,6 +4,7 @@ import React from "react";
 import PlayPauseButton from "../buttons/play-pause-button";
 import Image from "next/image";
 import useAudioStore from "@/lib/contexts/audio-context";
+import logger from "@/lib/logger";
 type LargeAudioPlayerProps = {
   mix: MixModel;
 };
@@ -31,7 +32,9 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
             <PlayPauseButton
               disabled={!mix.isProcessed}
               mix={mix}
-              onPlayStart={() => {}}
+              onPlayStart={() => {
+                logger.debug("large-audio-player", "onPlayStart");
+              }}
             />
           </div>
           <div className="flex-grow justify-center">

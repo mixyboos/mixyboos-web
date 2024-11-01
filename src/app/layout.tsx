@@ -3,6 +3,7 @@ import { Poppins as CurrentFont } from "next/font/google";
 import "@/styles/globals.css";
 import { AuthProvider } from "@/lib/contexts/auth/auth-context";
 import { ThemeProvider } from "@/components/theme-provider";
+import AudioProvider from "@/lib/contexts/audio-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,14 +23,16 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <AudioProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </AudioProvider>
         </AuthProvider>
       </body>
     </html>

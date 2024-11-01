@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getByUserAndSlug } from "@/lib/services/api/mix-service";
 import MixDetailsComponent from "@/components/pages/mix/mix-details";
@@ -6,9 +6,10 @@ import MixDetailsComponent from "@/components/pages/mix/mix-details";
 export default async function Page({
   params,
 }: {
-  params: { username: string; mixSlug: string };
+  params: Promise<{ username: string; mixSlug: string }>;
 }) {
-  const mix = await getByUserAndSlug(params.username, params.mixSlug);
+  const { username, mixSlug } = await params;
+  const mix = await getByUserAndSlug(username, mixSlug);
   return (
     <div className="container p-5">
       {mix ? (
