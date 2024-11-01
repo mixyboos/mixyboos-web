@@ -74,6 +74,7 @@ import {
   Dna,
   Pin,
   PartyPopper,
+  ArrowLeftFromLine,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -95,6 +96,7 @@ export const Icons = {
   activity: Activity,
   add: Plus,
   arrowRight: ArrowRight,
+  back: ArrowLeftFromLine,
   bell: Bell,
   billing: CreditCard,
   broadcast: RadioTower,
