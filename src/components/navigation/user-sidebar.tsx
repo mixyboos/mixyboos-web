@@ -21,11 +21,11 @@ const items = {
     {
       name: "My Shows",
       icon: Icons.liveStream as LucideIcon,
-      link: "/me/shows",
+      link: "/dashboard/shows",
     },
-    { name: "My Mixes", icon: Icons.mix as LucideIcon, link: "/me/mixes" },
-    { name: "My Profile", icon: Icons.user as LucideIcon, link: "/me/profile" },
-    { name: "Stats", icon: Icons.graph as LucideIcon, link: "/me/stats" },
+    { name: "My Mixes", icon: Icons.mix as LucideIcon, link: "/dashboard/mixes" },
+    { name: "My Profile", icon: Icons.user as LucideIcon, link: "/dashboard/profile" },
+    { name: "Stats", icon: Icons.graph as LucideIcon, link: "/dashboard/stats" },
   ],
   feed: [
     { name: "New Shows", icon: Icons.recent as LucideIcon, link: "/new" },
@@ -39,9 +39,9 @@ const items = {
       icon: Icons.remind as LucideIcon,
       link: "/me/later",
     },
-    { name: "Genres", icon: Icons.genre as LucideIcon, link: "/me/genres" },
-    { name: "Trending", icon: Icons.trending as LucideIcon, link: "/trending" },
-    { name: "Live Now", icon: Icons.liveNow as LucideIcon, link: "/live/now" },
+    { name: "Genres", icon: Icons.genre as LucideIcon, link: "/dashboard/genres" },
+    { name: "Trending", icon: Icons.trending as LucideIcon, link: "/dashboard/trending" },
+    { name: "Live Now", icon: Icons.liveNow as LucideIcon, link: "/dashboard/live/now" },
   ],
 };
 
