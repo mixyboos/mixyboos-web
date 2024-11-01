@@ -5,10 +5,10 @@ import FileUpload from "@/components/widgets/file-upload";
 import { type MixModel } from "@/lib/models";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
-import MixCreateDetailsComponent from "./create-mix-details";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/widgets/page-header";
 import { Icons } from "@/components/icons";
+import CreateMixDetails from "@/components/mix/create-mix-details";
 
 enum CreateState {
   new,
@@ -80,7 +80,7 @@ const MixCreateComponent = () => {
           </div>
         )}
         {createState === CreateState.new && uploadState !== UploadState.new && (
-          <MixCreateDetailsComponent
+          <CreateMixDetails
             mix={{ id: mixId, title: fileName } as MixModel}
             onMixCreated={(mix) => {
               setCreateState(mix ? CreateState.done : CreateState.error);

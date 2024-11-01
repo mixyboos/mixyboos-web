@@ -4,6 +4,9 @@ import logger from "@/lib/logger";
 
 const DebugPage = () => {
   const { profile, logout } = useAuth();
+  if (process.env.NODE_ENV === "production") {
+    return <div>Debug page is disabled in production</div>;
+  }
   return (
     <div>
       <h1>Welcome {profile?.slug}</h1>
