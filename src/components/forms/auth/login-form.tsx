@@ -83,8 +83,13 @@ const LoginForm: React.FC = () => {
     <div className="w-full max-w-xl space-y-4">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Login to Mixy/Boos</CardTitle>
-          <CardDescription>{"Let's play..."}</CardDescription>
+          <CardTitle className="text-2xl">
+            <div className="flex flex-row">
+              <Icons.play />
+              {"Let's play..."}
+            </div>
+          </CardTitle>
+          <CardDescription>Login to mixyboos</CardDescription>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
