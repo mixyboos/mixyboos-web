@@ -1,6 +1,7 @@
 "use client";
 
 import { Icons, type Icon } from "@/components/icons";
+import UserNav from "@/components/navigation/user-nav";
 import Search from "@/components/widgets/search";
 import { ThemeToggle } from "@/components/widgets/theme-toggle";
 import { useAuth } from "@/lib/contexts/auth/auth-context";
@@ -54,12 +55,11 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
       <div className="ml-auto flex items-center space-x-4">
         <Search />
         <ThemeToggle />
-        {/* {status !== "loading" &&
-          (profile ? (
-            <UserNav session={profile} />
-          ) : (
-            <NavLink href="/auth/login" title="Login" Icon={Icons.login} />
-          ))} */}
+        {profile ? (
+          <UserNav />
+        ) : (
+          <NavLink href="/auth/login" title="Login" Icon={Icons.login} />
+        )}
       </div>
     </div>
   );

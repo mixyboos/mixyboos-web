@@ -13,7 +13,7 @@ const login = async (username: string, password: string) => {
   );
   return response;
 };
-const logout = async (): Promise<boolean> => {
+const logout = async (callbackUrl: string): Promise<boolean> => {
   const response = await api.delete("/account/logout", {
     withCredentials: true,
   });
@@ -23,8 +23,33 @@ const logout = async (): Promise<boolean> => {
       const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
       document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
     });
+    if (callbackUrl) {
+      window.location.href = callbackUrl;
+    }
   }
   return response.status === 200;
+};
+
+const register = async (
+  email: string,
+  password: string,
+  confirmPassword: string,
+  username: string = ""
+): Promise<boolean> => {
+  const url = "/account/register";
+  const result = await api.post(url, {
+    username: email,
+    password,
+    confirmPassword,
+    displayName: username,
+  });
+
+  if (result.status === 200) {
+    return true;
+  } else if (result.status === 400) {
+    console.log("authService", "register", result);
+  }
+  return false;
 };
 const getProfile = async (): Promise<ProfileModel | null> => {
   try {
@@ -44,4 +69,4 @@ const getProfile = async (): Promise<ProfileModel | null> => {
   return null;
 };
 
-export { login, getProfile, logout };
+export { login, getProfile, logout, register };

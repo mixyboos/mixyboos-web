@@ -35,25 +35,14 @@ const UserImage: React.FC<IUserImageProps> = ({
   size = "md",
 }) => {
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>
-          <Avatar>
-            <AvatarImage
-              src={src}
-              alt="avatar"
-              className={classNames("rounded-full", classNames(sizes[size]))}
-            ></AvatarImage>
-            <AvatarFallback>XX</AvatarFallback>
-          </Avatar>
-        </TooltipTrigger>
-
-        <TooltipContent side="top">
-          Tooltip content
-          <TooltipArrow />
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Avatar>
+      <AvatarImage
+        src={src || "/img/default-avatar.png"}
+        alt="avatar"
+        className={classNames("rounded-full", classNames(sizes[size]))}
+      ></AvatarImage>
+      <AvatarFallback>SC</AvatarFallback>
+    </Avatar>
   );
 };
 
