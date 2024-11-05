@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+import { uploadImage } from "@/lib/services/api/upload/upload-service";
 
 const MAX_PROFILE_IMAGE_SIZE = 5242880;
 const ACCEPTED_IMAGE_TYPES = [
@@ -76,7 +77,11 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   });
   const onSubmit = async (data: FormValues) => {
     console.log("profile-images-form", "onSubmit", data);
-    if (profileImageChanged || headerImageChanged) {
+    if (profileImageChanged && false) {
+      await uploadImage(profile.id, data.profileImage, "users", "avatars");
+    }
+    if (headerImageChanged) {
+      await uploadImage(profile.id, data.headerImage, "users", "headers");
     }
   };
   return (

@@ -82,9 +82,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         isProcessed: false,
       });
       if (result && values.mixImage) {
-        const data = new FormData();
-        data.append("file", values.mixImage);
-        uploadImage(mix.id, data, "MixImage", undefined);
+        uploadImage(mix.id, values.mixImage, "mixes", undefined);
       }
       onMixCreated(result);
     } catch (err) {

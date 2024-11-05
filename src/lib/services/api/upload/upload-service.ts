@@ -2,12 +2,12 @@ import { AxiosError } from "axios";
 import api from "@/lib/services/api/api-client";
 
 const uploadAudio = async (
-  id: string,
+  mixId: string,
   formData: FormData,
   callback: (total: number, loaded: number) => void
 ): Promise<boolean> => {
   try {
-    const result = await api.post(`/upload/${id}`, formData, {
+    const result = await api.post(`/upload/${mixId}`, formData, {
       onUploadProgress: (e) => {
         callback(e.total ?? 0, e.loaded);
       },
@@ -27,19 +27,21 @@ const uploadAudio = async (
 };
 
 const uploadImage = async (
-  id: string,
-  formData: FormData,
-  imageSource: "MixImage" | "ShowImage" | "UserImage",
+  userId: string,
+  file: File,
+  imageSource: "mixes" | "shows" | "users",
   imageType: "headers" | "avatars" | undefined
 ): Promise<boolean> => {
   try {
+    const formData = new FormData();
+    formData.append("file", file);
     const it = imageType ? `&imageType=${imageType}` : "";
     const result = await api.post(
-      `/upload/image/${id}?imageSource=${imageSource}${it}`,
+      `/upload/image/${userId}?imageSource=${imageSource}${it}`,
       formData,
       {
         headers: {
-          "content-type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
