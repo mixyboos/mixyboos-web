@@ -1,14 +1,7 @@
 import Image from "next/image";
 import React, { ComponentProps, PropsWithChildren } from "react";
 import classNames from "classnames";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { TooltipArrow } from "@radix-ui/react-tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export interface AvatarSizes {
   xs: string;
   sm: string;
@@ -35,7 +28,7 @@ const UserImage: React.FC<IUserImageProps> = ({
   size = "md",
 }) => {
   return (
-    <Avatar>
+    <Avatar className={classNames("rounded-full", classNames(sizes[size]))}>
       <AvatarImage
         src={src || "/img/default-avatar.png"}
         alt="avatar"

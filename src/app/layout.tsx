@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -46,6 +47,7 @@ export default function RootLayout({
             >
               {children}
               <Toaster />
+              <Sonner />
             </ThemeProvider>
           </AudioProvider>
         </AuthProvider>
