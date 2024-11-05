@@ -14,11 +14,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   ...props
 }) => {
   const dropzoneRef = React.createRef<DropzoneRef>();
-  useEffect(() => {
-    if (imageUrl) {
-      console.log("image-upload", "imageUrl", imageUrl);
-    }
-  }, [imageUrl]);
   return (
     <Dropzone
       accept={{
