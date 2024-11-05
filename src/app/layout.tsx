@@ -6,6 +6,7 @@ import AudioProvider from "@/lib/contexts/audio-provider";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: {
@@ -44,6 +45,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               {children}
+              <Toaster />
             </ThemeProvider>
           </AudioProvider>
         </AuthProvider>

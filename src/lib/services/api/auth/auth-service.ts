@@ -26,6 +26,28 @@ const logout = async (): Promise<boolean> => {
   }
   return response.status === 200;
 };
+
+const register = async (
+  email: string,
+  password: string,
+  confirmPassword: string,
+  username: string = ""
+): Promise<boolean> => {
+  const url = "/account/register";
+  const result = await api.post(url, {
+    username: email,
+    password,
+    confirmPassword,
+    displayName: username,
+  });
+
+  if (result.status === 200) {
+    return true;
+  } else if (result.status === 400) {
+    console.log("authService", "register", result);
+  }
+  return false;
+};
 const getProfile = async (): Promise<ProfileModel | null> => {
   try {
     const result = await api.get("/profile", {
@@ -44,4 +66,4 @@ const getProfile = async (): Promise<ProfileModel | null> => {
   return null;
 };
 
-export { login, getProfile, logout };
+export { login, getProfile, logout, register };

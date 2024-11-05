@@ -184,7 +184,7 @@ const LoginForm: React.FC = () => {
                 <div className="text-sm font-medium">
                   <span className="text-muted-foreground">Not registered?</span>
                   <Link
-                    href="/auth/register"
+                    href="/register"
                     className="ml-2 text-primary hover:underline"
                   >
                     Create account
