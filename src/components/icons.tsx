@@ -75,6 +75,7 @@ import {
   Pin,
   PartyPopper,
   ArrowLeftFromLine,
+  ImagePlus,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -119,6 +120,7 @@ export const Icons = {
   heart: Heart,
   help: HelpCircle,
   home: Home,
+  imagePlus: ImagePlus,
   keyboard: Keyboard,
   laptop: Laptop,
   link: Link,

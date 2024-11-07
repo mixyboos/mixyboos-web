@@ -77,7 +77,7 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
   });
   const onSubmit = async (data: FormValues) => {
     console.log("profile-images-form", "onSubmit", data);
-    if (profileImageChanged && false) {
+    if (profileImageChanged) {
       await uploadImage(profile.id, data.profileImage, "users", "avatars");
     }
     if (headerImageChanged) {
