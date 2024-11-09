@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getByUserAndSlug } from "@/lib/services/api/mix-service";
 import MixDetailsComponent from "@/components/pages/mix/mix-details";
@@ -10,6 +10,7 @@ export default async function Page({
   params: Promise<{ username: string; mixSlug: string }>;
 }) {
   const { username, mixSlug } = await params;
+  debugger;
   const mix = await getByUserAndSlug(username, mixSlug);
   if (!mix) {
     notFound();

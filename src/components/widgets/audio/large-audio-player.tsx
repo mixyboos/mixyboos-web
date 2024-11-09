@@ -3,8 +3,9 @@ import { type MixModel } from "@/lib/models";
 import React from "react";
 import PlayPauseButton from "../buttons/play-pause-button";
 import Image from "next/image";
-import useAudioStore from "@/lib/contexts/audio-context";
+import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
 import logger from "@/lib/logger";
+import WaveformComponent from "@/components/widgets/audio/waveform";
 type LargeAudioPlayerProps = {
   mix: MixModel;
 };
@@ -46,34 +47,15 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
         </div>
       </div>
       {mix.isProcessed ? (
-        <div
-          className="relative h-[150px] w-full cursor-pointer"
-          onClick={_handleTimeClick}
-        >
-          <div id="progress-overlay" className="">
-            <Image
-              alt="Waveform overlay"
-              id="waveform-overlay"
-              style={{
-                width: `${progressPercentage}%`,
-              }}
-              width={1600}
-              height={250}
-              src="https://mixyboos.blob.core.windows.net/waveforms/3f3af6f4-c208-4f68-99bd-5a0c5153184f/3f3af6f4-c208-4f68-99bd-5a0c5153184f.cropped.overlay.png"
-              className="absolute left-0 top-0 z-10 h-full w-full"
-            ></Image>
-          </div>
-          <div id="full-overlay" className="">
-            <Image
-              alt="Waveform overlay"
-              id="waveform-overlay"
-              width={1600}
-              height={250}
-              src="https://mixyboos.blob.core.windows.net/waveforms/3f3af6f4-c208-4f68-99bd-5a0c5153184f/3f3af6f4-c208-4f68-99bd-5a0c5153184f.cropped.png"
-              className="absolute left-0 top-0 z-0 h-full w-full"
-            ></Image>
-          </div>
-        </div>
+        <WaveformComponent
+          audioUrl={mix.audioUrl as string}
+          pcmUrl={
+            "https://cdn.podnoms.com/waveforms/d70b31d6-9c9a-4787-921f-08d68e3285c7.json"
+          }
+          playState={PlayState.stopped}
+          audioDuration={0}
+          currentPosition={0}
+        />
       ) : (
         <div className="relative h-[150px] w-full cursor-pointer">
           <Image
