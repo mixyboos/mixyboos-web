@@ -3,6 +3,7 @@ import Wavesurfer from "wavesurfer.js";
 import { useTheme } from "next-themes";
 import { secondsToHHMMSS } from "@/lib/utils/time-utils";
 import { PlayState } from "@/lib/contexts/audio-context";
+import useAudioStore from "@/lib/contexts/audio-context";
 
 type WaveformComponentProps = {
   audioUrl: string;
@@ -14,15 +15,21 @@ type WaveformComponentProps = {
 };
 const WaveformComponent = ({
   audioUrl,
-  audioDuration,
   pcmUrl,
-  playState,
-  currentPosition,
   progress,
 }: WaveformComponentProps) => {
   const { theme } = useTheme();
   const [elapsedTime, setElapsedTime] = React.useState(0);
-  const [totalTime, setTotalTime] = React.useState(audioDuration);
+  const {
+    duration,
+    position,
+    currentVolume,
+    nowPlaying,
+    playState,
+    setSeekPosition,
+    togglePlayState,
+    progressPercentage,
+  } = useAudioStore();
 
   const waveform = React.useRef<Wavesurfer | null>(null);
   React.useEffect(() => {
@@ -55,15 +62,9 @@ const WaveformComponent = ({
         if (response.ok) {
           const result = await response.json();
           const peaks = result.data.map((p: number) => p / 128);
-          waveform.current.load(audioUrl, peaks, "auto");
+          waveform.current.load(audioUrl, peaks, duration);
           waveform.current.on("audioprocess", (e) => {
             setElapsedTime(e);
-            if (totalTime === 0) {
-              setTotalTime(e);
-            }
-            if (totalTime !== 0) {
-              progress && progress((e / totalTime) * 100);
-            }
           });
           waveform.current.on("ready", () => {
             if (playState === PlayState.playing) {
@@ -85,7 +86,7 @@ const WaveformComponent = ({
       </span>
       <div id="waveform" className="h-12 overflow-hidden"></div>
       <span className="absolute bottom-0 right-0 z-50 text-xs font-semibold bg-opacity-20 text-neutral-content ">
-        {secondsToHHMMSS(totalTime)}
+        {secondsToHHMMSS(duration)}
       </span>
     </div>
   );

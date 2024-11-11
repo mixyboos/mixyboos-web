@@ -4,6 +4,7 @@ type MixModel = {
   id: string;
   slug?: string;
   title: string;
+  duration: number;
   description: string | null;
   dateUploaded?: string;
   image?: string;
@@ -13,6 +14,7 @@ type MixModel = {
   downloadCount?: number;
   user?: ProfileModel;
   audioUrl?: string;
+  pcmUrl?: string;
   isProcessed: boolean;
 };
 export default MixModel;
