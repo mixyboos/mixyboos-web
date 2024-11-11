@@ -31,10 +31,10 @@ const WaveformComponent = ({
     } else {
       waveform.current?.pause();
     }
-  }, [playState, audioUrl]);
+  }, [playState]);
 
   React.useEffect(() => {
-    if (!waveform.current && audioUrl && pcmUrl) {
+    if (!waveform.current && pcmUrl) {
       waveform.current = Wavesurfer.create({
         backend: "MediaElement",
         container: "#waveform",
@@ -46,7 +46,7 @@ const WaveformComponent = ({
         barWidth: 1,
       });
     }
-  }, [audioUrl, pcmUrl, theme, playState]);
+  }, [pcmUrl, theme, playState]);
 
   React.useEffect(() => {
     const loadPcm = async () => {
@@ -55,7 +55,14 @@ const WaveformComponent = ({
         if (response.ok) {
           const result = await response.json();
           const peaks = result.data.map((p: number) => p / 128);
+<<<<<<< Updated upstream
           waveform.current.load(audioUrl, peaks, "auto");
+=======
+          waveform.current.load(
+            "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV",
+            peaks
+          );
+>>>>>>> Stashed changes
           waveform.current.on("audioprocess", (e) => {
             setElapsedTime(e);
             if (totalTime === 0) {

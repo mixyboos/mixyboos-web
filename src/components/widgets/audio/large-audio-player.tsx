@@ -46,7 +46,11 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
           </div>
         </div>
       </div>
+<<<<<<< Updated upstream
       {mix.isProcessed ? (
+=======
+      {mix.isProcessed && mix.pcmUrl ? (
+>>>>>>> Stashed changes
         <WaveformComponent
           audioUrl={mix.audioUrl as string}
           pcmUrl={
