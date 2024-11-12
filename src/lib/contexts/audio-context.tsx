@@ -38,7 +38,7 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   seekPosition: -1,
   duration: 0,
   playState: PlayState.stopped,
-  currentVolume: 50,
+  currentVolume: 500,
   muted: false,
   progressPercentage: 0,
 

@@ -44,7 +44,7 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
         <Link className="mr-6 flex items-center space-x-2" href="/">
           <Icons.mixyboos className="mr-2 h-44 w-80" />
           <span className="hidden font-bold lowercase sm:inline-block">
-            Mixy/Boos
+            mixy://boos
           </span>
         </Link>
         <NavLink href="/discover" title="Discover" Icon={Icons.discover} />

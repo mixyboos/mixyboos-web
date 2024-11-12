@@ -41,7 +41,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
         hls.loadSource(nowPlayingUrl);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           if (!player?.current) return;
-          player.current.volume = 0.1;
+          player.current.volume = 1;
 
           const p = player.current;
 
@@ -109,12 +109,6 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
     if (!player.current) return;
     player.current.currentTime = seekPosition;
   }, [seekPosition]);
-
-  // React.useEffect(() => {
-  //   const audio = audioElRef.current;
-  //   if (!audio) return;
-  //   audio.volume = currentVolume / 50;
-  // }, [currentVolume]);
 
   return (
     <>

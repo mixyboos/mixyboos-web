@@ -1,8 +1,12 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Mixy:Boos",
+  name: "mixy://boos",
   description: "Robot Powered Mixes.",
+  theme: {
+    waveFormColor: "#FFFFFF",
+    waveFormProgressColor: "#FF0000",
+  },
   mainNav: [
     {
       title: "Home",
