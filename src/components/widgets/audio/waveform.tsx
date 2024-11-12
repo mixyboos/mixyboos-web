@@ -4,6 +4,7 @@ import { useTheme } from "next-themes";
 import { secondsToHHMMSS } from "@/lib/utils/time-utils";
 import { PlayState } from "@/lib/contexts/audio-context";
 import useAudioStore from "@/lib/contexts/audio-context";
+import { siteConfig } from "@/config/site";
 
 type WaveformComponentProps = {
   audioUrl: string;
@@ -42,8 +43,8 @@ const WaveformComponent = ({
       waveform.current = Wavesurfer.create({
         container: "#waveform",
         cursorWidth: 0,
-        waveColor: "#FFFFFF",
-        progressColor: "#FF0000",
+        waveColor: siteConfig.theme.waveFormColor,
+        progressColor: siteConfig.theme.waveFormProgressColor,
         height: 48,
         hideScrollbar: true,
         barWidth: 1,
@@ -80,11 +81,11 @@ const WaveformComponent = ({
 
   return (
     <div id="wrapper" className="relative">
-      <span className="absolute bottom-0 left-0 z-50 text-xs font-semibold text-neutral-content bg-opacity-20 ">
+      <span className="absolute bottom-0 left-0 z-50 text-xs font-semibold text-muted-foreground bg-opacity-20 ">
         {secondsToHHMMSS(elapsedTime)}
       </span>
       <div id="waveform" className="h-12 overflow-hidden"></div>
-      <span className="absolute bottom-0 right-0 z-50 text-xs font-semibold bg-opacity-20 text-neutral-content ">
+      <span className="absolute bottom-0 right-0 z-50 text-xs font-semibold bg-opacity-20 text-muted-foreground ">
         {secondsToHHMMSS(duration)}
       </span>
     </div>
