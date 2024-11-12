@@ -33,10 +33,11 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
     <>
       <div className="flex flex-col">
         <div className="flex flex-row items-center space-x-2 ">
-          <div className="h-16 w-16 flex-none">
+          <div className="h-16 w-16 p-2 flex-none">
             <PlayPauseButton
               disabled={!mix.isProcessed}
               mix={mix}
+              
               onPlayStart={() => {
                 logger.debug("large-audio-player", "onPlayStart");
               }}
