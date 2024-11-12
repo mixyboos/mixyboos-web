@@ -3,28 +3,32 @@ import Wavesurfer from "wavesurfer.js";
 import { useTheme } from "next-themes";
 import { secondsToHHMMSS } from "@/lib/utils/time-utils";
 import { PlayState } from "@/lib/contexts/audio-context";
+import useAudioStore from "@/lib/contexts/audio-context";
 
 type WaveformComponentProps = {
   audioUrl: string;
   pcmUrl: string;
   playState: PlayState;
-  audioDuration: number;
-  currentPosition: number;
+  duration: number;
+  position: number;
   progress?: (e: number) => void;
 };
 const WaveformComponent = ({
   audioUrl,
-  audioDuration,
   pcmUrl,
-  playState,
-  currentPosition,
+  duration,
   progress,
 }: WaveformComponentProps) => {
   const { theme } = useTheme();
   const [elapsedTime, setElapsedTime] = React.useState(0);
-  const [totalTime, setTotalTime] = React.useState(audioDuration);
+  const { playState, setSeekPosition, progressPercentage } = useAudioStore();
 
   const waveform = React.useRef<Wavesurfer | null>(null);
+
+  React.useEffect(() => {
+    waveform.current?.seekTo(progressPercentage / 100);
+  }, [progressPercentage]);
+
   React.useEffect(() => {
     if (playState === PlayState.playing) {
       waveform.current?.play();
@@ -36,7 +40,6 @@ const WaveformComponent = ({
   React.useEffect(() => {
     if (!waveform.current && pcmUrl) {
       waveform.current = Wavesurfer.create({
-        backend: "MediaElement",
         container: "#waveform",
         cursorWidth: 0,
         waveColor: "#FFFFFF",
@@ -55,27 +58,17 @@ const WaveformComponent = ({
         if (response.ok) {
           const result = await response.json();
           const peaks = result.data.map((p: number) => p / 128);
-<<<<<<< Updated upstream
-          waveform.current.load(audioUrl, peaks, "auto");
-=======
           waveform.current.load(
+            //empty mp3 file
             "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV",
             peaks
           );
->>>>>>> Stashed changes
           waveform.current.on("audioprocess", (e) => {
             setElapsedTime(e);
-            if (totalTime === 0) {
-              setTotalTime(e);
-            }
-            if (totalTime !== 0) {
-              progress && progress((e / totalTime) * 100);
-            }
           });
-          waveform.current.on("ready", () => {
-            if (playState === PlayState.playing) {
-              waveform?.current?.play();
-            }
+          waveform.current.on("click", (e) => {
+            console.log("waveform", "click", e);
+            setSeekPosition(e * duration);
           });
         }
       }
@@ -92,7 +85,7 @@ const WaveformComponent = ({
       </span>
       <div id="waveform" className="h-12 overflow-hidden"></div>
       <span className="absolute bottom-0 right-0 z-50 text-xs font-semibold bg-opacity-20 text-neutral-content ">
-        {secondsToHHMMSS(totalTime)}
+        {secondsToHHMMSS(duration)}
       </span>
     </div>
   );

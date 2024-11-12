@@ -13,7 +13,11 @@ type LargeAudioPlayerProps = {
 const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
   mix,
 }: LargeAudioPlayerProps) => {
-  const { duration, setSeekPosition, progressPercentage } = useAudioStore();
+  const { setSeekPosition, position, duration, setDuration } = useAudioStore();
+
+  React.useEffect(() => {
+    setDuration(mix.duration);
+  }, []);
   const _handleTimeClick: React.MouseEventHandler<HTMLDivElement> = (
     $event: React.MouseEvent<HTMLDivElement>
   ) => {
@@ -46,19 +50,13 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
           </div>
         </div>
       </div>
-<<<<<<< Updated upstream
-      {mix.isProcessed ? (
-=======
       {mix.isProcessed && mix.pcmUrl ? (
->>>>>>> Stashed changes
         <WaveformComponent
           audioUrl={mix.audioUrl as string}
-          pcmUrl={
-            "https://cdn.podnoms.com/waveforms/d70b31d6-9c9a-4787-921f-08d68e3285c7.json"
-          }
+          pcmUrl={mix.pcmUrl as string}
           playState={PlayState.stopped}
-          audioDuration={0}
-          currentPosition={0}
+          duration={mix.duration}
+          position={position}
         />
       ) : (
         <div className="relative h-[150px] w-full cursor-pointer">

@@ -170,6 +170,7 @@ const LoginForm: React.FC = () => {
                   type="submit"
                   variant={"default"}
                   size={"lg"}
+                  name="login"
                   className="w-full"
                   disabled={isSending}
                 >
