@@ -68,7 +68,6 @@ const WaveformComponent = ({
             setElapsedTime(e);
           });
           waveform.current.on("click", (e) => {
-            console.log("waveform", "click", e);
             setSeekPosition(e * duration);
           });
         }
