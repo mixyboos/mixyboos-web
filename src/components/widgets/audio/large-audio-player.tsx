@@ -6,6 +6,7 @@ import Image from "next/image";
 import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
 import logger from "@/lib/logger";
 import WaveformComponent from "@/components/widgets/audio/waveform";
+import Link from "next/link";
 type LargeAudioPlayerProps = {
   mix: MixModel;
 };
@@ -18,36 +19,27 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
   React.useEffect(() => {
     setDuration(mix.duration);
   }, []);
-  const _handleTimeClick: React.MouseEventHandler<HTMLDivElement> = (
-    $event: React.MouseEvent<HTMLDivElement>
-  ) => {
-    console.log("large-audio-player", "_handleTimeClick", $event);
-    const { pageX: eventOffsetX } = $event;
 
-    const elementOffsetX = $event.currentTarget.offsetLeft;
-    const elementWidth = $event.currentTarget.clientWidth;
-    const percent = (eventOffsetX - elementOffsetX) / elementWidth;
-    setSeekPosition(percent * duration);
-  };
   return (
-    <>
+    <div className="space-x-4">
       <div className="flex flex-col">
-        <div className="flex flex-row items-center space-x-2 ">
+        <div className="flex flex-row items-center gap-11 pb-6">
           <div className="h-16 w-16 p-2 flex-none">
             <PlayPauseButton
               disabled={!mix.isProcessed}
               mix={mix}
-              
               onPlayStart={() => {
                 logger.debug("large-audio-player", "onPlayStart");
               }}
             />
           </div>
           <div className="flex-grow justify-center">
-            <h1 className="text-xl font-bold md:text-3xl">{mix.title}</h1>
-            <h2 className="text-md text-muted-foreground">
-              By: {mix.user?.displayName}
-            </h2>
+            <Link href={`/${mix.user?.slug}/${mix.slug}`}>
+              <h1 className="text-xl font-bold md:text-3xl">{mix.title}</h1>
+              <h2 className="text-md text-muted-foreground">
+                By: {mix.user?.displayName}
+              </h2>
+            </Link>
           </div>
         </div>
       </div>
@@ -70,7 +62,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
           />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
