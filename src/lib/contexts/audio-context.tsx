@@ -9,6 +9,7 @@ enum PlayState {
 
 interface IAudioState {
   nowPlaying?: MixModel;
+  nowPlayingId?: string;
   nowPlayingUrl?: string;
   position: number;
   progressPercentage: number;
@@ -17,8 +18,8 @@ interface IAudioState {
   playState: PlayState;
   currentVolume: number;
   muted: boolean;
-  setNowPlaying: (mix?: MixModel) => void;
-  setNowPlayingUrl: (url: string) => void;
+  clearNowPlaying: () => void;
+  setNowPlaying: (mix: MixModel, url: string, id: string) => void;
   setPosition: (position: number) => void;
   setDuration: (duration: number) => void;
   setSeekPosition: (duration: number) => void;
@@ -33,6 +34,7 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   id: "",
   url: "",
   nowPlaying: undefined,
+  nowPlayingId: "",
   nowPlayingUrl: "",
   position: -1,
   seekPosition: -1,
@@ -48,8 +50,10 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   },
   setSeekPosition: (seekPosition: number) => set((state) => ({ seekPosition })),
   setDuration: (duration: number) => set((state) => ({ duration })),
-  setNowPlaying: (mix?: MixModel) => set((state) => ({ nowPlaying: mix })),
-  setNowPlayingUrl: (url: string) => set((state) => ({ nowPlayingUrl: url })),
+  clearNowPlaying: () =>
+    set({ nowPlaying: undefined, nowPlayingUrl: "", nowPlayingId: "" }),
+  setNowPlaying: (mix: MixModel, url: string, id: string) =>
+    set((state) => ({ nowPlaying: mix, nowPlayingUrl: url, nowPlayingId: id })),
   setPlayState: (playState: PlayState) => {
     if (get().playState !== playState) {
       set({ playState });

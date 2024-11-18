@@ -24,25 +24,32 @@ const PlayPauseButton = ({
     playState,
     togglePlayState,
     nowPlaying,
+    clearNowPlaying,
     setNowPlaying,
-    setNowPlayingUrl,
     nowPlayingUrl,
   } = useAudioStore();
+  const _playMix = async (mix: MixModel) => {
+    const url = await getMixAudioUrl(mix);
+    if (url) {
+      setNowPlaying(mix, url, mix.id);
+      onPlayStart();
+    }
+  };
   return (
     <button
       className="hover:opacity-80 transition duration-500 hover:scale-105"
       {...props}
       onClick={async () => {
+        if (mix.id !== nowPlaying?.id) {
+          clearNowPlaying();
+          _playMix(mix);
+        }
+
         if (
           playState === PlayState.stopped ||
           (mix.id !== nowPlaying?.id && !nowPlayingUrl)
         ) {
-          const url = await getMixAudioUrl(mix);
-          if (url) {
-            setNowPlaying(mix);
-            setNowPlayingUrl(url);
-            onPlayStart();
-          }
+          _playMix(mix);
         } else {
           togglePlayState();
         }

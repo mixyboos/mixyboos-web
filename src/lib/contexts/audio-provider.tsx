@@ -7,7 +7,8 @@ import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
 interface IAudioProviderProps extends PropsWithChildren {}
 
 const AudioProvider = ({ children }: IAudioProviderProps) => {
-  const player = React.createRef<HTMLAudioElement>();
+  //don't use this directly as some of the hls callbacks don't have this in scope
+  const __player = React.createRef<HTMLAudioElement>();
 
   const {
     currentVolume,
@@ -24,7 +25,7 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
     if (!nowPlayingUrl) return;
     let hls: Hls;
 
-    const __initPlayer = () => {
+    const __initPlayer = (player: HTMLAudioElement) => {
       if (hls) {
         hls.destroy();
       }
@@ -33,33 +34,26 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
         enableWorker: false,
       });
 
-      if (!player.current) return;
+      if (!player) return;
 
-      hls.attachMedia(player.current);
+      hls.attachMedia(player);
 
       hls.on(Hls.Events.MEDIA_ATTACHED, () => {
         hls.loadSource(nowPlayingUrl);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          if (!player?.current) return;
-          player.current.volume = 1;
+        hls.on(Hls.Events.MANIFEST_PARSED, async () => {
+          if (!player) return;
+          player.volume = 1;
 
-          const p = player.current;
-
-          player.current.ontimeupdate = () => {
-            setPosition(p.currentTime || 0);
-          };
-          player.current
-            .play()
-            .then(() => {
-              if (!player.current) return;
-              setDuration(player.current.duration || 0);
-              setPlayState(PlayState.playing);
-            })
-            .catch(() =>
-              console.log(
-                "Unable to autoplay prior to user interaction with the dom."
-              )
+          try {
+            await player.play();
+            setDuration(player.duration || 0);
+            setPlayState(PlayState.playing);
+          } catch (err) {
+            logger.error("audio-provider", "Error playing url", err);
+            console.log(
+              "Unable to autoplay prior to user interaction with the dom."
             );
+          }
         });
       });
       hls.on(Hls.Events.ERROR, function (event, data) {
@@ -77,14 +71,19 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
               hls.recoverMediaError();
               break;
             default:
-              __initPlayer();
+              if (__player.current) {
+                __initPlayer(__player.current);
+              }
               break;
           }
         }
       });
     };
-    if (Hls.isSupported()) {
-      __initPlayer();
+    if (Hls.isSupported() && __player.current) {
+      __initPlayer(__player.current);
+      __player.current.ontimeupdate = () => {
+        setPosition(__player.current?.currentTime || 0);
+      };
     }
 
     return () => {
@@ -95,25 +94,25 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   }, [nowPlayingUrl]);
 
   React.useEffect(() => {
-    if (!player?.current) return;
+    if (!__player?.current) return;
     if (playState === PlayState.paused) {
-      player.current.pause();
+      __player.current.pause();
     } else if (playState === PlayState.playing) {
-      player.current
+      __player.current
         .play()
         .catch((err) => logger.error("audio-provider", "error resuming", err));
     }
-  }, [playState, player]);
+  }, [playState, __player]);
 
   React.useEffect(() => {
-    if (!player.current) return;
-    player.current.currentTime = seekPosition;
+    if (!__player.current) return;
+    __player.current.currentTime = seekPosition;
   }, [seekPosition]);
 
   return (
     <>
       {children}
-      <audio ref={player} />
+      <audio ref={__player} />
     </>
   );
 };
