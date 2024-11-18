@@ -13,7 +13,7 @@ const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
   mix,
 }: MixDetailsComponentProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-screen">
       <div>
         <div className="px-8">
           <LargeAudioPlayer mix={mix} />

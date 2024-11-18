@@ -33,7 +33,9 @@ export default function MixListPage() {
       <h1>These are my mixes</h1>
       <div>
         {data?.map((mix) => (
-          <ListAudioPlayer key={mix.id} mix={mix} />
+          <div className="py-1">
+            <ListAudioPlayer key={mix.id} mix={mix} />
+          </div>
         ))}
       </div>
     </div>
