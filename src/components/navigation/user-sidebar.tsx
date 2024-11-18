@@ -23,9 +23,21 @@ const items = {
       icon: Icons.liveStream as LucideIcon,
       link: "/dashboard/shows",
     },
-    { name: "My Mixes", icon: Icons.mix as LucideIcon, link: "/dashboard/mixes" },
-    { name: "My Profile", icon: Icons.user as LucideIcon, link: "/dashboard/profile" },
-    { name: "Stats", icon: Icons.graph as LucideIcon, link: "/dashboard/stats" },
+    {
+      name: "My Mixes",
+      icon: Icons.mix as LucideIcon,
+      link: "/dashboard/mixes",
+    },
+    {
+      name: "My Profile",
+      icon: Icons.user as LucideIcon,
+      link: "/dashboard/profile",
+    },
+    {
+      name: "Stats",
+      icon: Icons.graph as LucideIcon,
+      link: "/dashboard/stats",
+    },
   ],
   feed: [
     { name: "New Shows", icon: Icons.recent as LucideIcon, link: "/new" },
@@ -39,16 +51,28 @@ const items = {
       icon: Icons.remind as LucideIcon,
       link: "/me/later",
     },
-    { name: "Genres", icon: Icons.genre as LucideIcon, link: "/dashboard/genres" },
-    { name: "Trending", icon: Icons.trending as LucideIcon, link: "/dashboard/trending" },
-    { name: "Live Now", icon: Icons.liveNow as LucideIcon, link: "/dashboard/live/now" },
+    {
+      name: "Genres",
+      icon: Icons.genre as LucideIcon,
+      link: "/dashboard/genres",
+    },
+    {
+      name: "Trending",
+      icon: Icons.trending as LucideIcon,
+      link: "/dashboard/trending",
+    },
+    {
+      name: "Live Now",
+      icon: Icons.liveNow as LucideIcon,
+      link: "/dashboard/live/now",
+    },
   ],
 };
 
 const UserSidebar = () => {
   const { profile } = useAuth();
   return (
-    <Sidebar className="mt-16">
+    <Sidebar className="mt-16 pb-16">
       <SidebarHeader>
         <div className="flex items-center space-x-4 p-2">
           {profile?.profileImage && (
