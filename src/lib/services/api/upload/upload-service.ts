@@ -20,7 +20,7 @@ const uploadAudio = async (
     console.log("uploadService", "uploadAudio_error", err);
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number))
-        throw new Error(err as any);
+        throw new Error(err.message);
     }
   }
   return false;
@@ -50,7 +50,7 @@ const uploadImage = async (
     console.log("uploadService", "uploadAudio_error", err);
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number))
-        throw new Error(err as any);
+        throw new Error(err.message);
     }
   }
   return false;

@@ -4,7 +4,7 @@ type MixModel = {
   id: string;
   slug?: string;
   title: string;
-  duration: number;
+  duration?: number;
   description: string | null;
   dateUploaded?: string;
   image?: string;

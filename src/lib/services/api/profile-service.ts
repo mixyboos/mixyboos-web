@@ -26,16 +26,13 @@ const getProfile = async (): Promise<ProfileModel | undefined> => {
   } catch (err) {
     if (err instanceof AxiosError) {
       console.log("authService", "getUser_error", err);
-      if (![401, 400].includes(err.status as number))
-        throw new Error(err as any);
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }
   }
   return undefined;
 };
 
-const getProfileBySlug = async (
-  slug: string
-): Promise<ProfileModel | undefined> => {
+const getProfileBySlug = async (slug: string): Promise<ProfileModel | undefined> => {
   try {
     const results = await api.get(`/profile?slug=${slug}`);
     if (results.status === 200) {
@@ -63,10 +60,4 @@ const updateProfile = async (
   return undefined;
 };
 
-export {
-  getStreamKey,
-  getProfile,
-  getProfileBySlug,
-  toggleFollow,
-  updateProfile,
-};
+export { getStreamKey, getProfile, getProfileBySlug, toggleFollow, updateProfile };

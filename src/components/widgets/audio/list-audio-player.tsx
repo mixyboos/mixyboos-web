@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MixModel } from "@/lib/models";
@@ -8,8 +7,6 @@ import PlayPauseButton from "@/components/widgets/buttons/play-pause-button";
 import logger from "@/lib/logger";
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { Play } from "next/font/google";
 import Link from "next/link";
 
 type ListAudioPlayerProps = {
@@ -17,18 +14,6 @@ type ListAudioPlayerProps = {
 };
 
 const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
-  const {
-    nowPlaying,
-    setNowPlaying,
-    setPosition,
-    setDuration,
-    setSeekPosition,
-    setPlayState,
-    togglePlayState,
-    setVolume,
-    setMuted,
-    toggleMuted,
-  } = useAudioStore();
   return (
     <Card className="w-full">
       <CardContent className="p-4 flex gap-4">
@@ -44,17 +29,13 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
           <div className="flex items-center gap-4 mb-4">
             <PlayPauseButton
               mix={mix}
-              onPlayStart={() =>
-                logger.debug("list-audio-player", "onPlayStart")
-              }
+              onPlayStart={() => logger.debug("list-audio-player", "onPlayStart")}
             />
             <div>
               <h3 className="text-lg font-semibold">
                 <Link href={`/${mix.user?.slug}/${mix.slug}`}>{mix.title}</Link>
               </h3>
-              <p className="text-muted-foreground text-sm">
-                {mix.user?.displayName}
-              </p>
+              <p className="text-muted-foreground text-sm">{mix.user?.displayName}</p>
             </div>
           </div>
 

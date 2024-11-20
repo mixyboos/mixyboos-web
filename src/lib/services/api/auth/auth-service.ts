@@ -1,6 +1,6 @@
 import ProfileModel from "@/lib/models/profile";
 import api from "@/lib/services/api/api-client";
-import { AxiosError } from "axios";
+import {AxiosError} from "axios";
 
 const login = async (username: string, password: string) => {
   const response = await api.post(
@@ -9,11 +9,11 @@ const login = async (username: string, password: string) => {
       email: username,
       password: password,
     },
-    { withCredentials: true }
+    {withCredentials: true}
   );
   return response;
 };
-const logout = async (callbackUrl: string): Promise<boolean> => {
+const logout = async (callbackUrl?: string): Promise<boolean> => {
   const response = await api.delete("/account/logout", {
     withCredentials: true,
   });
@@ -63,10 +63,10 @@ const getProfile = async (): Promise<ProfileModel | null> => {
     if (err instanceof AxiosError) {
       console.log("authService", "getUser_error", err);
       if (![401, 400].includes(err.status as number))
-        throw new Error(err as any);
+        throw new Error(err.message);
     }
   }
   return null;
 };
 
-export { login, getProfile, logout, register };
+export {login, getProfile, logout, register};

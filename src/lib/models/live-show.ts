@@ -7,7 +7,7 @@ class LiveShowModel {
     description: string,
     tags: string[],
     startDate: Date,
-    status: ShowStatus,
+    status: ShowStatus
   ) {
     this.title = title;
     this.description = description;
@@ -25,7 +25,7 @@ class LiveShowModel {
 
   user: ProfileModel | undefined;
   fromJson = (model: string) => {
-
+    console.log("live-show", "fromJson", model);
   };
 }
 export default LiveShowModel;

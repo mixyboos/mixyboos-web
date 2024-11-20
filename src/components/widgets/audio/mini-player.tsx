@@ -16,7 +16,6 @@ const MiniPlayer = () => {
   const {
     duration,
     position,
-    currentVolume,
     nowPlaying,
     playState,
     setSeekPosition,
