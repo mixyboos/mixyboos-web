@@ -8,6 +8,7 @@ import { siteConfig } from "@/config/site";
 import logger from "@/lib/logger";
 
 type WaveformComponentProps = {
+  id?: string;
   audioUrl: string;
   pcmUrl: string;
   playState: PlayState;
@@ -16,6 +17,7 @@ type WaveformComponentProps = {
   progress?: (e: number) => void;
 };
 const WaveformComponent = ({
+  id,
   audioUrl,
   pcmUrl,
   duration,
@@ -23,11 +25,15 @@ const WaveformComponent = ({
 }: WaveformComponentProps) => {
   const { theme } = useTheme();
   const [elapsedTime, setElapsedTime] = React.useState(0);
-  const { playState, setSeekPosition, progressPercentage } = useAudioStore();
+  const { playState, setSeekPosition, progressPercentage, nowPlayingId } =
+    useAudioStore();
 
   const waveform = React.useRef<Wavesurfer | null>(null);
 
   React.useEffect(() => {
+    if (id !== nowPlayingId) {
+      return;
+    }
     if (playState === PlayState.playing) {
       waveform.current?.seekTo(progressPercentage / 100);
     }

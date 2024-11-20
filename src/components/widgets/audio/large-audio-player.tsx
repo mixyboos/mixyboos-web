@@ -17,8 +17,10 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
   const { setSeekPosition, position, duration, setDuration } = useAudioStore();
 
   React.useEffect(() => {
-    setDuration(mix.duration);
-  }, []);
+    if (mix.duration) {
+      setDuration(mix.duration);
+    }
+  }, [mix]);
 
   return (
     <div className="space-x-4">
@@ -45,10 +47,11 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
       </div>
       {mix.isProcessed && mix.pcmUrl ? (
         <WaveformComponent
+          id={mix.id}
           audioUrl={mix.audioUrl as string}
           pcmUrl={mix.pcmUrl as string}
           playState={PlayState.stopped}
-          duration={mix.duration}
+          duration={mix.duration || 0}
           position={position}
         />
       ) : (
