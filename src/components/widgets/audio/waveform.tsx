@@ -5,6 +5,7 @@ import { secondsToHHMMSS } from "@/lib/utils/time-utils";
 import { PlayState } from "@/lib/contexts/audio-context";
 import useAudioStore from "@/lib/contexts/audio-context";
 import { siteConfig } from "@/config/site";
+import logger from "@/lib/logger";
 
 type WaveformComponentProps = {
   audioUrl: string;
@@ -27,7 +28,9 @@ const WaveformComponent = ({
   const waveform = React.useRef<Wavesurfer | null>(null);
 
   React.useEffect(() => {
-    waveform.current?.seekTo(progressPercentage / 100);
+    if (playState === PlayState.playing) {
+      waveform.current?.seekTo(progressPercentage / 100);
+    }
   }, [progressPercentage]);
 
   React.useEffect(() => {
@@ -64,9 +67,6 @@ const WaveformComponent = ({
             "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV",
             peaks
           );
-          waveform.current.on("audioprocess", (e) => {
-            setElapsedTime(e);
-          });
           waveform.current.on("click", (e) => {
             setSeekPosition(e * duration);
           });
@@ -74,8 +74,6 @@ const WaveformComponent = ({
       }
     };
     loadPcm();
-    // don't add PlayState as a dependency, it's not a part of the state
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pcmUrl, audioUrl]);
 
   return (

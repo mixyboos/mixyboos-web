@@ -31,13 +31,11 @@ export default function MixListPage() {
   return (
     <div>
       <h1>These are my mixes</h1>
-      <div>
-        {data?.map((mix) => (
-          <div className="py-1">
-            <ListAudioPlayer key={mix.id} mix={mix} />
-          </div>
-        ))}
-      </div>
+      {data?.map((mix) => (
+        <div className="py-1" key={mix.id}>
+          <ListAudioPlayer key={mix.id} mix={mix} />
+        </div>
+      ))}
     </div>
   );
 }

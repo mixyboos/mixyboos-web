@@ -11,8 +11,6 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
   const __player = React.createRef<HTMLAudioElement>();
 
   const {
-    currentVolume,
-    nowPlaying,
     nowPlayingUrl,
     setPosition,
     setDuration,
@@ -42,26 +40,27 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
         hls.loadSource(nowPlayingUrl);
         hls.on(Hls.Events.MANIFEST_PARSED, async () => {
           if (!player) return;
-          player.volume = 1;
-
+          player.volume = 0.1;
+          player.ontimeupdate = () => {
+            setPosition(player.currentTime);
+          };
+          hls.on(Hls.Events.FRAG_CHANGED, (event, data) => {
+            if (player && data.frag) {
+              setPosition(data.frag.start);
+            }
+          });
           try {
             await player.play();
             setDuration(player.duration || 0);
             setPlayState(PlayState.playing);
           } catch (err) {
             logger.error("audio-provider", "Error playing url", err);
-            console.log(
-              "Unable to autoplay prior to user interaction with the dom."
-            );
+            console.log("Unable to autoplay prior to user interaction with the dom.");
           }
         });
       });
       hls.on(Hls.Events.ERROR, function (event, data) {
-        logger.error(
-          "AudioProvider",
-          "Unable to initialise audio player",
-          data
-        );
+        logger.error("AudioProvider", "Unable to initialise audio player", data);
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
@@ -81,9 +80,6 @@ const AudioProvider = ({ children }: IAudioProviderProps) => {
     };
     if (Hls.isSupported() && __player.current) {
       __initPlayer(__player.current);
-      __player.current.ontimeupdate = () => {
-        setPosition(__player.current?.currentTime || 0);
-      };
     }
 
     return () => {

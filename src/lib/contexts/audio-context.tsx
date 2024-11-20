@@ -1,3 +1,4 @@
+import logger from "@/lib/logger";
 import { type MixModel } from "@/lib/models";
 import { create } from "zustand";
 
@@ -45,6 +46,7 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   progressPercentage: 0,
 
   setPosition: (position: number) => {
+    logger.debug("audio-context", "setPosition", position);
     const progressPercentage = (position / get().duration) * 100;
     set({ position, progressPercentage });
   },
@@ -63,9 +65,7 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
     set((state) => {
       return {
         playState:
-          state.playState === PlayState.playing
-            ? PlayState.paused
-            : PlayState.playing,
+          state.playState === PlayState.playing ? PlayState.paused : PlayState.playing,
       };
     }),
   setVolume: (volume: number) => set({ currentVolume: volume }),
