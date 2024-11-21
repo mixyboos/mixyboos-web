@@ -18,20 +18,13 @@ import * as z from "zod";
 import { uploadImage } from "@/lib/services/api/upload/upload-service";
 
 const MAX_PROFILE_IMAGE_SIZE = 5242880;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 type ProfileImageEditFormProps = {
   profile: ProfileModel;
 };
 
-const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
-  profile,
-}) => {
+const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({ profile }) => {
   const [profileImageChanged, setProfileImageChanged] = React.useState(false);
   const [headerImageChanged, setHeaderImageChanged] = React.useState(false);
 
@@ -39,8 +32,7 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
     profileImage: z
       .any()
       .refine((file: File) => {
-        const ret =
-          !profileImageChanged || file?.size <= MAX_PROFILE_IMAGE_SIZE;
+        const ret = !profileImageChanged || file?.size <= MAX_PROFILE_IMAGE_SIZE;
         console.log("profile-images-form", "profileImage_refine", ret);
         return ret;
       }, `Max image size is 5MB.`)
@@ -53,8 +45,7 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
     headerImage: z
       .any()
       .refine((file: File) => {
-        const ret =
-          !headerImageChanged || file?.size <= MAX_PROFILE_IMAGE_SIZE * 3;
+        const ret = !headerImageChanged || file?.size <= MAX_PROFILE_IMAGE_SIZE * 3;
         return ret;
       }, `Max image size is 15MB.`)
       .refine(
@@ -114,9 +105,7 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
                 />
               </div>
               <FormDescription>
-                {
-                  "This is your avatar, it's how you will be recognised on the site"
-                }
+                {"This is your avatar, it's how you will be recognised on the site"}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -146,8 +135,7 @@ const ProfileImageEditForm: React.FC<ProfileImageEditFormProps> = ({
                 }}
               />
               <FormDescription>
-                This is the image that will show at the top of your profile
-                page.
+                This is the image that will show at the top of your profile page.
               </FormDescription>
               <FormMessage />
             </FormItem>

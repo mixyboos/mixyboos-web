@@ -4,7 +4,6 @@ import React from "react";
 import { type MixModel } from "@/lib/models";
 
 import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
 import { getMixAudioUrl } from "@/lib/services/api/mix-service";
 

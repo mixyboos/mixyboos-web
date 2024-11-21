@@ -21,10 +21,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import logger from "@/lib/logger";
 import { register } from "@/lib/services/api/auth/auth-service";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
+import { error } from "@/components/toast";
 
 const RegisterForm = () => {
-  const { toast } = useToast();
   const router = useRouter();
   const [hasErrors, setHasErrors] = React.useState(false);
   const schema = z
@@ -83,10 +82,7 @@ const RegisterForm = () => {
           <button
             title="Sign in with Facebook"
             onClick={() => {
-              toast({
-                title: "Warning",
-                description: "Facebook login is not working yet",
-              });
+              error("Warning", "Facebook login is not working yet");
               // signIn('facebook')
             }}
             className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#4267B2] shadow-sm hover:bg-gray-50"
@@ -96,13 +92,7 @@ const RegisterForm = () => {
           <button
             title="Sign in with Google"
             onClick={() => {
-              toast({
-                title: "Warning",
-                description: "Google login is not working yet",
-              });
-              // signIn('google', {
-              //   callbackUrl: `${window.location.origin}/`
-              // })
+              error("Warning", "Google login is not working yet");
             }}
             className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#DB4437] shadow-sm hover:bg-gray-50"
           >
@@ -111,10 +101,7 @@ const RegisterForm = () => {
           <button
             title="Sign in with Twitter"
             onClick={() => {
-              toast({
-                title: "Warning",
-                description: "Twitter login is not working yet",
-              });
+              error("Warning", "Twitter login is not working yet");
               // signIn('twitter')
             }}
             className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#00acee] shadow-sm hover:bg-gray-50"
@@ -131,10 +118,7 @@ const RegisterForm = () => {
             <AlertTitle>Yikes! Something went wrong...</AlertTitle>
             <AlertDescription>
               Please try again, or
-              <Link
-                href="/login"
-                className="ml-2 text-fuchsia-600 hover:underline"
-              >
+              <Link href="/login" className="ml-2 text-fuchsia-600 hover:underline">
                 login{" "}
               </Link>
               if you already have an account?
@@ -221,10 +205,7 @@ const RegisterForm = () => {
             </div>
             <div className="text-sm font-medium text-gray-500">
               Already registered?
-              <Link
-                href="/login"
-                className="ml-2 text-fuchsia-600 hover:underline"
-              >
+              <Link href="/login" className="ml-2 text-fuchsia-600 hover:underline">
                 Login to your account
               </Link>
             </div>

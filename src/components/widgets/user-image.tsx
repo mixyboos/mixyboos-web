@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { ComponentProps, PropsWithChildren } from "react";
 import classNames from "classnames";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

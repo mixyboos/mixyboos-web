@@ -47,17 +47,14 @@ export default function NotFoundPage() {
           />
         </div>
         <CardContent className="p-6 text-center">
-          <motion.h1
-            className="text-4xl font-bold mb-4"
-            variants={itemVariants}
-          >
+          <motion.h1 className="text-4xl font-bold mb-4" variants={itemVariants}>
             404 - Page Not Found
           </motion.h1>
           <motion.p
             className="text-xl text-muted-foreground mb-6"
             variants={itemVariants}
           >
-            Oops! The page you're looking for doesn't exist.
+            {"Oops! The page you're looking for doesn't exist."}
           </motion.p>
           <MotionButton asChild variants={itemVariants}>
             <LinkButton variant={"link"} href="/">

@@ -3,6 +3,7 @@ import { Icons } from "@/components/icons";
 import ActionButton from "@/components/widgets/buttons/action-button";
 import { type MixModel } from "@/lib/models";
 import { addLike } from "@/lib/services/api/mix-service";
+import { Link } from "lucide-react";
 import React from "react";
 
 type AudioPlayerBarProps = {
@@ -40,8 +41,8 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             <div className="text-xs">{mix.playCount}</div>
           </div>
           <div className="mr-2 space-x-1 text-gray-400">
-            <a href="/">#house</a>
-            <a href="/">#deephouse</a>
+            <Link href="/">#house</Link>
+            <Link href="/">#deephouse</Link>
           </div>
         </div>
       </div>

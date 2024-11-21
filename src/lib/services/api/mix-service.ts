@@ -75,7 +75,7 @@ const getByUserAndSlug = async (
           err.status as number
         )
       )
-        throw new Error(err);
+        throw new Error(err.message);
     }
   }
   throw new Error("Unable to load mixes");

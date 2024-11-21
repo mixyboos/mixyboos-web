@@ -1,14 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/contexts/auth/auth-context";
-import logger from "@/lib/logger";
 import { error, notice, success } from "@/components/toast";
-import { useToast } from "@/hooks/use-toast";
-import classNames from "classnames";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const DebugPage = () => {
-  const { toast } = useToast();
   const { profile, logout } = useAuth();
   if (process.env.NODE_ENV === "production") {
     return <div>Debug page is disabled in production</div>;
@@ -18,10 +14,7 @@ const DebugPage = () => {
       <div>
         <h1>Welcome {profile?.slug}</h1>
         <Avatar>
-          <AvatarImage
-            src="/img/default-avatar.png"
-            alt="avatar"
-          ></AvatarImage>
+          <AvatarImage src="/img/default-avatar.png" alt="avatar"></AvatarImage>
           <AvatarFallback>SC</AvatarFallback>
         </Avatar>
       </div>

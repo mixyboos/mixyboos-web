@@ -44,11 +44,11 @@ type FormValues = z.infer<typeof formSchema>;
 const ProfileEditForm = () => {
   const { profile } = useAuth();
   if (!profile) return null;
-  const defaultValues: Partial<FormValues> = {
+  const defaultValues: FormValues = {
     slug: profile.slug,
     displayName: profile.displayName || "",
     biography: profile.biography || "",
-    urls: [],
+    urls: [{ value: "" }],
   };
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

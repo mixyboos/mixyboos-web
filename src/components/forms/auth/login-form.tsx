@@ -36,23 +36,16 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { useAuth } from "@/lib/contexts/auth/auth-context";
 
 const LoginForm: React.FC = () => {
-  const { profile, login } = useAuth();
-
   const [loginError, setLoginError] = React.useState(false);
   const [isSending, setIsSending] = React.useState(false);
-  const searchParams = useSearchParams();
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       usernameOrEmail:
-        process.env.NODE_ENV === "development"
-          ? "fergal.moran+mixyboos@gmail.com"
-          : "",
+        process.env.NODE_ENV === "development" ? "fergal.moran+mixyboos@gmail.com" : "",
       password:
         process.env.NODE_ENV === "development"
           ? "SVqVKJWZh5dIaM7JsNY1h0E/xbzPCD7y7Veedxa1Q/k="
@@ -64,19 +57,6 @@ const LoginForm: React.FC = () => {
     logger.debug(values);
     setIsSending(true);
     setLoginError(false);
-
-    console.log(values);
-    const response = await login(values.usernameOrEmail, values.password);
-    console.log("login-form", "response", response);
-    setIsSending(false);
-    //TODO: have to check result?.error rather than result.ok
-    //TODO: https://github.com/nextauthjs/next-auth/issues/7725#issuecomment-1649310412
-
-    if (response) {
-      router.push(searchParams?.get("returnUrl") || "/");
-    } else {
-      setLoginError(true);
-    }
   }
 
   return (
@@ -113,9 +93,7 @@ const LoginForm: React.FC = () => {
                   <span className="w-full border-t text-muted-foreground" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className=" px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
+                  <span className=" px-2 text-muted-foreground">Or continue with</span>
                 </div>
               </div>
               {loginError && (
@@ -174,9 +152,7 @@ const LoginForm: React.FC = () => {
                   className="w-full"
                   disabled={isSending}
                 >
-                  {isSending && (
-                    <Icons.loading className="mr-2 h-4 w-4 animate-spin" />
-                  )}
+                  {isSending && <Icons.loading className="mr-2 h-4 w-4 animate-spin" />}
                   <div className="inline-flex items-center">
                     <Icons.login className="mr-2 h-4 w-4" />
                     <span>Login</span>
@@ -184,10 +160,7 @@ const LoginForm: React.FC = () => {
                 </Button>
                 <div className="text-sm font-medium">
                   <span className="text-muted-foreground">Not registered?</span>
-                  <Link
-                    href="/register"
-                    className="ml-2 text-primary hover:underline"
-                  >
+                  <Link href="/register" className="ml-2 text-primary hover:underline">
                     Create account
                   </Link>
                 </div>

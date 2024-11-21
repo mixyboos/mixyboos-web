@@ -1,6 +1,4 @@
 "use client";
-import LoginForm from "@/components/forms/auth/login-form";
-import DebugPage from "@/components/pages/debug";
 import HeroPage from "@/components/pages/hero-page";
 import { useAuth } from "@/lib/contexts/auth/auth-context";
 import { redirect } from "next/navigation";

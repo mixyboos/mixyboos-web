@@ -50,12 +50,12 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
     const progressPercentage = (position / get().duration) * 100;
     set({ position, progressPercentage });
   },
-  setSeekPosition: (seekPosition: number) => set((state) => ({ seekPosition })),
-  setDuration: (duration: number) => set((state) => ({ duration })),
+  setSeekPosition: (seekPosition: number) => set(() => ({ seekPosition })),
+  setDuration: (duration: number) => set(() => ({ duration })),
   clearNowPlaying: () =>
     set({ nowPlaying: undefined, nowPlayingUrl: "", nowPlayingId: "" }),
   setNowPlaying: (mix: MixModel, url: string, id: string) =>
-    set((state) => ({ nowPlaying: mix, nowPlayingUrl: url, nowPlayingId: id })),
+    set(() => ({ nowPlaying: mix, nowPlayingUrl: url, nowPlayingId: id })),
   setPlayState: (playState: PlayState) => {
     if (get().playState !== playState) {
       set({ playState });

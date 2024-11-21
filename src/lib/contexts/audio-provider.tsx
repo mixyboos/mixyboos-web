@@ -4,9 +4,8 @@ import logger from "@/lib/logger";
 import React, { type PropsWithChildren } from "react";
 import Hls from "hls.js";
 import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
-interface IAudioProviderProps extends PropsWithChildren {}
 
-const AudioProvider = ({ children }: IAudioProviderProps) => {
+const AudioProvider = ({ children }: PropsWithChildren) => {
   //don't use this directly as some of the hls callbacks don't have this in scope
   const __player = React.createRef<HTMLAudioElement>();
 

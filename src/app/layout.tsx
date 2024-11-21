@@ -8,7 +8,6 @@ import { fontSans } from "@/config/fonts";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "sonner";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import QueryProvider from "@/app/query-client.provider";
 
 export const metadata: Metadata = {

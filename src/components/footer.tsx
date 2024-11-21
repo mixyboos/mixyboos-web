@@ -2,7 +2,6 @@
 import React from "react";
 
 import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
-import { Icons } from "@/components/icons";
 import MiniPlayer from "@/components/widgets/audio/mini-player";
 
 const FooterComponent = () => {

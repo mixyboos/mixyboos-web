@@ -1,6 +1,5 @@
 import { uploadAudio } from "@/lib/services/api/upload/upload-service";
 import { getFilename } from "@/lib/utils/file-utils";
-import { StatusCodes } from "http-status-codes";
 import React from "react";
 
 interface IFileUploadProps {
