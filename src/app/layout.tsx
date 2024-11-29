@@ -31,11 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="theme-mixboos dark">
       <body
-        className={cn(
-          "min-h-screen bg-background",
-          fontSans.className,
-          "antialiased"
-        )}
+        className={cn("min-h-screen bg-background", fontSans.className, "antialiased")}
         suppressHydrationWarning
       >
         <QueryProvider>

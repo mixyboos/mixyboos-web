@@ -25,7 +25,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import logger from "@/lib/logger";
 import {
@@ -36,6 +35,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { login } from "@/lib/services/api/auth/auth-service";
 
 const LoginForm: React.FC = () => {
   const [loginError, setLoginError] = React.useState(false);
@@ -57,6 +57,21 @@ const LoginForm: React.FC = () => {
     logger.debug(values);
     setIsSending(true);
     setLoginError(false);
+
+    try {
+      const result = await login(values.usernameOrEmail, values.password);
+
+      if (result.status === 200) {
+        window.location.href = "/";
+      } else {
+        setLoginError(true);
+      }
+    } catch (e) {
+      logger.error("login-form", "error", e);
+      setLoginError(true);
+    } finally {
+      setIsSending(false);
+    }
   }
 
   return (

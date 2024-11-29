@@ -8,10 +8,10 @@ type MixModel = {
   description: string | null;
   dateUploaded?: string;
   image?: string;
-  likeCount?: number;
-  playCount?: number;
-  shareCount?: number;
-  downloadCount?: number;
+  likeCount: number;
+  playCount: number;
+  shareCount: number;
+  downloadCount: number;
   user?: ProfileModel;
   audioUrl?: string;
   pcmUrl?: string;

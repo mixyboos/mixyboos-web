@@ -105,10 +105,7 @@ const UserSidebar = () => {
             <SidebarMenu>
               {items.me.map((item) => (
                 <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.name === location.pathname}
-                  >
+                  <SidebarMenuButton asChild isActive={item.name === location.pathname}>
                     <Link href={item.link}>
                       <item.icon />
                       <span>{item.name}</span>
@@ -125,10 +122,7 @@ const UserSidebar = () => {
             <SidebarMenu>
               {items.feed.map((item) => (
                 <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.name === location.pathname}
-                  >
+                  <SidebarMenuButton asChild isActive={item.name === location.pathname}>
                     <Link href={item.link}>
                       <item.icon />
                       <span>{item.name}</span>

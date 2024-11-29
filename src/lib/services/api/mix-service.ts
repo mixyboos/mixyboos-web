@@ -1,7 +1,7 @@
-import {MixModel} from "@/lib/models";
+import { MixModel } from "@/lib/models";
 import api from "@/lib/services/api/api-client";
-import {AxiosError, AxiosResponse} from "axios";
-import {StatusCodes} from "http-status-codes";
+import { AxiosError, AxiosResponse } from "axios";
+import { StatusCodes } from "http-status-codes";
 
 const getMixes = async (): Promise<Array<MixModel>> => {
   try {
@@ -12,8 +12,7 @@ const getMixes = async (): Promise<Array<MixModel>> => {
   } catch (err) {
     console.log("userService", "getMixes_error", err);
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number))
-        throw new Error(err.message);
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }
   }
   throw new Error("Unable to load mixes");
@@ -28,8 +27,7 @@ const getMixesFeed = async (): Promise<MixModel[]> => {
   } catch (err) {
     console.log("userService", "getMixes_error", err);
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number))
-        throw new Error(err.message);
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }
   }
   throw new Error("Unable to load mixes");
@@ -47,8 +45,7 @@ const getUserMixes = async (user: string): Promise<MixModel[]> => {
   } catch (err) {
     console.log("userService", "getMixes_error", err);
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number))
-        throw new Error(err.message);
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }
   }
   throw new Error("Unable to load mixes");
@@ -90,8 +87,7 @@ const createMix = async (mix: MixModel): Promise<MixModel> => {
   } catch (err) {
     console.log("userService", "createMix_error", err);
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number))
-        throw new Error(err.message);
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }
   }
   throw new Error("Unable to create mix");
@@ -114,9 +110,9 @@ const updateMix = async (mix: MixModel): Promise<MixModel> => {
   throw new Error("Unable to create mix");
 };
 
-const addLike = async (mix: MixModel): Promise<boolean> => {
-  const result = await api.post(`/mix/addlike?mixId=${mix.id}`);
-  return result.status === 200;
+const toggleLike = async (mix: MixModel): Promise<Number> => {
+  const result = await api.post(`/mix/togglelike?id=${mix.id}`);
+  return result.status;
 };
 
 const deleteMix = async (mix: MixModel): Promise<boolean> => {
@@ -156,7 +152,7 @@ export {
   getByUserAndSlug,
   createMix,
   updateMix,
-  addLike,
+  toggleLike,
   getMixAudioUrl,
   deleteMix,
 };

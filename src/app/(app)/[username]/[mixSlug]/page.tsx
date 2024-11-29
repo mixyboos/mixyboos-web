@@ -10,7 +10,6 @@ export default async function Page({
   params: Promise<{ username: string; mixSlug: string }>;
 }) {
   const { username, mixSlug } = await params;
-  debugger;
   const mix = await getByUserAndSlug(username, mixSlug);
   if (!mix) {
     notFound();
