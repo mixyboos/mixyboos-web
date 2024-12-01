@@ -33,7 +33,9 @@ const ActionButton: React.FC<IActionButtonProps> = ({
     >
       <Icon className={cn(isActioned && "text-red-600")} />
       {children}
-      <div className="-mx-2 mb-3 text-sm">{currentCount.toString()}</div>
+      <div className={cn("-mx-2 mb-3 text-sm", isActioned && "text-red-600")}>
+        {currentCount.toString()}
+      </div>
     </Button>
   );
 };
