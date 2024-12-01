@@ -23,11 +23,11 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             title="Like"
             onClick={async () => {
               const result = await toggleLike(mix);
-              return result === 200 ? mix.likeCount + 1 : mix.likeCount - 1;
+              return result;
             }}
-          >
-            <Icons.heart />
-          </ActionButton>
+            icon={Icons.heart}
+            isActioned={mix.isLiked}
+          ></ActionButton>
           <ActionButton
             count={mix.shareCount}
             title="Share"
@@ -35,9 +35,9 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
               logger.debug("audio-player-bar", "share-mix", mix);
               return Promise.resolve(mix.shareCount);
             }}
-          >
-            <Icons.retweet />
-          </ActionButton>
+            isActioned={false}
+            icon={Icons.retweet}
+          ></ActionButton>
           <ActionButton
             count={mix.downloadCount}
             title="Download"
@@ -45,9 +45,9 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
               logger.debug("audio-player-bar", "download-mix", mix);
               return Promise.resolve(mix.downloadCount);
             }}
-          >
-            <Icons.download />
-          </ActionButton>
+            isActioned={false}
+            icon={Icons.download}
+          ></ActionButton>
         </div>
         <div className="flex items-center space-x-3">
           <div className="flex space-x-0">

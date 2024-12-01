@@ -50,7 +50,7 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
               title="Like"
               onClick={async () => {
                 const result = await toggleLike(mix);
-                return result === 200 ? mix.likeCount + 1 : mix.likeCount - 1;
+                return result;
               }}
             >
               <Icons.heart />

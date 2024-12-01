@@ -112,7 +112,7 @@ const updateMix = async (mix: MixModel): Promise<MixModel> => {
 
 const toggleLike = async (mix: MixModel): Promise<Number> => {
   const result = await api.post(`/mix/togglelike?id=${mix.id}`);
-  return result.status;
+  return (result.data as MixModel).likeCount;
 };
 
 const deleteMix = async (mix: MixModel): Promise<boolean> => {

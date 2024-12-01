@@ -16,5 +16,6 @@ type MixModel = {
   audioUrl?: string;
   pcmUrl?: string;
   isProcessed: boolean;
+  isLiked: boolean;
 };
 export default MixModel;
