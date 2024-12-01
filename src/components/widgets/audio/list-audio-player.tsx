@@ -8,6 +8,8 @@ import logger from "@/lib/logger";
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import ActionButton from "@/components/widgets/buttons/action-button";
+import { toggleLike } from "@/lib/services/api/mix-service";
 
 type ListAudioPlayerProps = {
   mix: MixModel;
@@ -43,9 +45,16 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
 
           {/* Favorite Button and Tags */}
           <div className="flex items-center gap-2">
-            <button>
-              <Icons.heart size={20} />
-            </button>
+            <ActionButton
+              count={mix.likeCount}
+              title="Like"
+              onClick={async () => {
+                const result = await toggleLike(mix);
+                return result === 200 ? mix.likeCount + 1 : mix.likeCount - 1;
+              }}
+            >
+              <Icons.heart />
+            </ActionButton>
             <div className="ml-auto flex gap-2">
               <Badge variant="secondary">Pop</Badge>
               <Badge variant="secondary">2024</Badge>

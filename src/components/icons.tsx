@@ -76,6 +76,8 @@ import {
   PartyPopper,
   ArrowLeftFromLine,
   ImagePlus,
+  Pause,
+  PauseCircle,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -140,7 +142,8 @@ export const Icons = {
   next: SkipForward,
   page: File,
   paintbrush: Paintbrush,
-  pause: PauseCircleIcon,
+  pause: Pause,
+  pauseCircle: PauseCircle,
   person: PersonStanding,
   pizza: Pizza,
   play: Play,

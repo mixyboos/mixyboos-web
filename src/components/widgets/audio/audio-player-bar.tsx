@@ -20,6 +20,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
         <div className="flex space-x-3">
           <ActionButton
             count={likeCount}
+            title="Like"
             onClick={async () => {
               const result = await toggleLike(mix);
               return result === 200 ? mix.likeCount + 1 : mix.likeCount - 1;
@@ -29,16 +30,20 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
           </ActionButton>
           <ActionButton
             count={mix.shareCount}
+            title="Share"
             onClick={async () => {
               logger.debug("audio-player-bar", "share-mix", mix);
+              return Promise.resolve(mix.shareCount);
             }}
           >
             <Icons.retweet />
           </ActionButton>
           <ActionButton
             count={mix.downloadCount}
+            title="Download"
             onClick={async () => {
               logger.debug("audio-player-bar", "download-mix", mix);
+              return Promise.resolve(mix.downloadCount);
             }}
           >
             <Icons.download />
