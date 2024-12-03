@@ -52,9 +52,9 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
                 const result = await toggleLike(mix);
                 return result;
               }}
-            >
-              <Icons.heart />
-            </ActionButton>
+              icon={Icons.heart}
+              isActioned={mix.isLiked}
+            ></ActionButton>
             <div className="ml-auto flex gap-2">
               <Badge variant="secondary">Pop</Badge>
               <Badge variant="secondary">2024</Badge>
