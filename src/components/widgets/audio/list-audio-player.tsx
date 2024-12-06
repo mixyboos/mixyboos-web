@@ -2,20 +2,22 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MixModel } from "@/lib/models";
-import useAudioStore from "@/lib/contexts/audio-context";
 import PlayPauseButton from "@/components/widgets/buttons/play-pause-button";
 import logger from "@/lib/logger";
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import ActionButton from "@/components/widgets/buttons/action-button";
-import { toggleLike } from "@/lib/services/api/mix-service";
+import { useToggleMixLike } from "@/lib/services/tan-mix-service";
+import { useQueryClient } from "@tanstack/react-query";
 
 type ListAudioPlayerProps = {
   mix: MixModel;
 };
 
 const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
+  const toggleLike = useToggleMixLike(mix);
+  const queryClient = useQueryClient();
   return (
     <Card className="w-full">
       <CardContent className="p-4 flex gap-4">
@@ -49,8 +51,8 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
               count={mix.likeCount}
               title="Like"
               onClick={async () => {
-                const result = await toggleLike(mix);
-                return result;
+                const result = await toggleLike.mutateAsync();
+                await queryClient.invalidateQueries({ queryKey: ["user-mixes"] });
               }}
               icon={Icons.heart}
               isActioned={mix.isLiked}

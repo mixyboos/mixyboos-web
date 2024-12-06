@@ -1,25 +1,15 @@
 "use client";
 import React from "react";
-import LargeAudioPlayer from "@/components/widgets/audio/large-audio-player";
 import { useAuth } from "@/lib/contexts/auth/auth-context";
-import { getUserMixes } from "@/lib/services/api/mix-service";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ListAudioPlayer from "@/components/widgets/audio/list-audio-player";
+import { useGetUserMixesQuery } from "@/lib/services/tan-mix-service";
 
 export default function MixListPage() {
   const { profile } = useAuth();
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: ["user-mixes"],
-    queryFn: async () => {
-      try {
-        if (!profile) return null;
-        return await getUserMixes(profile.slug);
-      } catch (err) {
-        console.error(err);
-        return Promise.reject(err);
-      }
-    },
-  });
+  const { isPending, isError, data, error } = useGetUserMixesQuery(
+    profile ?? undefined
+  );
+
   if (isPending) {
     return <span>Loading...</span>;
   }

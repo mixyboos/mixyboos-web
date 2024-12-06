@@ -23,7 +23,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             title="Like"
             onClick={async () => {
               const result = await toggleLike(mix);
-              return result;
+              return { newCount: result, newIsActioned: mix.isLiked };
             }}
             icon={Icons.heart}
             isActioned={mix.isLiked}
@@ -32,8 +32,10 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             count={mix.shareCount}
             title="Share"
             onClick={async () => {
-              logger.debug("audio-player-bar", "share-mix", mix);
-              return Promise.resolve(mix.shareCount);
+              return Promise.resolve({
+                newCount: mix.shareCount,
+                newIsActioned: false,
+              });
             }}
             isActioned={false}
             icon={Icons.retweet}
@@ -43,7 +45,10 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             title="Download"
             onClick={async () => {
               logger.debug("audio-player-bar", "download-mix", mix);
-              return Promise.resolve(mix.downloadCount);
+              return Promise.resolve({
+                newCount: mix.downloadCount,
+                newIsActioned: false,
+              });
             }}
             isActioned={false}
             icon={Icons.download}

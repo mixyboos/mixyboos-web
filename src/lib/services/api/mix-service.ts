@@ -110,9 +110,9 @@ const updateMix = async (mix: MixModel): Promise<MixModel> => {
   throw new Error("Unable to create mix");
 };
 
-const toggleLike = async (mix: MixModel): Promise<Number> => {
+const toggleLike = async (mix: MixModel): Promise<MixModel> => {
   const result = await api.post(`/mix/togglelike?id=${mix.id}`);
-  return (result.data as MixModel).likeCount;
+  return result.data as MixModel;
 };
 
 const deleteMix = async (mix: MixModel): Promise<boolean> => {
