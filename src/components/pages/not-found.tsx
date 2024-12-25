@@ -30,7 +30,7 @@ export default function NotFoundPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="flex justify-center p-4">
       <MotionCard
         className="w-full max-w-3xl overflow-hidden"
         variants={containerVariants}
