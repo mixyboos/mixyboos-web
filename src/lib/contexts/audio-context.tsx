@@ -49,6 +49,18 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
     logger.debug("audio-context", "setPosition", position);
     const progressPercentage = (position / get().duration) * 100;
     set({ position, progressPercentage });
+
+    //TODO: refactor this out to a service
+    //update local storage with the positions of all items
+    const positions = JSON.parse(localStorage.getItem("_p") || "[]");
+    const currentItem = positions.find((p: any) => p.id === get().nowPlayingId);
+    if (currentItem) {
+      currentItem.position = position;
+    } else {
+      positions.push({ id: get().nowPlayingId, position });
+    }
+    localStorage.setItem("_p", JSON.stringify(positions));
+    //TODO: end
   },
   setSeekPosition: (seekPosition: number) => set(() => ({ seekPosition })),
   setDuration: (duration: number) => set(() => ({ duration })),

@@ -17,8 +17,8 @@ import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
 import { useAuth } from "@/lib/contexts/auth/auth-context";
-import { updateProfile } from "@/lib/services/api/profile-service";
 import { error, success } from "@/components/toast";
+import ProfileService from "@/lib/services/api/profile-service";
 
 const formSchema = z.object({
   slug: z
@@ -63,7 +63,7 @@ const ProfileEditForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     console.log("profile-edit-form", "onSubmit", data);
-    const result = await updateProfile({
+    const result = await ProfileService.updateProfile({
       ...profile,
       slug: data.slug,
       displayName: data.displayName,
@@ -89,8 +89,8 @@ const ProfileEditForm = () => {
                 <Input placeholder="username" {...field} />
               </FormControl>
               <FormDescription>
-                This is your unique profile name, it will be used to generate
-                URLs to your shows & mixes
+                This is your unique profile name, it will be used to generate URLs to
+                your shows & mixes
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -127,8 +127,8 @@ const ProfileEditForm = () => {
                 />
               </FormControl>
               <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
+                You can <span>@mention</span> other users and organizations to link to
+                them.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -142,9 +142,7 @@ const ProfileEditForm = () => {
               name={`urls.${index}.value`}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
+                  <FormLabel className={cn(index !== 0 && "sr-only")}>URLs</FormLabel>
                   <FormDescription className={cn(index !== 0 && "sr-only")}>
                     Add links to your website, blog, or social media profiles.
                   </FormDescription>

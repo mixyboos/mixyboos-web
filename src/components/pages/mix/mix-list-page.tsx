@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/contexts/auth/auth-context";
 import ListAudioPlayer from "@/components/widgets/audio/list-audio-player";
 import { useGetUserMixesQuery } from "@/lib/services/tan-mix-service";
 
-export default function MixListPage() {
+const MixListPage: React.FC = () => {
   const { profile } = useAuth();
   const { isPending, isError, data, error } = useGetUserMixesQuery(
     profile ?? undefined
@@ -28,4 +28,5 @@ export default function MixListPage() {
       ))}
     </div>
   );
-}
+};
+export default MixListPage;

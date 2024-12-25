@@ -69,10 +69,11 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
               isActioned={mix.isLiked}
             ></ActionButton>{" "}
           </div>
+          {/* TODO: Tags
           <div className="mr-2 space-x-1 text-gray-400">
             <Link href="/">#house</Link>
             <Link href="/">#deephouse</Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

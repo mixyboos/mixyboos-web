@@ -78,6 +78,9 @@ import {
   ImagePlus,
   Pause,
   PauseCircle,
+  Eye,
+  Users2,
+  UsersRound
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -114,6 +117,7 @@ export const Icons = {
   download: DownloadCloud,
   ellipsis: MoreVertical,
   error: AlertCircle,
+  eye: Eye,
   facebook: Facebook,
   follow: UserPlus,
   genre: Dna,
@@ -145,6 +149,7 @@ export const Icons = {
   pause: Pause,
   pauseCircle: PauseCircle,
   person: PersonStanding,
+  people: UsersRound,
   pizza: Pizza,
   play: Play,
   playCircle: PlayCircleIcon,
