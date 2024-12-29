@@ -1,8 +1,9 @@
 "use client";
 import * as React from "react";
-import * as AuthService from "@/lib/services/api/auth/auth-service";
+import AuthService from "@/lib/services/api/auth/auth-service";
 import ProfileModel from "@/lib/models/profile";
 import logger from "@/lib/logger";
+import ProfileService from "@/lib/services/api/profile-service";
 
 type AuthContextType = {
   profile?: ProfileModel | null;
@@ -21,11 +22,11 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [profile, setProfile] = React.useState<ProfileModel | null>(null);
+  const [profile, setProfile] = React.useState<ProfileModel | undefined>(undefined);
   const [loading, setLoading] = React.useState(true);
   const [initialLoading, setInitialLoading] = React.useState(true);
   React.useEffect(() => {
-    AuthService.getProfile()
+    ProfileService.getProfile()
       .then((profile) => setProfile(profile))
       .catch((err) => {
         logger.error("auth-context", "getProfile", err);
@@ -42,7 +43,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async (): Promise<boolean> => {
     const result = await AuthService.logout();
     if (result) {
-      setProfile(null);
+      setProfile(undefined);
     }
     return result;
   };

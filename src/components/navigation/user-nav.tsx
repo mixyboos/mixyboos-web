@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useAuth } from "@/lib/contexts/auth/auth-context";
-import { logout } from "@/lib/services/api/auth/auth-service";
 import UserImage from "@/components/widgets/user-image";
+import AuthService from "@/lib/services/api/auth/auth-service";
 
 const UserNav: React.FC = () => {
   const { profile } = useAuth();
@@ -65,7 +65,7 @@ const UserNav: React.FC = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={async () => await logout("/")}
+          onClick={async () => await AuthService.logout("/")}
           className="cursor-pointer"
         >
           <Icons.logout className="mr-2 h-4 w-4" />

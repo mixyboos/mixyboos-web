@@ -1,6 +1,6 @@
 {
-    "workbench.colorTheme": "Ayu Dark",
-    "workbench.iconTheme": "Monokai Pro (Filter Machine) Icons",
+    "workbench.colorTheme": "Catppuccin Macchiato",
+    "workbench.iconTheme": "easy-icons",
     "editor.fontFamily": "Monaspace Neon",
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#ee4c83",
