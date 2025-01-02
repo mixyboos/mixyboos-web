@@ -37,14 +37,14 @@ import {
 } from "@/components/ui/card";
 import AuthService from "@/lib/services/api/auth/auth-service";
 import GoogleAuthButton from "@/components/widgets/buttons/google-login-button";
-import { GoogleLoginResponse, GoogleLoginResponseOffline } from "react-google-login";
+import { env } from "@/env";
 
 const LoginForm: React.FC = () => {
   const [loginError, setLoginError] = React.useState(false);
   const [isSending, setIsSending] = React.useState(false);
-  const twitterClientId = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID;
-  const facebookClientId = process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID;
-  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const twitterClientId = env.NEXT_PUBLIC_TWITTER_CLIENT_ID;
+  const facebookClientId = env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID;
+  const googleClientId = env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -106,18 +106,16 @@ const LoginForm: React.FC = () => {
                     Facebook
                   </Button>
                 )}
-                {/* {googleClientId && (
+                {googleClientId && (
                   <GoogleAuthButton
-                    onSuccess={function (
-                      response: GoogleLoginResponse | GoogleLoginResponseOffline
-                    ): void {
-                      throw new Error("Function not implemented.");
+                    onSuccess={(response) => {
+                      console.log(response);
                     }}
                     onFailure={function (error: any): void {
                       throw new Error("Function not implemented.");
                     }}
                   />
-                )} */}
+                )}
               </div>
               {twitterClientId ||
                 facebookClientId ||
@@ -151,6 +149,7 @@ const LoginForm: React.FC = () => {
                         <Input
                           maxLength={100}
                           placeholder="Your username or your email"
+                          autoComplete="username"
                           {...field}
                         />
                       </FormControl>
@@ -170,6 +169,7 @@ const LoginForm: React.FC = () => {
                         <Input
                           type="password"
                           placeholder="mysecretpassword123"
+                          autoComplete="current-password"
                           {...field}
                         />
                       </FormControl>

@@ -58,7 +58,7 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
         {profile ? (
           <UserNav />
         ) : (
-          <NavLink href="/auth/login" title="Login" Icon={Icons.login} />
+          <NavLink href="/login" title="Login" Icon={Icons.login} />
         )}
       </div>
     </div>

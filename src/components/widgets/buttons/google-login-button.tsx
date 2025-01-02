@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  GoogleLogin,
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from "react-google-login";
-
 type GoogleAuthButtonProps = {
-  onSuccess: (response: GoogleLoginResponse | GoogleLoginResponseOffline) => void;
+  onSuccess: (response: any) => void;
   onFailure: (error: any) => void;
 };
 
