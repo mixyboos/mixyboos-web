@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { AuthProvider } from "@/lib/contexts/auth/auth-context";
-import { ThemeProvider } from "@/components/theme-provider";
-import AudioProvider from "@/lib/contexts/audio-provider";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "sonner";
-import QueryProvider from "@/app/query-client.provider";
+import AppProviders from "@/app/providers";
 
 export const metadata: Metadata = {
   title: {
@@ -34,22 +31,11 @@ export default function RootLayout({
         className={cn("min-h-screen bg-background", fontSans.className, "antialiased")}
         suppressHydrationWarning
       >
-        <QueryProvider>
-          <AuthProvider>
-            <AudioProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                {children}
-                <Toaster />
-                <Sonner />
-              </ThemeProvider>
-            </AudioProvider>
-          </AuthProvider>
-        </QueryProvider>
+        <AppProviders>
+          {children}
+          <Toaster />
+          <Sonner />
+        </AppProviders>
       </body>
     </html>
   );

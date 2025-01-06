@@ -35,12 +35,16 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { login } from "@/lib/services/api/auth/auth-service";
+import AuthService from "@/lib/services/api/auth/auth-service";
+import GoogleAuthButton from "@/components/widgets/buttons/google-login-button";
+import { env } from "@/env";
 
 const LoginForm: React.FC = () => {
   const [loginError, setLoginError] = React.useState(false);
   const [isSending, setIsSending] = React.useState(false);
-
+  const twitterClientId = env.NEXT_PUBLIC_TWITTER_CLIENT_ID;
+  const facebookClientId = env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID;
+  const googleClientId = env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,7 +63,7 @@ const LoginForm: React.FC = () => {
     setLoginError(false);
 
     try {
-      const result = await login(values.usernameOrEmail, values.password);
+      const result = await AuthService.login(values.usernameOrEmail, values.password);
 
       if (result.status === 200) {
         window.location.href = "/";
@@ -90,27 +94,43 @@ const LoginForm: React.FC = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <CardContent className="grid gap-6">
               <div className="grid grid-cols-3 gap-6">
-                <Button variant="outline">
-                  <Icons.twitter className="mr-2 h-4 w-4" />
-                  Twitter
-                </Button>
-                <Button variant="outline">
-                  <Icons.facebook className="mr-2 h-4 w-4" />
-                  Facebook
-                </Button>
-                <Button variant="outline">
-                  <Icons.google className="mr-2 h-4 w-4" />
-                  Google
-                </Button>
+                {twitterClientId && (
+                  <Button variant="outline">
+                    <Icons.twitter className="mr-2 h-4 w-4" />
+                    Twitter
+                  </Button>
+                )}
+                {twitterClientId && (
+                  <Button variant="outline">
+                    <Icons.facebook className="mr-2 h-4 w-4" />
+                    Facebook
+                  </Button>
+                )}
+                {googleClientId && (
+                  <GoogleAuthButton
+                    onSuccess={(response) => {
+                      console.log(response);
+                    }}
+                    onFailure={function (error: any): void {
+                      throw new Error("Function not implemented.");
+                    }}
+                  />
+                )}
               </div>
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t text-muted-foreground" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className=" px-2 text-muted-foreground">Or continue with</span>
-                </div>
-              </div>
+              {twitterClientId ||
+                facebookClientId ||
+                (googleClientId && (
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t text-muted-foreground" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className=" px-2 text-muted-foreground">
+                        Or continue with
+                      </span>
+                    </div>
+                  </div>
+                ))}
               {loginError && (
                 <Alert variant="destructive">
                   <Icons.error className="h-4 w-4" />
@@ -129,6 +149,7 @@ const LoginForm: React.FC = () => {
                         <Input
                           maxLength={100}
                           placeholder="Your username or your email"
+                          autoComplete="username"
                           {...field}
                         />
                       </FormControl>
@@ -148,6 +169,7 @@ const LoginForm: React.FC = () => {
                         <Input
                           type="password"
                           placeholder="mysecretpassword123"
+                          autoComplete="current-password"
                           {...field}
                         />
                       </FormControl>
