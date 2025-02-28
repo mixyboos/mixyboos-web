@@ -1,11 +1,14 @@
 import { type ProfileModel } from ".";
 
-type MixModel = {
+export type CreateMixModel = {
   id: string;
-  slug?: string;
   title: string;
-  duration?: number;
   description: string | null;
+  isProcessed: boolean;
+};
+export type MixModel = CreateMixModel & {
+  slug?: string;
+  duration?: number;
   dateUploaded?: string;
   image?: string;
   likeCount: number;
@@ -15,7 +18,5 @@ type MixModel = {
   user?: ProfileModel;
   audioUrl?: string;
   pcmUrl?: string;
-  isProcessed: boolean;
   isLiked: boolean;
 };
-export default MixModel;

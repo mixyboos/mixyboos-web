@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "mixy://boos",
   description: "Robot Powered Mixes.",
   theme: {
-    waveFormColor: "#FFFFFF",
+    waveFormColor: "#61d3a5",
     waveFormProgressColor: "#FF0000",
   },
   mainNav: [

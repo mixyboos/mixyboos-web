@@ -19,8 +19,7 @@ const uploadAudio = async (
   } catch (err) {
     console.log("uploadService", "uploadAudio_error", err);
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number))
-        throw new Error(err.message);
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }
   }
   return false;
@@ -30,7 +29,7 @@ const uploadImage = async (
   userId: string,
   file: File,
   imageSource: "mixes" | "shows" | "users",
-  imageType: "headers" | "avatars" | undefined
+  imageType: "headers" | "avatars" | ""
 ): Promise<boolean> => {
   try {
     const formData = new FormData();
@@ -49,8 +48,7 @@ const uploadImage = async (
   } catch (err) {
     console.log("uploadService", "uploadAudio_error", err);
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number))
-        throw new Error(err.message);
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }
   }
   return false;

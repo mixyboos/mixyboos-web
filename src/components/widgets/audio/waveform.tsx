@@ -6,6 +6,7 @@ import { PlayState } from "@/lib/contexts/audio-context";
 import useAudioStore from "@/lib/contexts/audio-context";
 import { siteConfig } from "@/config/site";
 import logger from "@/lib/logger";
+import { Label } from "@/components/ui/label";
 
 type WaveformComponentProps = {
   id?: string;
@@ -84,13 +85,13 @@ const WaveformComponent = ({
 
   return (
     <div id="wrapper" className="relative">
-      <span className="absolute bottom-0 left-0 z-50 text-xs font-semibold text-muted-foreground bg-opacity-20 ">
+      <Label className="absolute bottom-0 left-0 z-50 text-xs font-semibold ">
         {secondsToHHMMSS(elapsedTime)}
-      </span>
+      </Label>
       <div id="waveform" className="h-12 overflow-hidden"></div>
-      <span className="absolute bottom-0 right-0 z-50 text-xs font-semibold bg-opacity-20 text-muted-foreground ">
+      <Label className="absolute bottom-0 right-0 z-50 text-xs font-semibold ">
         {secondsToHHMMSS(duration)}
-      </span>
+      </Label>
     </div>
   );
 };

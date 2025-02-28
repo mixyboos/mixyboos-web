@@ -1,4 +1,5 @@
 import { MixModel } from "@/lib/models";
+import { CreateMixModel } from "@/lib/models/mix";
 import api from "@/lib/services/api/api-client";
 import { AxiosError, AxiosResponse } from "axios";
 import { StatusCodes } from "http-status-codes";
@@ -78,7 +79,7 @@ const getByUserAndSlug = async (
   throw new Error("Unable to load mixes");
 };
 
-const createMix = async (mix: MixModel): Promise<MixModel> => {
+const createMix = async (mix: CreateMixModel): Promise<MixModel> => {
   try {
     const result = await api.post("/mix", mix);
     if (result?.status === 201) {

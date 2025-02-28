@@ -41,7 +41,10 @@ const MiniPlayer = () => {
     <div className="flex h-16 items-center bg-gray-800 p-2">
       <div
         className="align-center w-16 flex-none cursor-pointer stroke-0 p-1 text-gray-300"
-        onClick={() => togglePlayState()}
+        onClick={() => {
+          debugger;
+          togglePlayState();
+        }}
       >
         {playState === PlayState.playing ? (
           <Icons.pause className="h-8 w-8 delay-100 hover:text-gray-400" />
@@ -71,10 +74,7 @@ const MiniPlayer = () => {
           </Tooltip>
         </TooltipProvider>
       </div>
-      <div
-        id="left-button-bar"
-        className="flex flex-row space-x-1 px-1 text-gray-400"
-      >
+      <div id="left-button-bar" className="flex flex-row space-x-1 px-1 text-gray-400">
         <Button variant={"ghost"} size={"icon"}>
           <Icons.heart className="h-6 w-6" />
         </Button>
@@ -108,10 +108,7 @@ const MiniPlayer = () => {
           {secondsToReadableString(duration)}
         </div>
       </div>
-      <div
-        id="right-button-bar"
-        className="flex flex-row space-x-1 text-gray-400"
-      >
+      <div id="right-button-bar" className="flex flex-row space-x-1 text-gray-400">
         {/* <div id="volume">
           <VolumeControl
             volume={currentVolume}

@@ -1,3 +1,4 @@
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { env } from "@/env";
 import React from "react";
@@ -20,6 +21,7 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
         initiateGoogleLogin($e);
       }}
     >
+      <Icons.google />
       Login with Google
     </Button>
   );

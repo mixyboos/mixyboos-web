@@ -26,21 +26,13 @@ import { uploadImage } from "@/lib/services/api/upload/upload-service";
 import { createMix } from "@/lib/services/api/mix-service";
 
 const MAX_IMAGE_SIZE = 5242880;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 type CreateMixDetailsProps = {
   mix: MixModel;
   onMixCreated: (mix: MixModel) => void;
 };
 
-const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
-  mix,
-  onMixCreated,
-}) => {
+const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({ mix, onMixCreated }) => {
   const formSchema = z.object({
     title: z
       .string()
@@ -82,7 +74,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         isProcessed: false,
       });
       if (result && values.mixImage) {
-        uploadImage(mix.id, values.mixImage, "mixes", undefined);
+        uploadImage(mix.id, values.mixImage, "mixes", "");
       }
       onMixCreated(result);
     } catch (err) {
