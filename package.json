@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "NODE_ENV=development next dev --turbo -p 3002 & local-ssl-proxy --config ./ssl-proxy.json",
     "dev:plain": "next dev --turbo",
-    "dev:plain:noturbo": "next dev",
     "build": "next build",
     "start": "next start",
     "test": "playwright test",
