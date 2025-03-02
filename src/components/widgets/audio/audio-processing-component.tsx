@@ -19,7 +19,7 @@ const AudioProcessingComponent: React.FC<MixProcessingComponentProps> = ({
   return (
     <div className="flex w-full flex-row gap-2">
       <Loading title="Processing mix" message={`${processPercentage}% done`} />
-      <div className="flex-grow"></div>
+      <div className="grow"></div>
       <Button onClick={async () => await requeProcessMixJob(mix.id)}>
         <Icons.activity className="mr-2 h-4 w-4" />
         Request Update

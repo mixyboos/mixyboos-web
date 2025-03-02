@@ -9,7 +9,7 @@ const LoggedInLayout: React.FC<{ children: React.ReactNode }> = ({
       <div className="fixed top-0 left-0 right-0 z-50">
         <Navbar />
       </div>
-      <main className="flex-grow mx-8 pt-16 pb-16 mt-4">{children}</main>
+      <main className="grow mx-8 pt-16 pb-16 mt-4">{children}</main>
       <footer className="fixed bottom-0 left-0 right-0">
         <FooterComponent />
       </footer>

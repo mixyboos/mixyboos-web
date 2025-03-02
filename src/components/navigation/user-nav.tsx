@@ -44,21 +44,21 @@ const UserNav: React.FC = () => {
           <DropdownMenuItem>
             <Link href={"/settings/profile"} className="flex w-full flex-row">
               <Icons.user className="mr-2 h-4 w-4" />
-              <span className="flex-grow">Profile</span>
+              <span className="grow">Profile</span>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href={"/settings/billing"} className="flex w-full flex-row">
               <Icons.creditCard className="mr-2 h-4 w-4" />
-              <span className="flex-grow">Billing</span>
+              <span className="grow">Billing</span>
               <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href={"/settings"} className="flex w-full flex-row">
               <Icons.settings className="mr-2 h-4 w-4" />
-              <span className="flex-grow">Settings</span>
+              <span className="grow">Settings</span>
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>

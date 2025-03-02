@@ -73,7 +73,7 @@ const RegisterForm = () => {
     }
   }
   return (
-    <div className="w-full max-w-xl space-y-4 rounded-lg  border p-6  shadow sm:p-8">
+    <div className="w-full max-w-xl space-y-4 rounded-lg  border p-6  shadow-sm sm:p-8">
       <div className="space-y-4">
         <h1 className="scroll-m-20 text-2xl font-bold tracking-tight">
           Register with...
@@ -85,7 +85,7 @@ const RegisterForm = () => {
               error("Warning", "Facebook login is not working yet");
               // signIn('facebook')
             }}
-            className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#4267B2] shadow-sm hover:bg-gray-50"
+            className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#4267B2] shadow-xs hover:bg-gray-50"
           >
             <Icons.facebook className="h-5 w-5" />
           </button>
@@ -94,7 +94,7 @@ const RegisterForm = () => {
             onClick={() => {
               error("Warning", "Google login is not working yet");
             }}
-            className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#DB4437] shadow-sm hover:bg-gray-50"
+            className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#DB4437] shadow-xs hover:bg-gray-50"
           >
             <Icons.google className="h-5 w-5" />
           </button>
@@ -104,7 +104,7 @@ const RegisterForm = () => {
               error("Warning", "Twitter login is not working yet");
               // signIn('twitter')
             }}
-            className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#00acee] shadow-sm hover:bg-gray-50"
+            className="inline-flex w-full justify-center rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-[#00acee] shadow-xs hover:bg-gray-50"
           >
             <Icons.twitter className="h-5 w-5" />
           </button>

@@ -42,7 +42,6 @@ const MiniPlayer = () => {
       <div
         className="align-center w-16 flex-none cursor-pointer stroke-0 p-1 text-gray-300"
         onClick={() => {
-          debugger;
           togglePlayState();
         }}
       >
@@ -82,7 +81,7 @@ const MiniPlayer = () => {
           <Icons.next className="h-6 w-6" />
         </Button>
       </div>
-      <div className="flex w-full flex-grow items-center px-1">
+      <div className="flex w-full grow items-center px-1">
         <div className="mr-4 text-sm text-gray-400">
           {secondsToReadableString(position)}
         </div>

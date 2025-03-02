@@ -15,21 +15,17 @@ const useAudioProcessingStatus = () => {
         connection,
       );
       connection.on("ConversionStarted", (showId: string) => {
-        debugger;
         logger.debug("Signalr", "ConversionProgress", showId);
       });
       connection.on("ConversionProgress", (showId: string, value: number) => {
-        debugger;
         logger.debug("Signalr", "ConversionProgress", showId, value);
         setProcessPercentage(value);
       });
       connection.on("ConversionFinished", (showId: string) => {
-        debugger;
         logger.debug("Signalr", "ConversionProgress", showId);
         setIsProcessed(true);
       });
       connection.on("ConversionFailed", (showId: string) => {
-        debugger;
         logger.debug("Signalr", "ConversionProgress", showId);
         setIsProcessed(true);
       });

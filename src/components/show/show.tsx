@@ -16,7 +16,7 @@ const Show = ({ title, show,  setShow }: ShowProps) => {
       <div className="w-3/4">
         <ShowPlayerPage show={show} title={title} />
       </div>
-      <div className="flex-grow">
+      <div className="grow">
         <Chat show={show} />
       </div>
     </div>
