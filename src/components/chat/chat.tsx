@@ -34,11 +34,11 @@ const Chat = ({ show }: ChatProps) => {
   };
 
   return (
-    <div className="mx-auto flex h-full flex-col justify-between overflow-hidden  shadow-sm ">
+    <div className="mx-auto flex h-full flex-col justify-between overflow-hidden  shadow-xs ">
       <div className="flex justify-between">
         <ChatHeader />
       </div>
-      <div className="no-scrollbar flex-grow overflow-scroll bg-secondary">
+      <div className="no-scrollbar grow overflow-scroll bg-secondary">
         {messages.map((item) => (
           <ChatItem
             key={item.id}

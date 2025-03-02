@@ -16,12 +16,12 @@ export const notice = (title: string, body: string) => {
     (t) => (
       <div
         id="toast-success"
-        className="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow dark:bg-slate-800 dark:text-gray-400"
+        className="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow-sm dark:bg-slate-800 dark:text-gray-400"
         role="alert"
       >
         <div className="flex">
           <div
-            className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-300">
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-300">
             <Icons.warning className="h-5 w-5" fill="currentColor"/>
           </div>
           <div className="ml-3 text-sm font-normal">

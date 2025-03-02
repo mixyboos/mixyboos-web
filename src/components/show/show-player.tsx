@@ -26,7 +26,7 @@ const ShowPlayerPage = ({ title, show }: ShowPlayerPageProps) => {
       </div>
       <div>
         <div className="w-full flex-none">
-          <div className="w-full shadow-sm">
+          <div className="w-full shadow-xs">
             <div className="flex items-center justify-between border-t px-3 py-2 ">
               <span className="text-md center rounded-lg px-4 py-2.5 text-xl font-bold  ">
                 {title}

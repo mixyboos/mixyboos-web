@@ -35,7 +35,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
               }}
             />
           </div>
-          <div className="flex-grow justify-center">
+          <div className="grow justify-center">
             <Link href={`/${mix.user?.slug}/${mix.slug}`}>
               <h1 className="text-xl font-bold md:text-3xl">{mix.title}</h1>
               <h2 className="text-md text-muted-foreground">
