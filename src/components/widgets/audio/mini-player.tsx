@@ -42,7 +42,6 @@ const MiniPlayer = () => {
       <div
         className="align-center w-16 flex-none cursor-pointer stroke-0 p-1 text-gray-300"
         onClick={() => {
-          debugger;
           togglePlayState();
         }}
       >

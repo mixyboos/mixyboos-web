@@ -57,7 +57,6 @@ const getByUserAndSlug = async (
   mixSlug: string
 ): Promise<MixModel | undefined> => {
   try {
-    debugger;
     const result = await api.get(`/mix/single?user=${userSlug}&mix=${mixSlug}`);
     if (result?.status === StatusCodes.OK) {
       return result.data;
