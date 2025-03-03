@@ -19,9 +19,9 @@ import { Icons } from "@/components/icons";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import logger from "@/lib/logger";
-import { register } from "@/lib/services/api/auth/auth-service";
 import { useRouter } from "next/navigation";
 import { error } from "@/components/toast";
+import AuthService from "@/lib/services/api/auth/auth-service";
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -57,7 +57,7 @@ const RegisterForm = () => {
     logger.debug(values);
     setHasErrors(false);
     try {
-      const result = await register(
+      const result = await AuthService.register(
         values.email,
         values.password,
         values.confirmPassword,

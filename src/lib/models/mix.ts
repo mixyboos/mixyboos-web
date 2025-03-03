@@ -1,12 +1,12 @@
 import { type ProfileModel } from ".";
 
-export type CreateMixModel = {
+type CreateMixModel = {
   id: string;
   title: string;
   description: string | null;
   isProcessed: boolean;
 };
-export type MixModel = CreateMixModel & {
+type MixModel = CreateMixModel & {
   slug?: string;
   duration?: number;
   dateUploaded?: string;
@@ -20,3 +20,5 @@ export type MixModel = CreateMixModel & {
   pcmUrl?: string;
   isLiked: boolean;
 };
+export default MixModel;
+export type { CreateMixModel };
