@@ -11,7 +11,7 @@ const getMixes = async (): Promise<Array<MixModel>> => {
       return result.data;
     }
   } catch (err) {
-    console.log("userService", "getMixes_error", err);
+    console.log("mix-service.ts", "getMixes_error", err);
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number)) throw new Error(err.message);
     }

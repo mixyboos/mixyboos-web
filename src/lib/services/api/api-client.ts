@@ -1,12 +1,14 @@
 import { env } from "@/env";
 import axios from "axios";
 
+console.log("api-client", "Creating api endpoint", env.NEXT_PUBLIC_API_URL);
 const api = axios.create({
   withCredentials: true,
   baseURL: env.NEXT_PUBLIC_API_URL,
 });
 
 api.interceptors.request.use(async (config) => {
+  console.log("api-client", "Intercepting request", config);
   //add the browser cookies to the request if we're running on the server
   const runningOnServer = typeof window === "undefined";
   if (runningOnServer) {
