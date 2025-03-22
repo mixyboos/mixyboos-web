@@ -9,17 +9,18 @@ export default defineConfig({
   reporter: "html",
   use: {
     trace: "on-first-retry",
+    baseURL: "https://mixyboos.dev.fergl.ie:3000/",
   },
 
   projects: [
     //Authenticate and get cookie
     { name: "setup", testMatch: /.*\.setup\.ts/ },
-    {
-      name: "chromium",
-      use: {
-        ...devices["Desktop Chrome"],
-      },
-    },
+    // {
+    //   name: "chromium",
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //   },
+    // },
     {
       name: "firefox",
       use: {

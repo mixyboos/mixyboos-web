@@ -43,7 +43,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({ mix, onMixCreated }
       .min(5, { message: "must be at least 5 characters" })
       .max(2000, { message: "can't be more than 2000 characters" }),
     mixImage: z
-      .any()
+      .instanceof(File)
       .refine((file: File) => {
         const ret = file?.size <= MAX_IMAGE_SIZE;
         return ret;
@@ -56,8 +56,9 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({ mix, onMixCreated }
   type FormValues = z.infer<typeof formSchema>;
   const defaultValues: Partial<FormValues> = {
     title: mix.title,
-    description: "",
-    mixImage: null,
+    description:
+      "Hexagon pour-over hella, pop-up bespoke tote bag sus forage umami godard cred gentrify crucifix. Chillwave craft beer farm-to-table kogi portland jianbing PBR&B grailed meh bruh. Mustache lo-fi intelligentsia blue bottle godard microdosing. Hammock neutral milk hotel letterpress af, prism sartorial skateboard. Tofu chambray health goth copper mug. Listicle kogi knausgaard, cred bespoke master cleanse polaroid.",
+    mixImage: undefined,
   };
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

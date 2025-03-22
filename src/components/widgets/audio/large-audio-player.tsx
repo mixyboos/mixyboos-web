@@ -57,6 +57,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
       ) : (
         <div className="relative h-[150px] w-full cursor-pointer">
           <Image
+            unoptimized
             src="/img/processing-waves.gif"
             width={1600}
             height={250}

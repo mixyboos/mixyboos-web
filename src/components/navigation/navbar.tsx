@@ -41,7 +41,7 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
         className={cn("flex items-center space-x-4 lg:space-x-6", className)}
         {...props}
       >
-        <Link className="mr-6 flex items-center space-x-2" href="/">
+        <Link className="mr-6 flex items-center space-x-2" id="main-logo" href="/">
           <Icons.mixyboos className="mr-2 h-44 w-80" />
           <span className="hidden font-bold lowercase sm:inline-block">
             mixy://boos

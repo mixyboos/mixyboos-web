@@ -4,6 +4,7 @@ import React from "react";
 import LargeAudioPlayer from "@/components/widgets/audio/large-audio-player";
 import AudioProcessingComponent from "@/components/widgets/audio/audio-processing-component";
 import AudioPlayerBar from "@/components/widgets/audio/audio-player-bar";
+import ProcessingMix from "@/components/pages/mix/mix-process";
 
 type MixDetailsComponentProps = {
   mix: MixModel;
@@ -12,18 +13,14 @@ type MixDetailsComponentProps = {
 const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
   mix,
 }: MixDetailsComponentProps) => {
-  return (
+  return mix.isProcessed ? (
     <div className="flex flex-col h-screen">
       <div>
         <div className="px-8">
           <LargeAudioPlayer mix={mix} />
         </div>
         <div className="px-8 py-4">
-          {mix.isProcessed ? (
-            <AudioPlayerBar mix={mix} />
-          ) : (
-            <AudioProcessingComponent mix={mix} />
-          )}
+          <AudioPlayerBar mix={mix} />
         </div>
       </div>
       <div className="px-8">
@@ -39,6 +36,8 @@ const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
         </Card>
       </div>
     </div>
+  ) : (
+    <ProcessingMix mix={mix} />
   );
 };
 

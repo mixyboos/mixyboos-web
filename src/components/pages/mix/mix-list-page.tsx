@@ -1,32 +1,27 @@
 "use client";
 import React from "react";
-import { useAuth } from "@/lib/contexts/auth/auth-context";
 import ListAudioPlayer from "@/components/widgets/audio/list-audio-player";
-import { useGetUserMixesQuery } from "@/lib/services/tan-mix-service";
+import { MixModel } from "@/lib/models";
+import ProcessingMix from "@/components/pages/mix/mix-process";
 
-const MixListPage: React.FC = () => {
-  const { profile } = useAuth();
-  const { isPending, isError, data, error } = useGetUserMixesQuery(
-    profile ?? undefined
-  );
-
-  if (isPending) {
-    return <span>Loading...</span>;
-  }
-
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
-
-  return (
+type MixListPageProps = {
+  mixes: MixModel[] | undefined;
+};
+const MixListPage: React.FC<MixListPageProps> = ({ mixes }) => {
+  return mixes && mixes.length !== 0 ? (
     <div>
-      <h1>These are my mixes</h1>
-      {data?.map((mix) => (
+      {mixes?.map((mix) => (
         <div className="py-1" key={mix.id}>
-          <ListAudioPlayer key={mix.id} mix={mix} />
+          {mix.isProcessed ? (
+            <ListAudioPlayer key={mix.id} mix={mix} />
+          ) : (
+            <ProcessingMix mix={mix} />
+          )}
         </div>
       ))}
     </div>
+  ) : (
+    <div>No mixes found for this user...</div>
   );
 };
 export default MixListPage;

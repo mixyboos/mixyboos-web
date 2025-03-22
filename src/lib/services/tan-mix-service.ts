@@ -3,7 +3,21 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/services/api/api-client";
 import logger from "@/lib/logger";
 import { StatusCodes } from "http-status-codes";
-import { getUserMixes } from "@/lib/services/api/mix-service";
+import { getUserMixes, getMyMixes } from "@/lib/services/api/mix-service";
+
+export const useGetMyMixesQuery = () => {
+  return useQuery({
+    queryKey: ["user-mixes"],
+    queryFn: async () => {
+      try {
+        return await getMyMixes();
+      } catch (err) {
+        console.error(err);
+        return Promise.reject(err);
+      }
+    },
+  });
+};
 
 export const useGetUserMixesQuery = (profile: ProfileModel | undefined) => {
   return useQuery({

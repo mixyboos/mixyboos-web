@@ -68,11 +68,11 @@ const items = {
     },
   ],
 };
-
+//TODO: https://x.com/KaraBharat/status/1901883428494274901
 const UserSidebar = () => {
   const { profile } = useAuth();
   return (
-    <Sidebar className="mt-16 pb-16">
+    <Sidebar variant="inset" collapsible="icon" className="mt-16 pb-16">
       <SidebarHeader>
         <div className="flex items-center space-x-4 p-2">
           {profile?.profileImage && (

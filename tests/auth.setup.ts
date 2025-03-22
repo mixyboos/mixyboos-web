@@ -5,6 +5,6 @@ setup("authenticate", async ({ page }) => {
   //TODO: Properly fill these guys
   //   await page.getByLabel("Username or email address").fill("username");
   //   await page.getByLabel("Password").fill("password");
-  await page.getByRole("button", { name: "login" }).click();
+  await page.locator('button[type="submit"][name="login"]').click();
   await page.waitForURL("https://mixyboos.dev.fergl.ie:3000/dashboard");
 });

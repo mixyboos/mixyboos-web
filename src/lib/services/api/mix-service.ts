@@ -34,6 +34,23 @@ const getMixesFeed = async (): Promise<MixModel[]> => {
   throw new Error("Unable to load mixes");
 };
 
+const getMyMixes = async (): Promise<MixModel[]> => {
+  try {
+    const result = await api.get("/mix/me");
+    if (result?.status === 200) {
+      return result.data;
+    }
+    if (result?.status === 204) {
+      return [];
+    }
+  } catch (err) {
+    console.log("userService", "getMixes_error", err);
+    if (err instanceof AxiosError) {
+      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
+    }
+  }
+  throw new Error("Unable to load mixes");
+};
 const getUserMixes = async (user: string): Promise<MixModel[]> => {
   try {
     const result = await api.get(`/mix/user?user=${user}`);
@@ -147,6 +164,7 @@ const getMixAudioUrl = async (mix: MixModel): Promise<string> => {
 
 export {
   getMixes,
+  getMyMixes,
   getMixesFeed,
   getUserMixes,
   getByUserAndSlug,

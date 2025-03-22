@@ -45,9 +45,7 @@ const MixCreateComponent = () => {
                 <span className="font-semibold text-red-500 dark:text-red-400">
                   Ooopsies...
                 </span>
-                <p className="text-sm text-gray-600 dark:text-gray-200">
-                  {errors}
-                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-200">{errors}</p>
               </div>
             </div>
           </div>
@@ -83,6 +81,7 @@ const MixCreateComponent = () => {
           <CreateMixDetails
             mix={{ id: mixId, title: fileName } as MixModel}
             onMixCreated={(mix) => {
+              debugger;
               setCreateState(mix ? CreateState.done : CreateState.error);
               if (mix && mix.user) {
                 router.push(`/${mix.user.slug}/${mix.slug}`);
