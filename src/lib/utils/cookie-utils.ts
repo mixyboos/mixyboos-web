@@ -3,3 +3,5 @@ const checkCookieExists = (cookieName: string): boolean => {
     .split(";")
     .some((item) => item.trim().startsWith(`${cookieName}=`));
 };
+
+export { checkCookieExists };

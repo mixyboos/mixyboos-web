@@ -2,7 +2,6 @@ import type { ApiKeyModel, ProfileModel } from "@/lib/models";
 import logger from "@/lib/logger";
 import { AxiosError } from "axios";
 import api from "@/lib/services/api/api-client";
-import { getCookie } from "cookies-next"; // Import cookie helper
 
 const ProfileService = {
   getStreamKey: async (): Promise<ApiKeyModel | undefined> => {
@@ -16,16 +15,7 @@ const ProfileService = {
     }
     return undefined;
   },
-  /**
-   * Get the currently logged-in user's profile
-   */
   getProfile: async (): Promise<ProfileModel | undefined> => {
-    const cookieName = process.env.NEXT_PUBLIC_COOKIE_NAME || "";
-    if (!getCookie(cookieName)) {
-      logger.debug("profile-service", "getProfile", `Cannot find cookie ${cookieName}`);
-      return undefined;
-    }
-
     try {
       const result = await api.get("/profile");
       if (result?.status === 200) {

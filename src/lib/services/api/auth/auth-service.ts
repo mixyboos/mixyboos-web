@@ -55,9 +55,6 @@ const AuthService = {
   },
   getProfile: async (): Promise<ProfileModel | undefined> => {
     try {
-      if (!checkCookieExists(process.env.NEXT_PUBLIC_COOKIE_NAME || "")) {
-        return undefined;
-      }
       const result = await ProfileService.getProfile();
       return result;
     } catch (err) {
