@@ -62,7 +62,7 @@ const AuthService = {
       return result;
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.log("authService", "getUser_error", err);
+        console.log("authService", "getProfile_error", err);
         if (![401, 400].includes(err.status as number)) throw new Error(err.message);
       }
     }
