@@ -3,8 +3,8 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import AudioProvider from "@/lib/contexts/audio-provider";
 import QueryProvider from "@/app/query-client.provider";
 import { ActiveThemeProvider } from "@/components/theme/active-theme";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@/components/analytics/analytics";
 type AppProvidersProps = {
   activeTheme: string | undefined;
   children: React.ReactNode;
@@ -24,7 +24,7 @@ const AppProviders: React.FC<AppProvidersProps> = async ({ activeTheme, children
             <ActiveThemeProvider initialTheme={activeTheme}>
               {children}
               <Toaster />
-              <Sonner />
+              <Analytics />
             </ActiveThemeProvider>
           </ThemeProvider>
         </AudioProvider>

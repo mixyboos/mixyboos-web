@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "@/styles/theme.css";
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { fontVariables } from "@/config/fonts";

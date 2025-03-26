@@ -40,32 +40,7 @@ const items = {
     },
   ],
   feed: [
-    { name: "New Shows", icon: Icons.recent as LucideIcon, link: "/new" },
-    {
-      name: "Favourites",
-      icon: Icons.heart as LucideIcon,
-      link: "/me/favourites",
-    },
-    {
-      name: "Listen Later",
-      icon: Icons.remind as LucideIcon,
-      link: "/me/later",
-    },
-    {
-      name: "Genres",
-      icon: Icons.genre as LucideIcon,
-      link: "/dashboard/genres",
-    },
-    {
-      name: "Trending",
-      icon: Icons.trending as LucideIcon,
-      link: "/dashboard/trending",
-    },
-    {
-      name: "Live Now",
-      icon: Icons.liveNow as LucideIcon,
-      link: "/dashboard/live/now",
-    },
+
   ],
 };
 //TODO: https://x.com/KaraBharat/status/1901883428494274901
