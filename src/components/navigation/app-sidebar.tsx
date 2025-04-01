@@ -2,23 +2,6 @@
 
 import * as React from "react";
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react";
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -32,44 +15,34 @@ import { Icons } from "@/components/icons";
 import { LucideIcon } from "lucide-react";
 import { NavFeed } from "@/components/navigation/nav-feed";
 import { siteConfig } from "@/config/site";
+import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
+import { cn } from "@/lib/utils";
+
 export type SidebarItemProps = {
   title: string;
   icon?: LucideIcon;
   link: string;
 };
-const items = {
-  feed: [
-    { title: "New Shows", icon: Icons.recent as LucideIcon, link: "/new" },
-    {
-      title: "Favourites",
-      icon: Icons.heart as LucideIcon,
-      link: "/me/favourites",
-    },
-    {
-      title: "Listen Later",
-      icon: Icons.remind as LucideIcon,
-      link: "/me/later",
-    },
-    {
-      title: "Genres",
-      icon: Icons.genre as LucideIcon,
-      link: "/dashboard/genres",
-    },
-    {
-      title: "Trending",
-      icon: Icons.trending as LucideIcon,
-      link: "/dashboard/trending",
-    },
-    {
-      title: "Live Now",
-      icon: Icons.liveNow as LucideIcon,
-      link: "/dashboard/live/now",
-    },
-  ],
-};
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  // Get audio playback state to detect if MiniPlayer is visible
+  const { playState } = useAudioStore();
+  const isMiniPlayerVisible = playState !== PlayState.stopped;
+
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar
+      collapsible="offcanvas"
+      {...props}
+      className={cn(
+        props.className,
+        isMiniPlayerVisible ? "app-sidebar-with-player" : "app-sidebar-without-player"
+      )}
+      style={{
+        // Adjust height when mini player is visible
+        ...(props.style || {}),
+        height: isMiniPlayerVisible ? "calc(100vh - 64px)" : "100vh",
+      }}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -78,7 +51,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <Icons.mixyboos className="!size-5" />
+                <Icons.mixyboos
+                  className="!size-5 text-foreground fill-current"
+                />
                 <span className="text-base font-semibold">{siteConfig.name}</span>
               </a>
             </SidebarMenuButton>
@@ -88,11 +63,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMe />
         <NavFeed />
-        {/* <NavAdmin />  */}
       </SidebarContent>
       <SidebarFooter>
         <span>Nav User</span>
-        {/* <NavUser user={data.user} /> */}
       </SidebarFooter>
     </Sidebar>
   );

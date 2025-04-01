@@ -9,10 +9,7 @@ const LoggedInLayout: React.FC<{ children: React.ReactNode }> = async ({
 }) => {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
-  console.log("layout", "sidebar_state", defaultOpen);
-  const _getSidebar = () => {
-    return <AppSidebar variant="inset" />;
-  };
+
   return (
     <SidebarProvider
       defaultOpen={defaultOpen}
@@ -22,22 +19,26 @@ const LoggedInLayout: React.FC<{ children: React.ReactNode }> = async ({
         } as React.CSSProperties
       }
     >
-      {_getSidebar()}
-      <SidebarInset>
-        <AppTopbar />
-        <div className="flex flex-1 flex-col">{children}</div>
-      </SidebarInset>
+      {/* Main container that takes full viewport */}
+      <div className="flex flex-col min-h-screen w-full">
+        {/* Main content area that expands to fill available space */}
+        <div className="flex flex-grow w-full">
+          {/* Sidebar with fixed width */}
+          <AppSidebar variant="inset" />
+
+          {/* Content area that takes all remaining width */}
+          <SidebarInset className="flex flex-col flex-grow max-w-full m-0 p-0 rounded-none shadow-none">
+            <AppTopbar />
+            <main className="flex-grow w-full overflow-auto p-4">{children}</main>
+          </SidebarInset>
+        </div>
+
+        {/* Footer that takes full width */}
+        <footer className="w-full">
+          <FooterComponent />
+        </footer>
+      </div>
     </SidebarProvider>
-    // <div className="relative min-h-screen flex flex-col md:flex">
-    //   <span>This is logged in stuff?</span>
-    //   {/* <div className="fixed top-0 left-0 right-0 z-50">
-    //     <Navbar />
-    //   </div>
-    //   <main className="grow mx-8 pt-16 pb-16 mt-4">{children}</main>
-    //   <footer className="fixed bottom-0 left-0 right-0">
-    //     <FooterComponent />
-    //   </footer> */}
-    // </div>
   );
 };
 
