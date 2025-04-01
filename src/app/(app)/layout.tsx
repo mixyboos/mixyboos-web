@@ -19,21 +19,14 @@ const LoggedInLayout: React.FC<{ children: React.ReactNode }> = async ({
         } as React.CSSProperties
       }
     >
-      {/* Main container that takes full viewport */}
       <div className="flex flex-col min-h-screen w-full">
-        {/* Main content area that expands to fill available space */}
         <div className="flex flex-grow w-full">
-          {/* Sidebar with fixed width */}
           <AppSidebar variant="inset" />
-
-          {/* Content area that takes all remaining width */}
           <SidebarInset className="flex flex-col flex-grow max-w-full m-0 p-0 rounded-none shadow-none">
             <AppTopbar />
             <main className="flex-grow w-full overflow-auto p-4">{children}</main>
           </SidebarInset>
         </div>
-
-        {/* Footer that takes full width */}
         <footer className="w-full">
           <FooterComponent />
         </footer>
