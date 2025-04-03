@@ -1,11 +1,15 @@
-import type { Metadata } from "next";
 import "@/styles/globals.css";
+import "@/styles/theme.css";
+import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontVariables } from "@/config/fonts";
 import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "sonner";
 import AppProviders from "@/app/providers";
+import { cookies } from "next/headers";
+const META_THEME_COLORS = {
+  light: "#ffffff",
+  dark: "#09090b",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -20,22 +24,38 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const activeTheme = cookieStore.get("active_theme")?.value;
+  const isScaled = activeTheme?.endsWith("-scaled");
   return (
     <html lang="en" className="theme-mixboos dark">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.querySelector('meta[name="theme-color"]').setAttribute('content', '${META_THEME_COLORS.dark}')
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
       <body
-        className={cn("min-h-screen bg-background", fontSans.className, "antialiased")}
-        suppressHydrationWarning
+        className={cn(
+          "bg-background overscroll-none font-sans antialiased",
+          activeTheme ? `theme-${activeTheme}` : "",
+          isScaled ? "theme-scaled" : "",
+          fontVariables
+        )}
       >
-        <AppProviders>
-          {children}
-          <Toaster />
-          <Sonner />
-        </AppProviders>
+        <AppProviders activeTheme={activeTheme}>{children}</AppProviders>
       </body>
     </html>
   );

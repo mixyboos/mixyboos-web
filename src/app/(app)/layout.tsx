@@ -1,19 +1,37 @@
-import Navbar from "@/components/navigation/navbar";
 import FooterComponent from "@/components/footer";
+import { cookies } from "next/headers";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/navigation/app-sidebar";
+import { AppTopbar } from "@/components/navigation/app-topbar";
 
-const LoggedInLayout: React.FC<{ children: React.ReactNode }> = ({
+const LoggedInLayout: React.FC<{ children: React.ReactNode }> = async ({
   children,
 }) => {
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
+
   return (
-    <div className="relative min-h-screen flex flex-col md:flex">
-      <div className="fixed top-0 left-0 right-0 z-50">
-        <Navbar />
+    <SidebarProvider
+      defaultOpen={defaultOpen}
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+        } as React.CSSProperties
+      }
+    >
+      <div className="flex flex-col h-screen w-full">
+        <div className="flex w-full flex-1 overflow-hidden">
+          <AppSidebar variant="inset" />
+          <SidebarInset className="flex flex-col flex-grow max-w-full m-0 p-0 rounded-none shadow-none">
+            <AppTopbar />
+            <main className="w-full overflow-auto p-4">{children}</main>
+          </SidebarInset>
+        </div>
+        <footer className="w-full">
+          <FooterComponent />
+        </footer>
       </div>
-      <main className="grow mx-8 pt-16 pb-16 mt-4">{children}</main>
-      <footer className="fixed bottom-0 left-0 right-0">
-        <FooterComponent />
-      </footer>
-    </div>
+    </SidebarProvider>
   );
 };
 

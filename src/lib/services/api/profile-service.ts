@@ -15,9 +15,6 @@ const ProfileService = {
     }
     return undefined;
   },
-  /**
-   * Get the currently logged-in user's profile
-   */
   getProfile: async (): Promise<ProfileModel | undefined> => {
     try {
       const result = await api.get("/profile");
@@ -26,7 +23,7 @@ const ProfileService = {
       }
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.log("authService", "getUser_error", err);
+        console.log("authService", "getProfile_error", err);
         if (![401, 400].includes(err.status as number)) throw new Error(err.message);
       }
     }

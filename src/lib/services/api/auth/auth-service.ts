@@ -55,14 +55,11 @@ const AuthService = {
   },
   getProfile: async (): Promise<ProfileModel | undefined> => {
     try {
-      if (!checkCookieExists(process.env.NEXT_PUBLIC_COOKIE_NAME || "")) {
-        return undefined;
-      }
       const result = await ProfileService.getProfile();
       return result;
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.log("authService", "getUser_error", err);
+        console.log("authService", "getProfile_error", err);
         if (![401, 400].includes(err.status as number)) throw new Error(err.message);
       }
     }

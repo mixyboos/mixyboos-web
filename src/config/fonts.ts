@@ -1,2 +1,6 @@
+import { cn } from "@/lib/utils";
 import { GeistMono } from "geist/font/mono";
-export const fontSans = GeistMono;
+
+const fontMono = GeistMono;
+
+export const fontVariables = cn(fontMono.variable);
