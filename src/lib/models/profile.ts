@@ -1,6 +1,7 @@
 import User from "@/lib/models/user";
 type ProfileModel = {
   slug: string;
+  title: string | null;
   displayName: string | null;
   biography: string | null;
   profileImage: string;

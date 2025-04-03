@@ -17,6 +17,7 @@ import { NavFeed } from "@/components/navigation/nav-feed";
 import { siteConfig } from "@/config/site";
 import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
 import { cn } from "@/lib/utils";
+import UserNav from "./user-nav";
 
 export type SidebarItemProps = {
   title: string;
@@ -51,9 +52,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <Icons.mixyboos
-                  className="!size-5 text-foreground fill-current"
-                />
+                <Icons.mixyboos className="!size-5 text-foreground fill-current" />
                 <span className="text-base font-semibold">{siteConfig.name}</span>
               </a>
             </SidebarMenuButton>
@@ -65,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavFeed />
       </SidebarContent>
       <SidebarFooter>
-        <span>Nav User</span>
+        <UserNav />
       </SidebarFooter>
     </Sidebar>
   );
