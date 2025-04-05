@@ -156,10 +156,12 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({ mix, onMixCreated }
             </div>
           </div>
           <Separator className="bg-muted-foreground my-0" />
-          <Button type="submit" variant={"default"}>
-            <Icons.save className="mr-2 h-4 w-4" />
-            Save mix
-          </Button>
+          <div className="mt-4">
+            <Button type="submit" variant={"default"}>
+              <Icons.save className="mr-2 h-4 w-4" />
+              Save mix
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
