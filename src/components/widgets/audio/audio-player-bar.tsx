@@ -24,6 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 type AudioPlayerBarProps = {
   mix: MixModel;
@@ -131,24 +132,10 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             icon={Icons.download}
           ></ActionButton>
         </div>
-        <div className="flex items-center space-x-3">
-          <div className="flex space-x-0">
-            <ActionButton
-              count={mix.likeCount}
-              title="Like"
-              onClick={async () => {
-                const result = await toggleLike.mutateAsync();
-                await queryClient.invalidateQueries({ queryKey: ["user-mixes"] });
-              }}
-              icon={Icons.heart}
-              isActioned={mix.isLiked}
-            ></ActionButton>{" "}
-          </div>
-          {/* TODO: Tags
-          <div className="mr-2 space-x-1 text-gray-400">
-            <Link href="/">#house</Link>
-            <Link href="/">#deephouse</Link>
-          </div> */}
+        <div className="ml-auto flex gap-2">
+          <Badge variant="secondary">Pop</Badge>
+          <Badge variant="secondary">2024</Badge>
+          <Badge variant="secondary">English</Badge>
         </div>
       </div>
     </div>

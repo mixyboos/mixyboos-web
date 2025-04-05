@@ -10,6 +10,7 @@ import Link from "next/link";
 import ActionButton from "@/components/widgets/buttons/action-button";
 import { useToggleMixLike } from "@/lib/services/tan-mix-service";
 import { useQueryClient } from "@tanstack/react-query";
+import AudioPlayerBar from "@/components/widgets/audio/audio-player-bar";
 
 type ListAudioPlayerProps = {
   mix: MixModel;
@@ -44,25 +45,7 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
           </div>
 
           <Separator className="my-2" />
-
-          {/* Favorite Button and Tags */}
-          <div className="flex items-center gap-2">
-            <ActionButton
-              count={mix.likeCount}
-              title="Like"
-              onClick={async () => {
-                const result = await toggleLike.mutateAsync();
-                await queryClient.invalidateQueries({ queryKey: ["user-mixes"] });
-              }}
-              icon={Icons.heart}
-              isActioned={mix.isLiked}
-            ></ActionButton>
-            <div className="ml-auto flex gap-2">
-              <Badge variant="secondary">Pop</Badge>
-              <Badge variant="secondary">2024</Badge>
-              <Badge variant="secondary">English</Badge>
-            </div>
-          </div>
+          <AudioPlayerBar mix={mix} />
         </div>
       </CardContent>
     </Card>
