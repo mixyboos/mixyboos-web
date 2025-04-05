@@ -84,6 +84,8 @@ import {
   UsersRound,
   Instagram,
   Github,
+  RefreshCcw,
+  Pencil,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -103,6 +105,7 @@ export const Icons = {
   copy: Copy,
   copyDone: ClipboardCheck,
   creditCard: CreditCard,
+  delete: Trash,
   discover: LocateFixed,
   download: DownloadCloud,
   ellipsis: MoreVertical,
@@ -138,6 +141,7 @@ export const Icons = {
   paintbrush: Paintbrush,
   pause: Pause,
   pauseCircle: PauseCircle,
+  pencil: Pencil,
   person: PersonStanding,
   people: UsersRound,
   pizza: Pizza,
@@ -147,6 +151,7 @@ export const Icons = {
   previous: SkipBack,
   recent: PartyPopper,
   record: Voicemail,
+  refresh: RefreshCcw,
   register: UserPlus,
   retweet: Repeat2,
   remind: Pin,

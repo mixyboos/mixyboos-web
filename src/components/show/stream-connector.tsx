@@ -1,5 +1,5 @@
 import React from "react";
-import {ProfileModel, ShowStatus, type LiveShowModel} from "@/lib/models";
+import { ProfileModel, ShowStatus, type LiveShowModel } from "@/lib/models";
 import {
   Card,
   CardContent,
@@ -7,20 +7,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {HubConnectionState, type HubConnection} from "@microsoft/signalr";
+import { HubConnectionState, type HubConnection } from "@microsoft/signalr";
 
 import Loading from "@/components/widgets/loading";
 import logger from "@/lib/logger";
 import createSignalRConnection from "@/lib/services/realtime/signalr";
-import {useAuth} from "@/lib/contexts/auth/auth-context";
+import { useAuth } from "@/lib/contexts/auth/auth-context";
 
 type StreamConnectorProps = {
   show: LiveShowModel;
   setShow: (show: LiveShowModel) => void;
 };
 
-const StreamConnector = ({show, setShow}: StreamConnectorProps) => {
-  const {profile} = useAuth();
+const StreamConnector = ({ show, setShow }: StreamConnectorProps) => {
+  const { profile } = useAuth();
   const [messageTitle, setMessageTitle] = React.useState("Please start streaming...");
   const [messageText, setMessageText] = React.useState(
     "If your show doesn't start, refresh this page and restart your stream"
@@ -31,8 +31,7 @@ const StreamConnector = ({show, setShow}: StreamConnectorProps) => {
       profile &&
       (!connection || connection.state === HubConnectionState.Disconnected)
     ) {
-      const newConnection = createSignalRConnection("live");
-      setConnection(newConnection);
+      setConnection(createSignalRConnection("live"));
     }
     return () => {
       connection?.stop();
@@ -45,7 +44,6 @@ const StreamConnector = ({show, setShow}: StreamConnectorProps) => {
         .start()
         .then(() => {
           console.log("LivePage", "Connected");
-
           connection.on("StreamStarted", (message) => {
             setMessageTitle("Waiting for audio");
             setMessageText("RTMP stream detected, waiting for broadcast to be ready");
@@ -91,7 +89,7 @@ const StreamConnector = ({show, setShow}: StreamConnectorProps) => {
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        <Loading title={messageTitle} message={messageText}/>
+        <Loading title={messageTitle} message={messageText} />
       </CardContent>
     </Card>
   );

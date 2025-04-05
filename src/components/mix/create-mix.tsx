@@ -81,7 +81,6 @@ const MixCreateComponent = () => {
           <CreateMixDetails
             mix={{ id: mixId, title: fileName } as MixModel}
             onMixCreated={(mix) => {
-              debugger;
               setCreateState(mix ? CreateState.done : CreateState.error);
               if (mix && mix.user) {
                 router.push(`/${mix.user.slug}/${mix.slug}`);

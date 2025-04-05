@@ -11,13 +11,13 @@ import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useAudioProcessingStatus from "@/lib/services/realtime/hooks/audio-processing-hook";
+import { Icons } from "@/components/icons";
+import { isErrored } from "stream";
 
 // Component for mixes that aren't processed yet
 const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
-  const { isProcessed, processPercentage } = useAudioProcessingStatus();
-  // These values will be supplied later by you
-  const processingProgress = 45; // Example value
-  const processingStatus = "Converting audio..."; // Example value
+  const { isProcessed, processPercentage, processStatus, isFailed } =
+    useAudioProcessingStatus();
 
   useEffect(() => {
     if (isProcessed) {
@@ -93,27 +93,27 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-medium">{processingStatus}</span>
+                <span className="font-medium">{processStatus}</span>
                 <span
                   className={cn(
                     "font-medium",
-                    processingProgress < 30
+                    processPercentage < 30
                       ? "text-red-500"
-                      : processingProgress < 70
+                      : processPercentage < 70
                       ? "text-amber-500"
                       : "text-green-500"
                   )}
                 >
-                  {processingProgress}%
+                  {processPercentage}%
                 </span>
               </div>
               <Progress
-                value={processingProgress}
+                value={processPercentage}
                 className="h-1.5 transition-all"
                 color={
-                  processingProgress < 30
+                  processPercentage < 30
                     ? "bg-red-500"
-                    : processingProgress < 70
+                    : processPercentage < 70
                     ? "bg-amber-500"
                     : "bg-green-500"
                 }
@@ -131,30 +131,32 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
           </span>
 
           {/* Right side - processing message and button */}
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">
-              Processing will take a minute or two...
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleReprocess}
-              disabled={isPending}
-              className="h-7 px-2 py-0 text-xs"
-            >
-              {isPending ? (
-                <div className="flex items-center">
-                  <RefreshCcw className="mr-1 h-3 w-3 animate-spin" />
-                  <span>Reprocessing</span>
-                </div>
-              ) : (
-                <div className="flex items-center">
-                  <RefreshCcw className="mr-1 h-3 w-3" />
-                  <span>Reprocess</span>
-                </div>
-              )}
-            </Button>
-          </div>
+          {isFailed && (
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground">
+                Processing will take a minute or two...
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleReprocess}
+                disabled={isPending}
+                className="h-7 px-2 py-0 text-xs"
+              >
+                {isPending ? (
+                  <div className="flex items-center">
+                    <RefreshCcw className="mr-1 h-3 w-3 animate-spin" />
+                    <span>Reprocessing</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <Icons.refresh className="mr-1 h-3 w-3" />
+                    <span>Reprocess</span>
+                  </div>
+                )}
+              </Button>
+            </div>
+          )}
         </div>
       </CardFooter>
     </Card>

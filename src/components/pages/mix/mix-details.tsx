@@ -1,10 +1,11 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { type MixModel } from "@/lib/models";
 import React from "react";
 import LargeAudioPlayer from "@/components/widgets/audio/large-audio-player";
-import AudioProcessingComponent from "@/components/widgets/audio/audio-processing-component";
 import AudioPlayerBar from "@/components/widgets/audio/audio-player-bar";
 import ProcessingMix from "@/components/pages/mix/mix-process";
+import useAudioProcessingStatus from "@/lib/services/realtime/hooks/audio-processing-hook";
 
 type MixDetailsComponentProps = {
   mix: MixModel;
@@ -13,7 +14,17 @@ type MixDetailsComponentProps = {
 const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
   mix,
 }: MixDetailsComponentProps) => {
-  return mix.isProcessed ? (
+  const { isProcessed, isFailed } = useAudioProcessingStatus();
+  if (isFailed) {
+    return (
+      <Card className="overflow-hidden">
+        <CardContent>
+          <p className="p-4">Mix processing failed</p>
+        </CardContent>
+      </Card>
+    );
+  }
+  return mix.isProcessed || isProcessed ? (
     <div className="flex flex-col h-screen">
       <div>
         <div className="px-8">
