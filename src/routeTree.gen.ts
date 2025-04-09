@@ -15,10 +15,11 @@ import { Route as SignupImport } from './routes/signup'
 import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthedImport } from './routes/_authed'
+import { Route as DebugRouteImport } from './routes/debug/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthedPostsRouteImport } from './routes/_authed/posts.route'
-import { Route as AuthedPostsIndexImport } from './routes/_authed/posts.index'
-import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts.$postId'
+import { Route as UploadIndexImport } from './routes/upload/index'
+import { Route as DebugIndexImport } from './routes/debug/index'
+import { Route as LiveCreateImport } from './routes/live/create'
 
 // Create/Update Routes
 
@@ -45,28 +46,34 @@ const AuthedRoute = AuthedImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DebugRouteRoute = DebugRouteImport.update({
+  id: '/debug',
+  path: '/debug',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthedPostsRouteRoute = AuthedPostsRouteImport.update({
-  id: '/posts',
-  path: '/posts',
-  getParentRoute: () => AuthedRoute,
+const UploadIndexRoute = UploadIndexImport.update({
+  id: '/upload/',
+  path: '/upload/',
+  getParentRoute: () => rootRoute,
 } as any)
 
-const AuthedPostsIndexRoute = AuthedPostsIndexImport.update({
+const DebugIndexRoute = DebugIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthedPostsRouteRoute,
+  getParentRoute: () => DebugRouteRoute,
 } as any)
 
-const AuthedPostsPostIdRoute = AuthedPostsPostIdImport.update({
-  id: '/$postId',
-  path: '/$postId',
-  getParentRoute: () => AuthedPostsRouteRoute,
+const LiveCreateRoute = LiveCreateImport.update({
+  id: '/live/create',
+  path: '/live/create',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -78,6 +85,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/debug': {
+      id: '/debug'
+      path: '/debug'
+      fullPath: '/debug'
+      preLoaderRoute: typeof DebugRouteImport
       parentRoute: typeof rootRoute
     }
     '/_authed': {
@@ -108,129 +122,136 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
-    '/_authed/posts': {
-      id: '/_authed/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof AuthedPostsRouteImport
-      parentRoute: typeof AuthedImport
+    '/live/create': {
+      id: '/live/create'
+      path: '/live/create'
+      fullPath: '/live/create'
+      preLoaderRoute: typeof LiveCreateImport
+      parentRoute: typeof rootRoute
     }
-    '/_authed/posts/$postId': {
-      id: '/_authed/posts/$postId'
-      path: '/$postId'
-      fullPath: '/posts/$postId'
-      preLoaderRoute: typeof AuthedPostsPostIdImport
-      parentRoute: typeof AuthedPostsRouteImport
-    }
-    '/_authed/posts/': {
-      id: '/_authed/posts/'
+    '/debug/': {
+      id: '/debug/'
       path: '/'
-      fullPath: '/posts/'
-      preLoaderRoute: typeof AuthedPostsIndexImport
-      parentRoute: typeof AuthedPostsRouteImport
+      fullPath: '/debug/'
+      preLoaderRoute: typeof DebugIndexImport
+      parentRoute: typeof DebugRouteImport
+    }
+    '/upload/': {
+      id: '/upload/'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadIndexImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthedPostsRouteRouteChildren {
-  AuthedPostsPostIdRoute: typeof AuthedPostsPostIdRoute
-  AuthedPostsIndexRoute: typeof AuthedPostsIndexRoute
+interface DebugRouteRouteChildren {
+  DebugIndexRoute: typeof DebugIndexRoute
 }
 
-const AuthedPostsRouteRouteChildren: AuthedPostsRouteRouteChildren = {
-  AuthedPostsPostIdRoute: AuthedPostsPostIdRoute,
-  AuthedPostsIndexRoute: AuthedPostsIndexRoute,
+const DebugRouteRouteChildren: DebugRouteRouteChildren = {
+  DebugIndexRoute: DebugIndexRoute,
 }
 
-const AuthedPostsRouteRouteWithChildren =
-  AuthedPostsRouteRoute._addFileChildren(AuthedPostsRouteRouteChildren)
-
-interface AuthedRouteChildren {
-  AuthedPostsRouteRoute: typeof AuthedPostsRouteRouteWithChildren
-}
-
-const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedPostsRouteRoute: AuthedPostsRouteRouteWithChildren,
-}
-
-const AuthedRouteWithChildren =
-  AuthedRoute._addFileChildren(AuthedRouteChildren)
+const DebugRouteRouteWithChildren = DebugRouteRoute._addFileChildren(
+  DebugRouteRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
+  '/debug': typeof DebugRouteRouteWithChildren
+  '': typeof AuthedRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
-  '/posts': typeof AuthedPostsRouteRouteWithChildren
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/posts/': typeof AuthedPostsIndexRoute
+  '/live/create': typeof LiveCreateRoute
+  '/debug/': typeof DebugIndexRoute
+  '/upload': typeof UploadIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
+  '': typeof AuthedRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/posts': typeof AuthedPostsIndexRoute
+  '/live/create': typeof LiveCreateRoute
+  '/debug': typeof DebugIndexRoute
+  '/upload': typeof UploadIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_authed': typeof AuthedRouteWithChildren
+  '/debug': typeof DebugRouteRouteWithChildren
+  '/_authed': typeof AuthedRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
-  '/_authed/posts': typeof AuthedPostsRouteRouteWithChildren
-  '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/_authed/posts/': typeof AuthedPostsIndexRoute
+  '/live/create': typeof LiveCreateRoute
+  '/debug/': typeof DebugIndexRoute
+  '/upload/': typeof UploadIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/debug'
     | ''
     | '/login'
     | '/logout'
     | '/signup'
-    | '/posts'
-    | '/posts/$postId'
-    | '/posts/'
+    | '/live/create'
+    | '/debug/'
+    | '/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/logout' | '/signup' | '/posts/$postId' | '/posts'
+  to:
+    | '/'
+    | ''
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/live/create'
+    | '/debug'
+    | '/upload'
   id:
     | '__root__'
     | '/'
+    | '/debug'
     | '/_authed'
     | '/login'
     | '/logout'
     | '/signup'
-    | '/_authed/posts'
-    | '/_authed/posts/$postId'
-    | '/_authed/posts/'
+    | '/live/create'
+    | '/debug/'
+    | '/upload/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthedRoute: typeof AuthedRouteWithChildren
+  DebugRouteRoute: typeof DebugRouteRouteWithChildren
+  AuthedRoute: typeof AuthedRoute
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
   SignupRoute: typeof SignupRoute
+  LiveCreateRoute: typeof LiveCreateRoute
+  UploadIndexRoute: typeof UploadIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthedRoute: AuthedRouteWithChildren,
+  DebugRouteRoute: DebugRouteRouteWithChildren,
+  AuthedRoute: AuthedRoute,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   SignupRoute: SignupRoute,
+  LiveCreateRoute: LiveCreateRoute,
+  UploadIndexRoute: UploadIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -244,20 +265,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/debug",
         "/_authed",
         "/login",
         "/logout",
-        "/signup"
+        "/signup",
+        "/live/create",
+        "/upload/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/_authed": {
-      "filePath": "_authed.tsx",
+    "/debug": {
+      "filePath": "debug/route.tsx",
       "children": [
-        "/_authed/posts"
+        "/debug/"
       ]
+    },
+    "/_authed": {
+      "filePath": "_authed.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
@@ -268,21 +295,15 @@ export const routeTree = rootRoute
     "/signup": {
       "filePath": "signup.tsx"
     },
-    "/_authed/posts": {
-      "filePath": "_authed/posts.route.tsx",
-      "parent": "/_authed",
-      "children": [
-        "/_authed/posts/$postId",
-        "/_authed/posts/"
-      ]
+    "/live/create": {
+      "filePath": "live/create.tsx"
     },
-    "/_authed/posts/$postId": {
-      "filePath": "_authed/posts.$postId.tsx",
-      "parent": "/_authed/posts"
+    "/debug/": {
+      "filePath": "debug/index.tsx",
+      "parent": "/debug"
     },
-    "/_authed/posts/": {
-      "filePath": "_authed/posts.index.tsx",
-      "parent": "/_authed/posts"
+    "/upload/": {
+      "filePath": "upload/index.tsx"
     }
   }
 }
