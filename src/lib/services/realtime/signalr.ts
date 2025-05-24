@@ -1,12 +1,14 @@
-import { env } from "@/env.mjs";
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { useEffect, useState } from "react";
-import logger from "@/lib/logger";
+"use client";
 
-const createSignalRConnection = (hub: string, token: string) => {
+import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { env } from "@/env";
+
+const createSignalRConnection = (hub: string) => {
   const newConnection = new HubConnectionBuilder()
     .withUrl(`${env.NEXT_PUBLIC_REALTIME_HOST}/${hub}`, {
-      accessTokenFactory: () => token,
+      withCredentials: true,
+      transport: HttpTransportType.WebSockets,
+      skipNegotiation: true,
     })
     .configureLogging(LogLevel.Debug)
     .withAutomaticReconnect()

@@ -1,33 +1,14 @@
-import { siteConfig } from "@/config/site";
-import Navbar from "@/lib/components/layout/navbar";
-import { cn } from "@/lib/utils";
-import { type Metadata } from "next";
-import Providers from "./providers";
 import "@/styles/globals.css";
-import FooterComponent from "@/components/widgets/footer";
-import { fontSans } from "@/config/fonts";
-
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <html lang="en" suppressHydrationWarning className="theme-netflix">
-      <body className={cn("min-h-screen bg-background", fontSans.className)}>
-        <Providers>
-          <div className="md:hidden">
-            <h1>Base Layout page {"<"}md</h1>
-          </div>
-          <div className="relative hidden h-screen w-full flex-col md:flex">
-            <div className="border-b">
-              <Navbar className="mx-6" />
-            </div>
-            <div className="mx-12">{children}</div>
-            <footer className="sticky top-[100vh] text-center py-2">
-              <FooterComponent />
-            </footer>
-          </div>
-        </Providers>
-      </body>
-    </html>
-  );
+import "@/styles/theme.css";
+import type { Metadata } from "next";
+import { siteConfig } from "@/config/site";
+import { fontVariables } from "@/config/fonts";
+import { cn } from "@/lib/utils";
+import AppProviders from "@/app/providers";
+import { cookies } from "next/headers";
+const META_THEME_COLORS = {
+  light: "#ffffff",
+  dark: "#09090b",
 };
 
 export const metadata: Metadata = {
@@ -36,10 +17,6 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
@@ -47,4 +24,39 @@ export const metadata: Metadata = {
   },
 };
 
-export default RootLayout;
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const cookieStore = await cookies();
+  const activeTheme = cookieStore.get("active_theme")?.value;
+  const isScaled = activeTheme?.endsWith("-scaled");
+  return (
+    <html lang="en" className="theme-mixboos dark">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.querySelector('meta[name="theme-color"]').setAttribute('content', '${META_THEME_COLORS.dark}')
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
+      <body
+        className={cn(
+          "bg-background overscroll-none font-sans antialiased",
+          activeTheme ? `theme-${activeTheme}` : "",
+          isScaled ? "theme-scaled" : "",
+          fontVariables
+        )}
+      >
+        <AppProviders activeTheme={activeTheme}>{children}</AppProviders>
+      </body>
+    </html>
+  );
+}

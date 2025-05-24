@@ -1,18 +1,24 @@
 import { type ProfileModel } from ".";
 
-type MixModel = {
+type CreateMixModel = {
   id: string;
-  slug?: string;
   title: string;
   description: string | null;
-  dateUploaded?: string;
-  image?: string;
-  likeCount?: number;
-  playCount?: number;
-  shareCount?: number;
-  downloadCount?: number;
-  user?: ProfileModel;
-  audioUrl?: string;
   isProcessed: boolean;
 };
+type MixModel = CreateMixModel & {
+  slug?: string;
+  duration?: number;
+  dateUploaded?: string;
+  image?: string;
+  likeCount: number;
+  playCount: number;
+  shareCount: number;
+  downloadCount: number;
+  user?: ProfileModel;
+  audioUrl?: string;
+  pcmUrl?: string;
+  isLiked: boolean;
+};
 export default MixModel;
+export type { CreateMixModel };

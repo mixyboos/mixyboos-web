@@ -1,17 +1,17 @@
-import HeroPage from "@/lib/components/pages/HeroPage";
-import React from "react";
-import { getServerSession } from "next-auth";
+"use client";
+import HeroPage from "@/components/pages/hero-page";
+import { useAuth } from "@/lib/contexts/auth/auth-context";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/services/auth/config";
 
-const Home = async () => {
-  const session = await getServerSession(authOptions);
+export default function Home() {
+  const { profile } = useAuth();
 
-  if (session) {
+  if (profile) {
     redirect("/dashboard");
-    return;
   }
-  return <HeroPage />;
-};
-
-export default Home;
+  return (
+    <div className="m-28">
+      <HeroPage />
+    </div>
+  );
+}

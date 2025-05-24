@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///srv/dev/mixyboos/mixyboos-web/src/app/%28app%29/%28loggedin%29/live/layout.tsx"],"sourcesContent":["import React from \"react\";\n\nconst LiveLayout = ({ children }: { children: React.ReactNode }) => {\n  return (\n    //     padding-top: 24px;\n    // padding-right: 128px;\n    // padding-bottom: 24px;\n    // padding-left: 128px;\n    <div className=\"py-6\">{children}</div>\n  );\n};\n\nexport default LiveLayout;\n"],"names":[],"mappings":";;;;;AAEA,MAAM,aAAa,CAAC,EAAE,QAAQ,EAAiC;IAC7D,OACE,yBAAyB;IACzB,wBAAwB;IACxB,wBAAwB;IACxB,uBAAuB;kBACvB,8OAAC;QAAI,WAAU;kBAAQ;;;;;;AAE3B;uCAEe","debugId":null}}]
+}

@@ -1,7 +1,5 @@
-import UploadService from "@/lib/services/api/upload-service";
-import { getFilename } from "@/lib/utils/fileUtils";
-import axios, { type AxiosProgressEvent, type AxiosRequestConfig } from "axios";
-import { StatusCodes } from "http-status-codes";
+import { uploadAudio } from "@/lib/services/api/upload/upload-service";
+import { getFilename } from "@/lib/utils/file-utils";
 import React from "react";
 
 interface IFileUploadProps {
@@ -24,28 +22,23 @@ const FileUpload = ({
     if (!event.currentTarget.files) return;
     if (!event.currentTarget.files[0]) return;
 
-    const uploadService = new UploadService();
     const formData = new FormData();
 
     formData.append("file", event.currentTarget.files[0]);
     try {
       onUploadStart(getFilename(event.currentTarget.files[0].name));
-      const result = await uploadService.uploadAudio(
-        mixId,
-        formData,
-        onUploadProgress,
-      );
+      const result = await uploadAudio(mixId, formData, onUploadProgress);
       if (result) {
         onUploadComplete();
       } else {
         onError(
-          "Error uploading file, please refresh your browser and try again!",
+          "Error uploading file, please refresh your browser and try again!"
         );
       }
     } catch (err) {
       console.error("Upload", "Error", err);
       onError(
-        "Error uploading file, please refresh your browser and try again!",
+        "Error uploading file, please refresh your browser and try again!"
       );
     }
   };
@@ -66,6 +59,7 @@ const FileUpload = ({
       <span className="mt-2 text-base leading-normal">gimme a file</span>
       <input
         type="file"
+        accept=".mp3,audio/*"
         className="hidden"
         onChange={(e) => {
           startUpload(e).catch((err) => {

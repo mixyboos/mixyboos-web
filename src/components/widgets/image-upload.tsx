@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import React, { useEffect } from "react";
+import React from "react";
 import Dropzone, { type DropzoneRef } from "react-dropzone";
 
 interface ImageUploadProps extends React.BaseHTMLAttributes<HTMLDivElement> {
@@ -14,11 +14,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   ...props
 }) => {
   const dropzoneRef = React.createRef<DropzoneRef>();
-  useEffect(() => {
-    if (imageUrl) {
-      console.log("image-upload", "imageUrl", imageUrl);
-    }
-  }, [imageUrl]);
+
   return (
     <Dropzone
       accept={{
@@ -33,15 +29,25 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         }
       }}
     >
-      {({ getRootProps, getInputProps, acceptedFiles }) => {
+      {({ getRootProps, getInputProps, open, acceptedFiles }) => {
         return (
           <div className={cn("h-64 w-64", className)}>
-            <div
-              {...getRootProps({ className: "dropzone" })}
-              onClick={(e) => e.stopPropagation()}
-            >
+            <div {...getRootProps({ className: "dropzone" })}>
+              <input
+                {...getInputProps()}
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+              />
               {acceptedFiles?.length || imageUrl ? (
-                <div id="preview" className="flex h-56 w-3/4">
+                <div
+                  id="preview"
+                  className="flex h-56 w-3/4"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    open();
+                  }}
+                >
                   {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -78,19 +84,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                         ></path>
                       </svg>
                       <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span className="font-semibold">Click to upload</span>{" "}
-                        or drag and drop
+                        <span className="font-semibold">Click to upload</span> or drag
+                        and drop
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         SVG, PNG, JPG or GIF (MAX. 800x400px)
                       </p>
                     </div>
-                    <input
-                      {...getInputProps()}
-                      id="dropzone-file"
-                      type="file"
-                      className="hidden"
-                    />
                   </label>
                 </div>
               )}

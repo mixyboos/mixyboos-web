@@ -1,34 +1,41 @@
 "use client";
 import React, { type PropsWithChildren } from "react";
-import clsx from "clsx";
+import { Button } from "@/components/ui/button";
+import { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
-const colors = {
-  default: "text-gray-600 hover:text-gray-900",
-  danger: "text-red-600 hover:text-red-900",
-};
 interface IActionButtonProps extends PropsWithChildren {
-  count?: number;
-  onClick?: () => void;
-  color?: "default" | "danger";
+  count: number;
+  title: string;
+  isActioned?: boolean;
+  icon: React.ComponentType<{ className?: string }>;
+  // onClick: () => Promise<{ newCount: number; newIsActioned: boolean }>;
+  onClick: () => void;
 }
 
 const ActionButton: React.FC<IActionButtonProps> = ({
   children,
   count,
-  color = "default",
+  title,
+  isActioned,
+  icon: Icon,
   onClick,
 }) => {
   return (
-    <button
-      className={clsx(
-        "py-0.2 inline-flex items-center rounded-md border border-gray-500 px-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-200 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800",
-        colors[color],
-      )}
-      onClick={onClick}
+    <Button
+      variant={"ghost"}
+      title={title}
+      onClick={async () => {
+        await onClick();
+      }}
     >
+      {Icon && <Icon className={cn(isActioned && "text-red-600")} />}
       {children}
-      <div className="mx-1 text-sm">{count}</div>
-    </button>
+      <div className={cn("-mx-2 mb-3 text-sm", isActioned && "text-red-600")}>
+        {count.toString()}
+      </div>
+    </Button>
   );
 };
 export default ActionButton;

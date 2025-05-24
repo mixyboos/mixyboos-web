@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import logger from "@/lib/logger";
 import createSignalRConnection from "@/lib/services/realtime/signalr";
-const useAudioProcessingStatus = (token: string) => {
+const useAudioProcessingStatus = () => {
   const [isProcessed, setIsProcessed] = useState(false);
   const [processPercentage, setProcessPercentage] = useState(0);
-  logger.debug("Signalr", "useAudioProcessingStatus", "Token", token);
+  const [processStatus, setProcessStatus] = useState("Preparing conversion...");
+  const [isFailed, setIsFailed] = useState(false);
   useEffect(() => {
-    if (!token) return;
 
-    const connection = createSignalRConnection("updates", token);
+    const connection = createSignalRConnection("updates");
     connection.start().then(() => {
       logger.debug(
         "Signalr",
@@ -17,26 +17,26 @@ const useAudioProcessingStatus = (token: string) => {
         connection,
       );
       connection.on("ConversionStarted", (showId: string) => {
-        debugger;
-        logger.debug("Signalr", "ConversionProgress", showId);
+        logger.debug("Signalr", "ConversionStarted", showId);
+        setProcessStatus("Converting audio...");
       });
       connection.on("ConversionProgress", (showId: string, value: number) => {
-        debugger;
         logger.debug("Signalr", "ConversionProgress", showId, value);
         setProcessPercentage(value);
+        setProcessStatus("Converting audio...");
       });
       connection.on("ConversionFinished", (showId: string) => {
-        debugger;
-        logger.debug("Signalr", "ConversionProgress", showId);
+        logger.debug("Signalr", "ConversionFinished", showId);
         setIsProcessed(true);
+        setProcessStatus("Processing finished...");
       });
       connection.on("ConversionFailed", (showId: string) => {
-        debugger;
-        logger.debug("Signalr", "ConversionProgress", showId);
-        setIsProcessed(true);
+        logger.debug("Signalr", "ConversionFailed", showId);
+        setProcessStatus("Processing failed...");
+        setIsFailed(true);
       });
     });
   });
-  return { isProcessed, processPercentage };
+  return { isProcessed, processPercentage, processStatus, isFailed };
 };
 export default useAudioProcessingStatus;

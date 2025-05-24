@@ -9,15 +9,13 @@ export const useStreamDetails = () => {
   React.useEffect(() => {
     // const liveService = new LiveService(session?.user.accessToken);
     // const profileService = new ProfileService(session?.user.accessToken);
-    const liveService = new LiveService();
-    const profileService = new ProfileService();
 
     const loadUserStreamDetails = async () => {
-      setStreamKey((await profileService.getStreamKey())?.apiKey);
-      setStreamHost(await liveService.getStreamHost());
+      setStreamKey((await ProfileService.getStreamKey())?.apiKey);
+      setStreamHost(await LiveService.getStreamHost());
     };
     loadUserStreamDetails();
   }, []);
 
-  return { streamKey, streamHost };
+  return {streamKey, streamHost};
 };

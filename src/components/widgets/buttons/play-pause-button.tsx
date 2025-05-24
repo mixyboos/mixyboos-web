@@ -2,16 +2,12 @@
 import React from "react";
 
 import { type MixModel } from "@/lib/models";
-import useAudioStore, {
-  PlayState,
-} from "@/lib/services/stores/audio/audio-store";
-import { Icons } from "@/components/icons";
-import MixService from "@/lib/services/api/mix-service";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
-interface IPlayPauseButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+import { Icons } from "@/components/icons";
+import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
+import { getMixAudioUrl } from "@/lib/services/api/mix-service";
+
+interface IPlayPauseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   mix: MixModel;
   onPlayStart: () => void;
 }
@@ -26,37 +22,43 @@ const PlayPauseButton = ({
     playState,
     togglePlayState,
     nowPlaying,
+    clearNowPlaying,
     setNowPlaying,
-    setNowPlayingUrl,
     nowPlayingUrl,
   } = useAudioStore();
+  const _playMix = async (mix: MixModel) => {
+    const url = await getMixAudioUrl(mix);
+    if (url) {
+      setNowPlaying(mix, url, mix.id);
+      onPlayStart();
+    }
+  };
   return (
-    <Button
-      variant="ghost"
-      className={className}
+    <button
+      className="hover:opacity-80 transition duration-500 hover:scale-105"
+      {...props}
       onClick={async () => {
+        if (mix.id !== nowPlaying?.id) {
+          clearNowPlaying();
+          _playMix(mix);
+        }
+
         if (
           playState === PlayState.stopped ||
           (mix.id !== nowPlaying?.id && !nowPlayingUrl)
         ) {
-          const url = await new MixService().getMixAudioUrl(mix);
-          if (url) {
-            setNowPlaying(mix);
-            setNowPlayingUrl(url);
-            onPlayStart();
-          }
+          _playMix(mix);
         } else {
           togglePlayState();
         }
       }}
-      {...props}
     >
       {nowPlaying?.id === mix.id && playState === PlayState.playing ? (
-        <Icons.pause className="h-full w-full" />
+        <Icons.pauseCircle size={64} strokeWidth="1" />
       ) : (
-        <Icons.playCircle className="h-full w-full" />
+        <Icons.playCircle size={64} strokeWidth="" />
       )}
-    </Button>
+    </button>
   );
 };
 

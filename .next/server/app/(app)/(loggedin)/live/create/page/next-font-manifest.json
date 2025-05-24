@@ -1,0 +1,10 @@
+{
+  "pages": {},
+  "app": {
+    "[project]/src/app/(app)/(loggedin)/live/create/page": [
+      "static/media/GeistMono_Variable.p.6bae060c.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": false,
+  "pagesUsingSizeAdjust": false
+}

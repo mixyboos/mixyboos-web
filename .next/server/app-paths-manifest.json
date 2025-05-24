@@ -1,0 +1,6 @@
+{
+  "/(app)/(loggedin)/live/create/page": "app/(app)/(loggedin)/live/create/page.js",
+  "/(app)/(loggedin)/upload/page": "app/(app)/(loggedin)/upload/page.js",
+  "/(app)/[username]/[mixSlug]/page": "app/(app)/[username]/[mixSlug]/page.js",
+  "/[...not_found]/page": "app/[...not_found]/page.js"
+}
