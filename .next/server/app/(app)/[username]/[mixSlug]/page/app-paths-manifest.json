@@ -1,3 +1,0 @@
-{
-  "/(app)/[username]/[mixSlug]/page": "app/(app)/[username]/[mixSlug]/page.js"
-}

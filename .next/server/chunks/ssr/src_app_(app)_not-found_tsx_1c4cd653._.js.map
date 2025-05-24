@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///srv/dev/mixyboos/mixyboos-web/src/app/%28app%29/not-found.tsx"],"sourcesContent":["import NotFoundPage from \"@/components/pages/not-found\";\n\nconst NotFound = () => {\n  return <NotFoundPage />;\n};\n\nexport default NotFound;\n"],"names":[],"mappings":";;;;AAAA;;;AAEA,MAAM,WAAW;IACf,qBAAO,8OAAC,2IAAA,CAAA,UAAY;;;;;AACtB;uCAEe","debugId":null}}]
-}
