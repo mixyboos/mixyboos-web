@@ -1,64 +1,46 @@
-import { Button } from "@/components/ui/button";
+import type { LucideIcon } from 'lucide-react'
+import type { SidebarItemProps } from '@/components/navigation/app-sidebar'
+import { Icons } from '@/components/icons'
 import {
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import {
-  IconCirclePlusFilled,
-  IconDots,
-  IconFolder,
-  IconMail,
-  IconShare3,
-  IconTrash,
-} from "@tabler/icons-react";
-import { SidebarItemProps } from "@/components/navigation/app-sidebar";
-import { Icons } from "@/components/icons";
-import { LucideIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/sidebar'
 
-const items: SidebarItemProps[] = [
-  { title: "New Shows", icon: Icons.recent as LucideIcon, link: "/new" },
+const items: Array<SidebarItemProps> = [
+  { title: 'New Shows', icon: Icons.recent as LucideIcon, link: '/new' },
   {
-    title: "Favourites",
+    title: 'Favourites',
     icon: Icons.heart as LucideIcon,
-    link: "/me/favourites",
+    link: '/me/favourites',
   },
   {
-    title: "Listen Later",
+    title: 'Listen Later',
     icon: Icons.remind as LucideIcon,
-    link: "/me/later",
+    link: '/me/later',
   },
   {
-    title: "Genres",
+    title: 'Genres',
     icon: Icons.genre as LucideIcon,
-    link: "/dashboard/genres",
+    link: '/dashboard/genres',
   },
   {
-    title: "Trending",
+    title: 'Trending',
     icon: Icons.trending as LucideIcon,
-    link: "/dashboard/trending",
+    link: '/dashboard/trending',
   },
   {
-    title: "Live Now",
+    title: 'Live Now',
     icon: Icons.liveNow as LucideIcon,
-    link: "/dashboard/live/now",
+    link: '/dashboard/live/now',
   },
-];
+]
 
 export function NavFeed() {
-  const { isMobile } = useSidebar();
+  const { isMobile } = useSidebar()
   return (
     <SidebarGroup className="group-data-[c`ollapsible=icon]:hidden">
       <SidebarGroupLabel>Feed</SidebarGroupLabel>
@@ -75,11 +57,11 @@ export function NavFeed() {
         ))}
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
-            <IconDots className="text-sidebar-foreground/70" />
+            <Icons.verticalDots className="text-sidebar-foreground/70" />
             <span>More</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
-  );
+  )
 }

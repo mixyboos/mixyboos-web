@@ -1,8 +1,8 @@
-import path from "path";
-
 const getFileExtension = (fileName: string): string =>
-  fileName.split(".").pop() as string;
+  fileName.split('.').pop() as string
 
-const getFilename = (fullPath: string): string => path.basename(fullPath);
-
-export { getFileExtension, getFilename };
+const getFilename = (fileName: string): string => {
+  const parts = fileName.split('/')
+  return parts[parts.length - 1]
+}
+export { getFileExtension, getFilename }

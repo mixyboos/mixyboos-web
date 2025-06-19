@@ -1,31 +1,30 @@
-import type ShowStatus from "./show-status";
-import type ProfileModel from "./profile";
+import type { ProfileModel } from '@/lib/models/profile'
+import type { ShowStatus } from '@/lib/models/show-status'
 
-class LiveShowModel {
+export class LiveShowModel {
   constructor(
     title: string,
     description: string,
-    tags: string[],
+    tags: Array<string>,
     startDate: Date,
-    status: ShowStatus
+    status: ShowStatus,
   ) {
-    this.title = title;
-    this.description = description;
-    this.tags = tags;
-    this.startDate = startDate;
-    this.status = status;
+    this.title = title
+    this.description = description
+    this.tags = tags
+    this.startDate = startDate
+    this.status = status
   }
-  id?: string;
-  title: string;
-  description: string;
-  tags: string[];
+  id?: string
+  title: string
+  description: string
+  tags: Array<string>
 
-  startDate: Date;
-  status: ShowStatus;
+  startDate: Date
+  status: ShowStatus
 
-  user: ProfileModel | undefined;
+  user: ProfileModel | undefined
   fromJson = (model: string) => {
-    console.log("live-show", "fromJson", model);
-  };
+    console.log('live-show', 'fromJson', model)
+  }
 }
-export default LiveShowModel;

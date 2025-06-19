@@ -1,21 +1,19 @@
-"use client";
-import { Icons } from "@/components/icons";
-import ActionButton from "@/components/widgets/buttons/action-button";
-import logger from "@/lib/logger";
-import { type MixModel } from "@/lib/models";
-import React, { useState } from "react";
-import { useToggleMixLike } from "@/lib/services/tan-mix-service";
-import { useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/lib/contexts/auth/auth-context";
+'use client'
+import React, { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
+import type { MixModel } from '@/lib/models/mix'
+import { Icons } from '@/components/icons'
+import ActionButton from '@/components/widgets/buttons/action-button'
+import logger from '@/lib/logger'
 import {
   DropdownMenu,
-  DropdownMenuItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { deleteMix } from "@/lib/services/api/mix-service";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { deleteMix } from '@/lib/services/api/mix-service'
 import {
   Dialog,
   DialogContent,
@@ -23,28 +21,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/dialog'
+import { Badge } from '@/components/ui/badge'
+import { useToggleMixLike } from '@/lib/queries/mix'
+import { useAuth } from '@/lib/auth'
 
 type AudioPlayerBarProps = {
-  mix: MixModel;
-};
+  mix: MixModel
+}
 
 const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
-  const toggleLike = useToggleMixLike(mix);
-  const queryClient = useQueryClient();
-  const { profile } = useAuth();
-  const router = useRouter();
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const toggleLike = useToggleMixLike(mix)
+  const queryClient = useQueryClient()
+  const { profile } = useAuth()
+  const router = useRouter()
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   const handleDeleteConfirmed = async () => {
-    const result = await deleteMix(mix);
+    const result = await deleteMix(mix)
     if (result) {
-      await queryClient.invalidateQueries({ queryKey: ["user-mixes"] });
-      router.push("/dashboard/mixes");
+      await queryClient.invalidateQueries({ queryKey: ['user-mixes'] })
+      router.navigate({ to: '/dashboard/mixes' })
     }
-    setIsDeleteDialogOpen(false);
-  };
+    setIsDeleteDialogOpen(false)
+  }
 
   return (
     <div>
@@ -71,13 +71,16 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+              <Dialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+              >
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Delete Mix</DialogTitle>
                     <DialogDescription>
-                      Are you sure you want to delete &quot;{mix.title}&quot;? This
-                      action cannot be undone.
+                      Are you sure you want to delete &quot;{mix.title}&quot;?
+                      This action cannot be undone.
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
@@ -87,7 +90,10 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
                     >
                       Cancel
                     </Button>
-                    <Button variant="destructive" onClick={handleDeleteConfirmed}>
+                    <Button
+                      variant="destructive"
+                      onClick={handleDeleteConfirmed}
+                    >
                       Delete
                     </Button>
                   </DialogFooter>
@@ -100,8 +106,8 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             count={mix.likeCount}
             title="Like"
             onClick={async () => {
-              const result = await toggleLike.mutateAsync();
-              await queryClient.invalidateQueries({ queryKey: ["user-mixes"] });
+              const result = await toggleLike.mutateAsync()
+              await queryClient.invalidateQueries({ queryKey: ['user-mixes'] })
             }}
             icon={Icons.heart}
             isActioned={mix.isLiked}
@@ -113,7 +119,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
               return Promise.resolve({
                 newCount: mix.shareCount,
                 newIsActioned: false,
-              });
+              })
             }}
             isActioned={false}
             icon={Icons.retweet}
@@ -122,11 +128,11 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             count={mix.downloadCount}
             title="Download"
             onClick={async () => {
-              logger.debug("audio-player-bar", "download-mix", mix);
+              logger.debug('audio-player-bar', 'download-mix', mix)
               return Promise.resolve({
                 newCount: mix.downloadCount,
                 newIsActioned: false,
-              });
+              })
             }}
             isActioned={false}
             icon={Icons.download}
@@ -139,7 +145,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AudioPlayerBar;
+export default AudioPlayerBar

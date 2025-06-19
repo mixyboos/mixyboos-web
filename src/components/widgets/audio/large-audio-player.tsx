@@ -1,29 +1,29 @@
-"use client";
-import { type MixModel } from "@/lib/models";
-import React from "react";
-import PlayPauseButton from "../buttons/play-pause-button";
-import Image from "next/image";
-import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
-import logger from "@/lib/logger";
-import WaveformComponent from "@/components/widgets/audio/waveform";
-import Link from "next/link";
-import useAudioProcessingStatus from "@/lib/services/realtime/hooks/audio-processing-hook";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
+'use client'
+import React from 'react'
+import { Link } from '@tanstack/react-router'
+import type { MixModel } from '@/lib/models/mix'
+import useAudioStore, { PlayState } from '@/lib/contexts/audio-context'
+import logger from '@/lib/logger'
+import WaveformComponent from '@/components/widgets/audio/waveform'
+import { Button } from '@/components/ui/button'
+import { Icons } from '@/components/icons'
+import useAudioProcessingStatus from '@/lib/hooks/audio-processing-hook'
+import PlayPauseButton from '@/components/widgets/buttons/play-pause-button'
+
 type LargeAudioPlayerProps = {
-  mix: MixModel;
-};
+  mix: MixModel
+}
 
 const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
   mix,
 }: LargeAudioPlayerProps) => {
-  const { setSeekPosition, position, duration, setDuration } = useAudioStore();
-  const { isProcessed } = useAudioProcessingStatus();
+  const { setSeekPosition, position, duration, setDuration } = useAudioStore()
+  const { isProcessed } = useAudioProcessingStatus()
   React.useEffect(() => {
     if (mix.duration) {
-      setDuration(mix.duration);
+      setDuration(mix.duration)
     }
-  }, [mix]);
+  }, [mix])
 
   return (
     <div className="space-x-4">
@@ -34,12 +34,12 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
               disabled={!mix.isProcessed}
               mix={mix}
               onPlayStart={() => {
-                logger.debug("large-audio-player", "onPlayStart");
+                logger.debug('large-audio-player', 'onPlayStart')
               }}
             />
           </div>
           <div className="grow justify-center">
-            <Link href={`/${mix.user?.slug}/${mix.slug}`}>
+            <Link to={`/${mix.user!.slug}/${mix.slug!}`}>
               <h1 className="text-xl font-bold md:text-3xl">{mix.title}</h1>
               <h2 className="text-md text-muted-foreground">
                 By: {mix.user?.displayName}
@@ -52,7 +52,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
         <WaveformComponent
           id={mix.id}
           audioUrl={mix.audioUrl as string}
-          pcmUrl={mix.pcmUrl as string}
+          pcmUrl={mix.pcmUrl}
           playState={PlayState.stopped}
           duration={mix.duration || 0}
           position={position}
@@ -68,7 +68,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default LargeAudioPlayer;
+export default LargeAudioPlayer

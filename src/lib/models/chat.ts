@@ -1,11 +1,9 @@
-import type ProfileModel from "./profile";
+import type { ProfileModel } from "@/lib/models/profile";
 
-type ChatModel = {
+export type ChatModel = {
   id: string;
   fromUser: ProfileModel;
   toUser: ProfileModel;
   timestamp: Date;
   message: string;
 };
-
-export default ChatModel;

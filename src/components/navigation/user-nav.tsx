@@ -1,7 +1,7 @@
-import * as React from "react";
+import * as React from 'react'
 
-import { Icons } from "@/components/icons";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Icons } from '@/components/icons'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +10,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/lib/contexts/auth/auth-context";
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar'
+import { useAuth } from '@/lib/auth'
 
 const UserNav: React.FC = () => {
-  const { isMobile } = useSidebar();
-  const { profile } = useAuth();
-  if (!profile) return null;
+  const { isMobile } = useSidebar()
+  const { profile, isAuthenticated } = useAuth()
+  if (!isAuthenticated || !profile) return null
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -35,7 +35,7 @@ const UserNav: React.FC = () => {
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage
                   src={profile.profileImage}
-                  alt={profile.displayName || "Profile Name"}
+                  alt={profile.displayName || 'Profile Name'}
                 />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
@@ -50,18 +50,18 @@ const UserNav: React.FC = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={profile.profileImage} alt={profile.name} />
+                  <AvatarImage src={profile.profileImage} alt={profile.displayName} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{profile.name}</span>
+                  <span className="truncate font-medium">{profile.displayName}</span>
                   <span className="text-muted-foreground truncate text-xs">
                     {profile.username}
                   </span>
@@ -105,7 +105,7 @@ const UserNav: React.FC = () => {
     //   <DropdownMenuContent className="w-56" align="end" forceMount>
     //     <DropdownMenuLabel className="font-normal">
     //       <div className="flex flex-col space-y-1">
-    //         <p className="text-sm font-medium leading-none">{profile.name}</p>
+    //         <p className="text-sm font-medium leading-none">{profile.displayName}</p>
     //         <p className="text-xs leading-none ">{profile.email}</p>
     //       </div>
     //     </DropdownMenuLabel>
@@ -144,6 +144,6 @@ const UserNav: React.FC = () => {
     //     </DropdownMenuItem>
     //   </DropdownMenuContent>
     // </DropdownMenu>
-  );
-};
-export default UserNav;
+  )
+}
+export default UserNav

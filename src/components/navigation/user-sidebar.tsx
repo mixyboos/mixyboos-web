@@ -1,4 +1,5 @@
-import { Icons } from "@/components/icons";
+import type { LucideIcon } from 'lucide-react'
+import { Icons } from '@/components/icons'
 import {
   Sidebar,
   SidebarContent,
@@ -10,42 +11,37 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import UserImage from "@/components/widgets/user-image";
-import { useAuth } from "@/lib/contexts/auth/auth-context";
-import { LucideIcon } from "lucide-react";
-import Link from "next/link";
+} from '@/components/ui/sidebar'
+import UserImage from '@/components/widgets/user-image'
 
 const items = {
   me: [
     {
-      name: "My Shows",
+      name: 'My Shows',
       icon: Icons.liveStream as LucideIcon,
-      link: "/dashboard/shows",
+      link: '/dashboard/shows',
     },
     {
-      name: "My Mixes",
+      name: 'My Mixes',
       icon: Icons.mix as LucideIcon,
-      link: "/dashboard/mixes",
+      link: '/dashboard/mixes',
     },
     {
-      name: "My Profile",
+      name: 'My Profile',
       icon: Icons.user as LucideIcon,
-      link: "/dashboard/profile",
+      link: '/dashboard/profile',
     },
     {
-      name: "Stats",
+      name: 'Stats',
       icon: Icons.graph as LucideIcon,
-      link: "/dashboard/stats",
+      link: '/dashboard/stats',
     },
   ],
-  feed: [
-
-  ],
-};
-//TODO: https://x.com/KaraBharat/status/1901883428494274901
+  feed: [],
+}
+// TODO: https://x.com/KaraBharat/status/1901883428494274901
 const UserSidebar = () => {
-  const { profile } = useAuth();
+  const { profile } = useAuth()
   return (
     <Sidebar variant="inset" collapsible="icon" className="mt-16 pb-16">
       <SidebarHeader>
@@ -53,13 +49,13 @@ const UserSidebar = () => {
           {profile?.profileImage && (
             <UserImage
               src={profile?.profileImage as string}
-              status={"offline"}
-              size={"md"}
+              status={'offline'}
+              size={'md'}
             />
           )}
           <div>
             <h2 className="text-sm font-semibold">
-              {profile?.displayName || "Argle Bargle"}
+              {profile?.displayName || 'Argle Bargle'}
             </h2>
             <span className="flex items-center space-x-1">
               <a
@@ -67,7 +63,7 @@ const UserSidebar = () => {
                 href="#"
                 className="text-xs hover:underline "
               >
-                {profile?.biography || "Hello, Lover"}
+                {profile?.biography || 'Hello, Lover'}
               </a>
             </span>
           </div>
@@ -80,7 +76,10 @@ const UserSidebar = () => {
             <SidebarMenu>
               {items.me.map((item) => (
                 <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild isActive={item.name === location.pathname}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={item.name === location.pathname}
+                  >
                     <Link href={item.link}>
                       <item.icon />
                       <span>{item.name}</span>
@@ -97,7 +96,10 @@ const UserSidebar = () => {
             <SidebarMenu>
               {items.feed.map((item) => (
                 <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild isActive={item.name === location.pathname}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={item.name === location.pathname}
+                  >
                     <Link href={item.link}>
                       <item.icon />
                       <span>{item.name}</span>
@@ -111,7 +113,7 @@ const UserSidebar = () => {
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>
-  );
-};
+  )
+}
 
-export default UserSidebar;
+export default UserSidebar

@@ -1,10 +1,11 @@
-import { cn } from "@/lib/utils";
-import React from "react";
-import Dropzone, { type DropzoneRef } from "react-dropzone";
+import React from 'react'
+import Dropzone from 'react-dropzone'
+import type { DropzoneRef } from 'react-dropzone'
+import { cn } from '@/lib/utils'
 
 interface ImageUploadProps extends React.BaseHTMLAttributes<HTMLDivElement> {
-  imageUrl: string | undefined;
-  onImageChanged: (image: File) => void;
+  imageUrl: string | undefined
+  onImageChanged: (image: File) => void
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -13,26 +14,26 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   className,
   ...props
 }) => {
-  const dropzoneRef = React.createRef<DropzoneRef>();
+  const dropzoneRef = React.createRef<DropzoneRef>()
 
   return (
     <Dropzone
       accept={{
-        "image/png": [".png"],
-        "image/jpg": [".jpg", ".jpeg"],
+        'image/png': ['.png'],
+        'image/jpg': ['.jpg', '.jpeg'],
       }}
       maxFiles={1}
       ref={dropzoneRef}
       onDrop={(acceptedFiles) => {
         if (acceptedFiles.length !== 0 && acceptedFiles[0]) {
-          onImageChanged(acceptedFiles[0]);
+          onImageChanged(acceptedFiles[0])
         }
       }}
     >
       {({ getRootProps, getInputProps, open, acceptedFiles }) => {
         return (
-          <div className={cn("h-64 w-64", className)}>
-            <div {...getRootProps({ className: "dropzone" })}>
+          <div className={cn('h-64 w-64', className)}>
+            <div {...getRootProps({ className: 'dropzone' })}>
               <input
                 {...getInputProps()}
                 id="dropzone-file"
@@ -44,12 +45,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                   id="preview"
                   className="flex h-56 w-3/4"
                   onClick={(e) => {
-                    e.stopPropagation();
-                    open();
+                    e.stopPropagation()
+                    open()
                   }}
                 >
                   {
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       className="rounded-md  border-2 border-muted object-cover"
                       src={
@@ -84,8 +84,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                         ></path>
                       </svg>
                       <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span className="font-semibold">Click to upload</span> or drag
-                        and drop
+                        <span className="font-semibold">Click to upload</span>{' '}
+                        or drag and drop
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         SVG, PNG, JPG or GIF (MAX. 800x400px)
@@ -96,10 +96,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               )}
             </div>
           </div>
-        );
+        )
       }}
     </Dropzone>
-  );
-};
+  )
+}
 
-export default ImageUpload;
+export default ImageUpload

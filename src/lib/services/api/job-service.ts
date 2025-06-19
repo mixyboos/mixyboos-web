@@ -1,15 +1,16 @@
-import logger from "@/lib/logger";
-import api from "@/lib/services/api/api-client";
-import { StatusCodes } from "http-status-codes";
+import { StatusCodes } from 'http-status-codes'
+import logger from '@/lib/logger'
+import api from '@/lib/services/api/api-client'
+
 const requeProcessMixJob = async (mixId: string): Promise<boolean> => {
   try {
-    const result = await api.post(`job/requeuemix?mixId=${mixId}`);
+    const result = await api.post(`job/requeuemix?mixId=${mixId}`)
 
-    return result.status === StatusCodes.ACCEPTED;
+    return result.status === StatusCodes.ACCEPTED
   } catch (err) {
-    logger.error("Unable to resubmit mix for processing", err);
+    logger.error('Unable to resubmit mix for processing', err)
   }
-  return false;
-};
+  return false
+}
 
-export { requeProcessMixJob };
+export { requeProcessMixJob }

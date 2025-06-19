@@ -1,7 +1,6 @@
-type User = {
+export type User = {
   email: string;
   id: string;
-  name: string;
+  displayName: string;
   username: string;
 };
-export default User;

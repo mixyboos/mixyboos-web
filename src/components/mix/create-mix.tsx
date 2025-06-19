@@ -1,14 +1,12 @@
-"use client";
-
-import { Progress } from "@/components/ui/progress";
-import FileUpload from "@/components/widgets/file-upload";
-import { type MixModel } from "@/lib/models";
-import React from "react";
-import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "next/navigation";
-import PageHeader from "@/components/widgets/page-header";
-import { Icons } from "@/components/icons";
-import CreateMixDetails from "@/components/mix/create-mix-details";
+import React from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from '@tanstack/react-router'
+import type { MixModel } from '@/lib/models/mix'
+import { Progress } from '@/components/ui/progress'
+import { Icons } from '@/components/icons'
+import CreateMixDetails from '@/components/mix/create-mix-details'
+import FileUpload from '@/components/widgets/file-upload'
+import PageHeader from '@/components/widgets/page-header'
 
 enum CreateState {
   new,
@@ -24,13 +22,13 @@ enum UploadState {
   error,
 }
 const MixCreateComponent = () => {
-  const router = useRouter();
-  const [errors, setErrors] = React.useState<string[]>([]);
-  const [createState, setCreateState] = React.useState(CreateState.new);
-  const [uploadState, setUploadState] = React.useState(UploadState.new);
-  const [percentageUploaded, setPercentageUploaded] = React.useState(0);
-  const [mixId] = React.useState(uuidv4());
-  const [fileName, setFilename] = React.useState("");
+  const router = useRouter()
+  const [errors, setErrors] = React.useState<Array<string>>([])
+  const [createState, setCreateState] = React.useState(CreateState.new)
+  const [uploadState, setUploadState] = React.useState(UploadState.new)
+  const [percentageUploaded, setPercentageUploaded] = React.useState(0)
+  const [mixId] = React.useState(uuidv4())
+  const [fileName, setFilename] = React.useState('')
   return (
     <div className="flex flex-col justify-center space-y-4">
       <PageHeader title="Let's create a mix" />
@@ -45,7 +43,9 @@ const MixCreateComponent = () => {
                 <span className="font-semibold text-red-500 dark:text-red-400">
                   Ooopsies...
                 </span>
-                <p className="text-sm text-gray-600 dark:text-gray-200">{errors}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-200">
+                  {errors}
+                </p>
               </div>
             </div>
           </div>
@@ -61,18 +61,18 @@ const MixCreateComponent = () => {
             <FileUpload
               mixId={mixId}
               onError={(e) => {
-                setCreateState(CreateState.error);
-                setErrors([...errors, e]);
+                setCreateState(CreateState.error)
+                setErrors([...errors, e])
               }}
               onUploadComplete={() => {
-                setUploadState(UploadState.done);
+                setUploadState(UploadState.done)
               }}
               onUploadStart={(fileName) => {
-                setFilename(fileName);
-                setUploadState(UploadState.uploading);
+                setFilename(fileName)
+                setUploadState(UploadState.uploading)
               }}
               onUploadProgress={(total, loaded) => {
-                setPercentageUploaded(Math.round((loaded * 100) / total));
+                setPercentageUploaded(Math.round((loaded * 100) / total))
               }}
             />
           </div>
@@ -80,17 +80,17 @@ const MixCreateComponent = () => {
         {createState === CreateState.new && uploadState !== UploadState.new && (
           <CreateMixDetails
             mix={{ id: mixId, title: fileName } as MixModel}
-            onMixCreated={(mix) => {
-              setCreateState(mix ? CreateState.done : CreateState.error);
+            onMixCreated={(mix, error) => {
+              setCreateState(error ? CreateState.error : CreateState.done)
               if (mix && mix.user) {
-                router.push(`/${mix.user.slug}/${mix.slug}`);
+                router.navigate({ to: `/${mix.user.slug}/${mix.slug}` })
               }
             }}
           />
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MixCreateComponent;
+export default MixCreateComponent

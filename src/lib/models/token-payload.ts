@@ -1,4 +1,4 @@
-type TokenPayload = {
+export type TokenPayload = {
   name: string;
   email: string;
   displayName: string;
@@ -6,4 +6,3 @@ type TokenPayload = {
   slug: string;
 };
 
-export default TokenPayload;

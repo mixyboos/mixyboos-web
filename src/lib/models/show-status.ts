@@ -1,4 +1,4 @@
-enum ShowStatus {
+export enum ShowStatus {
   checking = "checking",
   setup = "setup",
   awaitingStreamConnection = "awaitingStreamConnection",
@@ -6,5 +6,3 @@ enum ShowStatus {
   ended = "ending",
   error = "error",
 }
-
-export default ShowStatus;

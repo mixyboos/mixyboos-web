@@ -1,15 +1,16 @@
-"use client";
-import React from "react";
+'use client'
+import React from 'react'
 
-import { type MixModel } from "@/lib/models";
+import type { MixModel } from '@/lib/models/mix'
 
-import { Icons } from "@/components/icons";
-import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
-import { getMixAudioUrl } from "@/lib/services/api/mix-service";
+import { Icons } from '@/components/icons'
+import useAudioStore, { PlayState } from '@/lib/contexts/audio-context'
+import { getMixAudioUrl } from '@/lib/services/api/mix-service'
 
-interface IPlayPauseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  mix: MixModel;
-  onPlayStart: () => void;
+interface IPlayPauseButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  mix: MixModel
+  onPlayStart: () => void
 }
 
 const PlayPauseButton = ({
@@ -25,31 +26,31 @@ const PlayPauseButton = ({
     clearNowPlaying,
     setNowPlaying,
     nowPlayingUrl,
-  } = useAudioStore();
+  } = useAudioStore()
   const _playMix = async (mix: MixModel) => {
-    const url = await getMixAudioUrl(mix);
+    const url = await getMixAudioUrl(mix)
     if (url) {
-      setNowPlaying(mix, url, mix.id);
-      onPlayStart();
+      setNowPlaying(mix, url, mix.id)
+      onPlayStart()
     }
-  };
+  }
   return (
     <button
       className="hover:opacity-80 transition duration-500 hover:scale-105"
       {...props}
       onClick={async () => {
         if (mix.id !== nowPlaying?.id) {
-          clearNowPlaying();
-          _playMix(mix);
+          clearNowPlaying()
+          _playMix(mix)
         }
 
         if (
           playState === PlayState.stopped ||
           (mix.id !== nowPlaying?.id && !nowPlayingUrl)
         ) {
-          _playMix(mix);
+          _playMix(mix)
         } else {
-          togglePlayState();
+          togglePlayState()
         }
       }}
     >
@@ -59,7 +60,7 @@ const PlayPauseButton = ({
         <Icons.playCircle size={64} strokeWidth="" />
       )}
     </button>
-  );
-};
+  )
+}
 
-export default PlayPauseButton;
+export default PlayPauseButton

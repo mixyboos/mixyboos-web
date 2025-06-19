@@ -1,13 +1,13 @@
-import { uploadAudio } from "@/lib/services/api/upload/upload-service";
-import { getFilename } from "@/lib/utils/file-utils";
-import React from "react";
+import React from 'react'
+import { uploadAudio } from '@/lib/services/api/upload/upload-service'
+import { getFilename } from '@/lib/utils/file-utils'
 
 interface IFileUploadProps {
-  mixId: string;
-  onError: (error: string) => void;
-  onUploadStart: (fileName: string) => void;
-  onUploadComplete: () => void;
-  onUploadProgress: (total: number, loaded: number) => void;
+  mixId: string
+  onError: (error: string) => void
+  onUploadStart: (fileName: string) => void
+  onUploadComplete: () => void
+  onUploadProgress: (total: number, loaded: number) => void
 }
 
 const FileUpload = ({
@@ -18,30 +18,28 @@ const FileUpload = ({
   onUploadProgress,
 }: IFileUploadProps) => {
   const startUpload = async (event: React.FormEvent<HTMLInputElement>) => {
-    if (!event.currentTarget.files) return;
-    if (!event.currentTarget.files) return;
-    if (!event.currentTarget.files[0]) return;
+    if (!event.currentTarget.files) return
 
-    const formData = new FormData();
+    const formData = new FormData()
 
-    formData.append("file", event.currentTarget.files[0]);
+    formData.append('file', event.currentTarget.files[0])
     try {
-      onUploadStart(getFilename(event.currentTarget.files[0].name));
-      const result = await uploadAudio(mixId, formData, onUploadProgress);
+      onUploadStart(getFilename(event.currentTarget.files[0].name))
+      const result = await uploadAudio(mixId, formData, onUploadProgress)
       if (result) {
-        onUploadComplete();
+        onUploadComplete()
       } else {
         onError(
-          "Error uploading file, please refresh your browser and try again!"
-        );
+          'Error uploading file, please refresh your browser and try again!',
+        )
       }
     } catch (err) {
-      console.error("Upload", "Error", err);
+      console.error('Upload', 'Error', err)
       onError(
-        "Error uploading file, please refresh your browser and try again!"
-      );
+        'Error uploading file, please refresh your browser and try again!',
+      )
     }
-  };
+  }
   return (
     <label
       className="bg-primary text-primary-foreground border-blue hover:bg-primary/90 hover:text-primary-foreground/90 flex w-full cursor-pointer
@@ -63,11 +61,11 @@ const FileUpload = ({
         className="hidden"
         onChange={(e) => {
           startUpload(e).catch((err) => {
-            console.error("FileUpload", "Error starting upload", err);
-          });
+            console.error('FileUpload', 'Error starting upload', err)
+          })
         }}
       />
     </label>
-  );
-};
-export default FileUpload;
+  )
+}
+export default FileUpload

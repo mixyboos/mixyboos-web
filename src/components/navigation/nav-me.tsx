@@ -1,39 +1,38 @@
-import { Button } from "@/components/ui/button";
+import { Link } from '@tanstack/react-router'
+import type { SidebarItemProps } from '@/components/navigation/app-sidebar'
+import type { LucideIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react";
-import { SidebarItemProps } from "@/components/navigation/app-sidebar";
-import { Icons } from "@/components/icons";
-import { LucideIcon } from "lucide-react";
-import Link from "next/link";
+} from '@/components/ui/sidebar'
+import { Icons } from '@/components/icons'
 
-const items: SidebarItemProps[] = [
+const items: Array<SidebarItemProps> = [
   {
-    title: "My Shows",
+    title: 'My Shows',
     icon: Icons.liveStream as LucideIcon,
-    link: "/dashboard/shows",
+    link: '/dashboard/shows',
   },
   {
-    title: "My Mixes",
+    title: 'My Mixes',
     icon: Icons.mix as LucideIcon,
-    link: "/dashboard/mixes",
+    link: '/dashboard/mixes',
   },
   {
-    title: "My Profile",
+    title: 'My Profile',
     icon: Icons.user as LucideIcon,
-    link: "/dashboard/profile",
+    link: '/dashboard/profile',
   },
   {
-    title: "Stats",
+    title: 'Stats',
     icon: Icons.graph as LucideIcon,
-    link: "/dashboard/stats",
+    link: '/dashboard/stats',
   },
-];
+]
 
 export function NavMe() {
   return (
@@ -45,7 +44,7 @@ export function NavMe() {
               tooltip="Upload Mix"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
             >
-              <IconCirclePlusFilled />
+              <Icons.upload />
               <span>Upload Mix</span>
             </SidebarMenuButton>
             <Button
@@ -62,7 +61,7 @@ export function NavMe() {
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title} asChild>
-                <Link href={item.link}>
+                <Link to={item.link}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>
@@ -72,5 +71,5 @@ export function NavMe() {
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  );
+  )
 }
