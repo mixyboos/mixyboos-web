@@ -1,22 +1,20 @@
-import React from "react";
-import Wavesurfer from "wavesurfer.js";
-import { useTheme } from "next-themes";
-import { secondsToHHMMSS } from "@/lib/utils/time-utils";
-import { PlayState } from "@/lib/contexts/audio-context";
-import useAudioStore from "@/lib/contexts/audio-context";
-import { siteConfig } from "@/config/site";
-import logger from "@/lib/logger";
-import { Label } from "@/components/ui/label";
+import React from 'react'
+import Wavesurfer from 'wavesurfer.js'
+import { useTheme } from 'next-themes'
+import { secondsToHHMMSS } from '@/lib/utils/time-utils'
+import useAudioStore, { PlayState } from '@/lib/contexts/audio-context'
+import { siteConfig } from '@/config/site'
+import { Label } from '@/components/ui/label'
 
 type WaveformComponentProps = {
-  id?: string;
-  audioUrl: string;
-  pcmUrl: string;
-  playState: PlayState;
-  duration: number;
-  position: number;
-  progress?: (e: number) => void;
-};
+  id?: string
+  audioUrl: string
+  pcmUrl: string
+  playState: PlayState
+  duration: number
+  position: number
+  progress?: (e: number) => void
+}
 const WaveformComponent = ({
   id,
   audioUrl,
@@ -24,76 +22,76 @@ const WaveformComponent = ({
   duration,
   progress,
 }: WaveformComponentProps) => {
-  const { theme } = useTheme();
-  const [elapsedTime, setElapsedTime] = React.useState(0);
+  const { theme } = useTheme()
+  const [elapsedTime, setElapsedTime] = React.useState(0)
   const { playState, setSeekPosition, progressPercentage, nowPlayingId } =
-    useAudioStore();
+    useAudioStore()
 
-  const waveform = React.useRef<Wavesurfer | null>(null);
+  const waveform = React.useRef<Wavesurfer | null>(null)
 
   React.useEffect(() => {
     if (id !== nowPlayingId) {
-      return;
+      return
     }
     if (playState === PlayState.playing) {
-      waveform.current?.seekTo(progressPercentage / 100);
+      waveform.current?.seekTo(progressPercentage / 100)
     }
-  }, [progressPercentage]);
+  }, [progressPercentage])
 
   React.useEffect(() => {
     if (playState === PlayState.playing) {
-      waveform.current?.play();
+      waveform.current?.play()
     } else {
-      waveform.current?.pause();
+      waveform.current?.pause()
     }
-  }, [playState]);
+  }, [playState])
 
   React.useEffect(() => {
     if (!waveform.current && pcmUrl) {
       waveform.current = Wavesurfer.create({
-        container: "#waveform",
+        container: '#waveform',
         cursorWidth: 0,
         waveColor: siteConfig.theme.waveFormColor,
         progressColor: siteConfig.theme.waveFormProgressColor,
-        height: 48,
+        height: 80,
         hideScrollbar: true,
         barWidth: 1,
-      });
+      })
     }
-  }, [pcmUrl, theme, playState]);
+  }, [pcmUrl, theme, playState])
 
   React.useEffect(() => {
     const loadPcm = async () => {
       if (waveform.current) {
-        const response = await fetch(pcmUrl);
+        const response = await fetch(pcmUrl)
         if (response.ok) {
-          const result = await response.json();
-          const peaks = result.data.map((p: number) => p / 128);
+          const result = await response.json()
+          const peaks = result.data.map((p: number) => p / 128)
           waveform.current.load(
-            //empty mp3 file
-            "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV",
-            peaks
-          );
-          waveform.current.on("click", (e) => {
-            setSeekPosition(e * duration);
-          });
+            // empty mp3 file
+            'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV',
+            peaks,
+          )
+          waveform.current.on('click', (e) => {
+            setSeekPosition(e * duration)
+          })
         }
       }
-    };
-    loadPcm();
-  }, [pcmUrl, audioUrl]);
+    }
+    loadPcm()
+  }, [pcmUrl, audioUrl])
 
   return (
     <div id="wrapper" className="relative">
-      <Label className="absolute bottom-0 left-0 z-50 text-xs font-semibold ">
+      <Label className="absolute bottom-2 left-1 z-50 text-xs font-semibold ">
         {secondsToHHMMSS(elapsedTime)}
       </Label>
-      <div id="waveform" className="h-12 overflow-hidden"></div>
-      <Label className="absolute bottom-0 right-0 z-50 text-xs font-semibold ">
+      <div id="waveform" className="h-20 overflow-hidden"></div>
+      <Label className="absolute bottom-2 right-1 z-50 text-xs font-semibold ">
         {secondsToHHMMSS(duration)}
       </Label>
     </div>
-  );
-};
+  )
+}
 
-export default WaveformComponent;
+export default WaveformComponent
