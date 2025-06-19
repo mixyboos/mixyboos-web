@@ -7,7 +7,6 @@ import logger from '@/lib/logger'
 import WaveformComponent from '@/components/widgets/audio/waveform'
 import { Button } from '@/components/ui/button'
 import { Icons } from '@/components/icons'
-import useAudioProcessingStatus from '@/lib/hooks/audio-processing-hook'
 import PlayPauseButton from '@/components/widgets/buttons/play-pause-button'
 
 type LargeAudioPlayerProps = {
@@ -17,8 +16,7 @@ type LargeAudioPlayerProps = {
 const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
   mix,
 }: LargeAudioPlayerProps) => {
-  const { setSeekPosition, position, duration, setDuration } = useAudioStore()
-  const { isProcessed } = useAudioProcessingStatus()
+  const { position, setDuration } = useAudioStore()
   React.useEffect(() => {
     if (mix.duration) {
       setDuration(mix.duration)
@@ -48,7 +46,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
           </div>
         </div>
       </div>
-      {(mix.isProcessed || isProcessed) && mix.pcmUrl ? (
+      {mix.isProcessed && mix.pcmUrl ? (
         <WaveformComponent
           id={mix.id}
           audioUrl={mix.audioUrl as string}
