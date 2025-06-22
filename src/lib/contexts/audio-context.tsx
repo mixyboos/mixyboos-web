@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { MixModel } from '@/lib/models/mix'
 import logger from '@/lib/logger'
+import { getStoredPosition, setStoredPosition } from '@/lib/services/playback-position-service'
 
 enum PlayState {
   stopped = 1,
@@ -50,24 +51,29 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
     const progressPercentage = (position / get().duration) * 100
     set({ position, progressPercentage })
 
-    // TODO: refactor this out to a service
-    // update local storage with the positions of all items
-    const positions = JSON.parse(localStorage.getItem('_p') || '[]')
-    const currentItem = positions.find((p: any) => p.id === get().nowPlayingId)
-    if (currentItem) {
-      currentItem.position = position
-    } else {
-      positions.push({ id: get().nowPlayingId, position })
+    // Store playback position using the dedicated service
+    const nowPlayingId = get().nowPlayingId
+    if (nowPlayingId) {
+      setStoredPosition(nowPlayingId, position)
     }
-    localStorage.setItem('_p', JSON.stringify(positions))
-    // TODO: end
   },
   setSeekPosition: (seekPosition: number) => set(() => ({ seekPosition })),
   setDuration: (duration: number) => set(() => ({ duration })),
   clearNowPlaying: () =>
     set({ nowPlaying: undefined, nowPlayingUrl: '', nowPlayingId: '' }),
-  setNowPlaying: (mix: MixModel, url: string, id: string) =>
-    set(() => ({ nowPlaying: mix, nowPlayingUrl: url, nowPlayingId: id })),
+  setNowPlaying: (mix: MixModel, url: string, id: string) => {
+    // Get stored playback position for this track
+    const storedPosition = getStoredPosition(id)
+    
+    set(() => ({ 
+      nowPlaying: mix, 
+      nowPlayingUrl: url, 
+      nowPlayingId: id,
+      // Set position to stored value or 0 if no stored position
+      position: storedPosition || 0,
+      progressPercentage: storedPosition ? (storedPosition / get().duration) * 100 : 0
+    }))
+  },
   setPlayState: (playState: PlayState) => {
     if (get().playState !== playState) {
       set({ playState })

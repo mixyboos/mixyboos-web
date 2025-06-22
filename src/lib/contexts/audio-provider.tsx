@@ -1,6 +1,17 @@
 'use client'
 
-import React from 'react'
+import R  React.useEffect(() => {
+    if (!nowPlayingUrl) return
+    let hls: Hls
+
+    const __initPlayer = (player: HTMLAudioElement) => {
+      hls?.destroy()
+
+      hls = new Hls({
+        enableWorker: false,
+      })
+
+      if (!player) returnct'
 import Hls from 'hls.js'
 import type { PropsWithChildren } from 'react'
 import logger from '@/lib/logger'
@@ -12,6 +23,7 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
 
   const {
     nowPlayingUrl,
+    position,
     setPosition,
     setDuration,
     seekPosition,
@@ -21,7 +33,7 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
 
   React.useEffect(() => {
     if (!nowPlayingUrl) return
-    let hls: Hls
+    let hls: Hls | null = null
 
     const __initPlayer = (player: HTMLAudioElement) => {
       if (hls) {
@@ -42,10 +54,14 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
             setPosition(player.currentTime)
           }
           hls.on(Hls.Events.FRAG_CHANGED, (_event, data) => {
-            if (data.frag) {
-              setPosition(data.frag.start)
-            }
+            setPosition(data.frag.start)
           })
+          
+          // Set the player to the stored position before playing
+          if (position > 0) {
+            player.currentTime = position
+          }
+          
           try {
             await player.play()
             setDuration(player.duration || 0)
@@ -82,9 +98,7 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
     }
 
     return () => {
-      if (hls != null) {
-        hls.destroy()
-      }
+      hls?.destroy()
     }
   }, [nowPlayingUrl])
 
