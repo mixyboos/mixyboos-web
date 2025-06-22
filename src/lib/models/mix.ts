@@ -3,20 +3,20 @@ import type { ProfileModel } from '@/lib/models/profile'
 export type CreateMixModel = {
   id: string
   title: string
-  description: string | null
+  description: string
   isProcessed: boolean
 }
 export type MixModel = CreateMixModel & {
-  slug?: string
-  duration?: number
-  dateUploaded?: string
-  image?: string
+  slug: string
+  duration: number
+  dateUploaded: string
+  image: string
   likeCount: number
   playCount: number
   shareCount: number
   downloadCount: number
-  user?: ProfileModel
-  audioUrl?: string
-  pcmUrl?: string
+  user: ProfileModel
+  audioUrl: string
+  pcmUrl: string
   isLiked: boolean
 }
