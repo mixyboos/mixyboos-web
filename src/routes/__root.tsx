@@ -37,7 +37,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     }
     return (
       <>
-        <BotIdClient protect={protectedRoutes} />
+      <BotIdClient protect={protectedRoutes} />
         <AudioProvider>
           <div className="flex flex-col h-screen w-full">
             <div className="flex w-full flex-1 overflow-hidden">

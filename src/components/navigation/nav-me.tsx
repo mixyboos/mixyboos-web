@@ -43,16 +43,21 @@ export function NavMe() {
             <SidebarMenuButton
               tooltip="Upload Mix"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+              asChild
             >
-              <Icons.upload />
-              <span>Upload Mix</span>
+              <Link to="/upload" className="flex items-center gap-2">
+                <Icons.upload />
+                <span>Upload Mix</span>
+              </Link>
             </SidebarMenuButton>
             <Button
               size="icon"
               className="size-8 group-data-[collapsible=icon]:opacity-0"
               variant="outline"
             >
-              <Icons.upload />
+              <Link to="/upload" className="flex items-center gap-2">
+                <Icons.upload />
+              </Link>
               <span className="sr-only">Upload</span>
             </Button>
           </SidebarMenuItem>
