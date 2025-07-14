@@ -1,11 +1,11 @@
 "use client";
+import React from "react";
+import type { MixModel } from "@/lib/models/mix";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { type MixModel } from "@/lib/models";
-import React from "react";
-import useAudioProcessingStatus from "@/lib/services/realtime/hooks/audio-processing-hook";
+import useAudioProcessingStatus from "@/lib/hooks/audio-processing-hook";
 import { requeProcessMixJob } from "@/lib/services/api/job-service";
-import Loading from "@/components/widgets/loading";
+import { Spinner } from "@/components/widgets/spinner";
 
 type MixProcessingComponentProps = {
   mix: MixModel;
@@ -18,7 +18,12 @@ const AudioProcessingComponent: React.FC<MixProcessingComponentProps> = ({
 
   return (
     <div className="flex w-full flex-row gap-2">
-      <Loading title="Processing mix" message={`${processPercentage}% done`} />
+      <Spinner size="large">
+        <div className="text-center">
+          <div className="font-semibold">Processing mix</div>
+          <div className="text-sm text-muted-foreground">{processPercentage}% done</div>
+        </div>
+      </Spinner>
       <div className="grow"></div>
       <Button onClick={async () => await requeProcessMixJob(mix.id)}>
         <Icons.activity className="mr-2 h-4 w-4" />

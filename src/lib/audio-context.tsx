@@ -1,6 +1,6 @@
+import { create } from "zustand";
+import type { MixModel } from "@/lib/models/mix";
 import logger from "@/lib/logger";
-import {type MixModel} from "@/lib/models";
-import {create} from "zustand";
 
 enum PlayState {
   stopped = 1,
@@ -50,8 +50,8 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
     const progressPercentage = (position / get().duration) * 100;
     set({position, progressPercentage});
 
-    //TODO: refactor this out to a service
-    //update local storage with the positions of all items
+    // TODO: refactor this out to a service
+    // update local storage with the positions of all items
     const positions = JSON.parse(localStorage.getItem("_p") || "[]");
     const currentItem = positions.find((p: any) => p.id === get().nowPlayingId);
     if (currentItem) {
@@ -60,7 +60,7 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
       positions.push({id: get().nowPlayingId, position});
     }
     localStorage.setItem("_p", JSON.stringify(positions));
-    //TODO: end
+    // TODO: end
   },
   setSeekPosition: (seekPosition: number) => set(() => ({seekPosition})),
   setDuration: (duration: number) => set(() => ({duration})),

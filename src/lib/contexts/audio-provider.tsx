@@ -1,17 +1,6 @@
 'use client'
 
-import R  React.useEffect(() => {
-    if (!nowPlayingUrl) return
-    let hls: Hls
-
-    const __initPlayer = (player: HTMLAudioElement) => {
-      hls?.destroy()
-
-      hls = new Hls({
-        enableWorker: false,
-      })
-
-      if (!player) returnct'
+import React from 'react'
 import Hls from 'hls.js'
 import type { PropsWithChildren } from 'react'
 import logger from '@/lib/logger'
@@ -33,12 +22,10 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
 
   React.useEffect(() => {
     if (!nowPlayingUrl) return
-    let hls: Hls | null = null
+    let hls: Hls | undefined
 
     const __initPlayer = (player: HTMLAudioElement) => {
-      if (hls) {
-        hls.destroy()
-      }
+      hls?.destroy()
 
       hls = new Hls({
         enableWorker: false,
@@ -47,15 +34,18 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
       hls.attachMedia(player)
 
       hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        if (!hls) return
         hls.loadSource(nowPlayingUrl)
         hls.on(Hls.Events.MANIFEST_PARSED, async () => {
           player.volume = 0.1
           player.ontimeupdate = () => {
             setPosition(player.currentTime)
           }
-          hls.on(Hls.Events.FRAG_CHANGED, (_event, data) => {
-            setPosition(data.frag.start)
-          })
+          if (hls) {
+            hls.on(Hls.Events.FRAG_CHANGED, (_event, data) => {
+              setPosition(data.frag.start)
+            })
+          }
           
           // Set the player to the stored position before playing
           if (position > 0) {
@@ -79,10 +69,10 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              hls.startLoad()
+              if (hls) hls.startLoad()
               break
             case Hls.ErrorTypes.MEDIA_ERROR:
-              hls.recoverMediaError()
+              if (hls) hls.recoverMediaError()
               break
             default:
               if (__player.current) {
@@ -100,7 +90,7 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
     return () => {
       hls?.destroy()
     }
-  }, [nowPlayingUrl])
+  }, [nowPlayingUrl, position])
 
   React.useEffect(() => {
     if (!__player.current) return

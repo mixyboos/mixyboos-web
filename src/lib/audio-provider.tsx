@@ -1,12 +1,13 @@
 "use client";
 
-import logger from "@/lib/logger";
-import React, { type PropsWithChildren } from "react";
+import React from "react";
 import Hls from "hls.js";
+import type { PropsWithChildren } from "react";
+import logger from "@/lib/logger";
 import useAudioStore, { PlayState } from "@/lib/contexts/audio-context";
 
 const AudioProvider = ({ children }: PropsWithChildren) => {
-  //don't use this directly as some of the hls callbacks don't have this in scope
+  // don't use this directly as some of the hls callbacks don't have this in scope
   const __player = React.createRef<HTMLAudioElement>();
 
   const {
@@ -23,30 +24,23 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
     let hls: Hls;
 
     const __initPlayer = (player: HTMLAudioElement) => {
-      if (hls) {
-        hls.destroy();
-      }
+      hls?.destroy();
 
       hls = new Hls({
         enableWorker: false,
       });
-
-      if (!player) return;
 
       hls.attachMedia(player);
 
       hls.on(Hls.Events.MEDIA_ATTACHED, () => {
         hls.loadSource(nowPlayingUrl);
         hls.on(Hls.Events.MANIFEST_PARSED, async () => {
-          if (!player) return;
           player.volume = 0.1;
           player.ontimeupdate = () => {
             setPosition(player.currentTime);
           };
-          hls.on(Hls.Events.FRAG_CHANGED, (event, data) => {
-            if (player && data.frag) {
-              setPosition(data.frag.start);
-            }
+          hls.on(Hls.Events.FRAG_CHANGED, (_event, data) => {
+            setPosition(data.frag.start);
           });
           try {
             await player.play();
@@ -58,7 +52,7 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
           }
         });
       });
-      hls.on(Hls.Events.ERROR, function (event, data) {
+      hls.on(Hls.Events.ERROR, function (_event, data) {
         logger.error("AudioProvider", "Unable to initialise audio player", data);
         if (data.fatal) {
           switch (data.type) {
@@ -82,14 +76,12 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
     }
 
     return () => {
-      if (hls != null) {
-        hls.destroy();
-      }
+      hls.destroy();
     };
   }, [nowPlayingUrl]);
 
   React.useEffect(() => {
-    if (!__player?.current) return;
+    if (!__player.current) return;
     if (playState === PlayState.paused) {
       __player.current.pause();
     } else if (playState === PlayState.playing) {
