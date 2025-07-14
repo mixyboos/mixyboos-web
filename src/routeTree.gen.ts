@@ -11,12 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as mixUploadRouteImport } from './routes/(mix)/upload'
-import { Route as authMixIdRouteImport } from './routes/(auth)/mix/$id'
-import { Route as authLiveCreateRouteImport } from './routes/(auth)/live/create'
+import { Route as AuthenticatedMixIdRouteImport } from './routes/_authenticated/mix/$id'
+import { Route as AuthenticatedLiveCreateRouteImport } from './routes/_authenticated/live/create'
+import { Route as AuthenticatedDashboardMixesIndexRouteImport } from './routes/_authenticated/dashboard/mixes/index'
 import { Route as mixUserMixIndexRouteImport } from './routes/(mix)/$user/$mix/index'
-import { Route as authDashboardMixesIndexRouteImport } from './routes/(auth)/dashboard/mixes/index'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -26,6 +27,10 @@ const RegisterRoute = RegisterRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -38,24 +43,25 @@ const mixUploadRoute = mixUploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authMixIdRoute = authMixIdRouteImport.update({
-  id: '/(auth)/mix/$id',
+const AuthenticatedMixIdRoute = AuthenticatedMixIdRouteImport.update({
+  id: '/mix/$id',
   path: '/mix/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const authLiveCreateRoute = authLiveCreateRouteImport.update({
-  id: '/(auth)/live/create',
+const AuthenticatedLiveCreateRoute = AuthenticatedLiveCreateRouteImport.update({
+  id: '/live/create',
   path: '/live/create',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardMixesIndexRoute =
+  AuthenticatedDashboardMixesIndexRouteImport.update({
+    id: '/dashboard/mixes/',
+    path: '/dashboard/mixes/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const mixUserMixIndexRoute = mixUserMixIndexRouteImport.update({
   id: '/(mix)/$user/$mix/',
   path: '/$user/$mix/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authDashboardMixesIndexRoute = authDashboardMixesIndexRouteImport.update({
-  id: '/(auth)/dashboard/mixes/',
-  path: '/dashboard/mixes/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -64,31 +70,32 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/upload': typeof mixUploadRoute
-  '/live/create': typeof authLiveCreateRoute
-  '/mix/$id': typeof authMixIdRoute
-  '/dashboard/mixes': typeof authDashboardMixesIndexRoute
+  '/live/create': typeof AuthenticatedLiveCreateRoute
+  '/mix/$id': typeof AuthenticatedMixIdRoute
   '/$user/$mix': typeof mixUserMixIndexRoute
+  '/dashboard/mixes': typeof AuthenticatedDashboardMixesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/upload': typeof mixUploadRoute
-  '/live/create': typeof authLiveCreateRoute
-  '/mix/$id': typeof authMixIdRoute
-  '/dashboard/mixes': typeof authDashboardMixesIndexRoute
+  '/live/create': typeof AuthenticatedLiveCreateRoute
+  '/mix/$id': typeof AuthenticatedMixIdRoute
   '/$user/$mix': typeof mixUserMixIndexRoute
+  '/dashboard/mixes': typeof AuthenticatedDashboardMixesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/(mix)/upload': typeof mixUploadRoute
-  '/(auth)/live/create': typeof authLiveCreateRoute
-  '/(auth)/mix/$id': typeof authMixIdRoute
-  '/(auth)/dashboard/mixes/': typeof authDashboardMixesIndexRoute
+  '/_authenticated/live/create': typeof AuthenticatedLiveCreateRoute
+  '/_authenticated/mix/$id': typeof AuthenticatedMixIdRoute
   '/(mix)/$user/$mix/': typeof mixUserMixIndexRoute
+  '/_authenticated/dashboard/mixes/': typeof AuthenticatedDashboardMixesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +106,8 @@ export interface FileRouteTypes {
     | '/upload'
     | '/live/create'
     | '/mix/$id'
-    | '/dashboard/mixes'
     | '/$user/$mix'
+    | '/dashboard/mixes'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,28 +116,27 @@ export interface FileRouteTypes {
     | '/upload'
     | '/live/create'
     | '/mix/$id'
-    | '/dashboard/mixes'
     | '/$user/$mix'
+    | '/dashboard/mixes'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/login'
     | '/register'
     | '/(mix)/upload'
-    | '/(auth)/live/create'
-    | '/(auth)/mix/$id'
-    | '/(auth)/dashboard/mixes/'
+    | '/_authenticated/live/create'
+    | '/_authenticated/mix/$id'
     | '/(mix)/$user/$mix/'
+    | '/_authenticated/dashboard/mixes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   mixUploadRoute: typeof mixUploadRoute
-  authLiveCreateRoute: typeof authLiveCreateRoute
-  authMixIdRoute: typeof authMixIdRoute
-  authDashboardMixesIndexRoute: typeof authDashboardMixesIndexRoute
   mixUserMixIndexRoute: typeof mixUserMixIndexRoute
 }
 
@@ -150,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -164,19 +177,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof mixUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/mix/$id': {
-      id: '/(auth)/mix/$id'
+    '/_authenticated/mix/$id': {
+      id: '/_authenticated/mix/$id'
       path: '/mix/$id'
       fullPath: '/mix/$id'
-      preLoaderRoute: typeof authMixIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedMixIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/(auth)/live/create': {
-      id: '/(auth)/live/create'
+    '/_authenticated/live/create': {
+      id: '/_authenticated/live/create'
       path: '/live/create'
       fullPath: '/live/create'
-      preLoaderRoute: typeof authLiveCreateRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedLiveCreateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/mixes/': {
+      id: '/_authenticated/dashboard/mixes/'
+      path: '/dashboard/mixes'
+      fullPath: '/dashboard/mixes'
+      preLoaderRoute: typeof AuthenticatedDashboardMixesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/(mix)/$user/$mix/': {
       id: '/(mix)/$user/$mix/'
@@ -185,24 +205,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof mixUserMixIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/dashboard/mixes/': {
-      id: '/(auth)/dashboard/mixes/'
-      path: '/dashboard/mixes'
-      fullPath: '/dashboard/mixes'
-      preLoaderRoute: typeof authDashboardMixesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedLiveCreateRoute: typeof AuthenticatedLiveCreateRoute
+  AuthenticatedMixIdRoute: typeof AuthenticatedMixIdRoute
+  AuthenticatedDashboardMixesIndexRoute: typeof AuthenticatedDashboardMixesIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedLiveCreateRoute: AuthenticatedLiveCreateRoute,
+  AuthenticatedMixIdRoute: AuthenticatedMixIdRoute,
+  AuthenticatedDashboardMixesIndexRoute: AuthenticatedDashboardMixesIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   mixUploadRoute: mixUploadRoute,
-  authLiveCreateRoute: authLiveCreateRoute,
-  authMixIdRoute: authMixIdRoute,
-  authDashboardMixesIndexRoute: authDashboardMixesIndexRoute,
   mixUserMixIndexRoute: mixUserMixIndexRoute,
 }
 export const routeTree = rootRouteImport

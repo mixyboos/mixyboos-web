@@ -8,23 +8,41 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
-import { AuthProvider } from '@/lib/auth.tsx'
+import { AuthProvider, useAuth } from '@/lib/auth.tsx'
 
-const router = createRouter({
-  routeTree,
-  context: {
-    ...TanStackQueryProvider.getContext(),
-  },
-  defaultPreload: 'intent',
-  scrollRestoration: true,
-  defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
-})
+// Create router function that will be called with auth context
+function createAppRouter() {
+  return createRouter({
+    routeTree,
+    context: {
+      ...TanStackQueryProvider.getContext(),
+      // Auth will be provided by the RouterProvider component
+      auth: undefined!,
+    },
+    defaultPreload: 'intent',
+    scrollRestoration: true,
+    defaultStructuralSharing: true,
+    defaultPreloadStaleTime: 0,
+  })
+}
+
+const router = createAppRouter()
 
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
+}
+
+// Component that provides router with auth context
+function App() {
+  const auth = useAuth()
+  
+  return (
+    <TanStackQueryProvider.Provider>
+      <RouterProvider router={router} context={{ auth }} />
+    </TanStackQueryProvider.Provider>
+  )
 }
 
 // Render the app
@@ -34,9 +52,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <AuthProvider>
-        <TanStackQueryProvider.Provider>
-          <RouterProvider router={router} />
-        </TanStackQueryProvider.Provider>
+        <App />
       </AuthProvider>
     </StrictMode>,
   )

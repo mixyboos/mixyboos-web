@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useGetMyMixesQuery } from '@/lib/queries/mix'
 import MixListPage from '@/pages/mix/mix-list-page'
 
-export const Route = createFileRoute('/(auth)/dashboard/mixes/')({
+export const Route = createFileRoute('/_authenticated/dashboard/mixes/')({
   component: RouteComponent,
 })
 
