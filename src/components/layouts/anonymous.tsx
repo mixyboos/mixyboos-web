@@ -1,7 +1,11 @@
 import { Outlet } from '@tanstack/react-router'
 
 const AnonymousLayout = () => {
-  return <Outlet />
+  return (
+    <div className="w-full h-full">
+      <Outlet />
+    </div>
+  )
 }
 
 export default AnonymousLayout

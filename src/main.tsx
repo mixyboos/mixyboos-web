@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, useMemo } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 
@@ -10,14 +10,18 @@ import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { AuthProvider, useAuth } from '@/lib/auth.tsx'
 
-// Create router function that will be called with auth context
-function createAppRouter() {
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: ReturnType<typeof createAppRouter>
+  }
+}
+
+function createAppRouter(auth: ReturnType<typeof useAuth>) {
   return createRouter({
     routeTree,
     context: {
       ...TanStackQueryProvider.getContext(),
-      // Auth will be provided by the RouterProvider component
-      auth: undefined!,
+      auth,
     },
     defaultPreload: 'intent',
     scrollRestoration: true,
@@ -26,21 +30,16 @@ function createAppRouter() {
   })
 }
 
-const router = createAppRouter()
-
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router
-  }
-}
-
-// Component that provides router with auth context
+// Component that creates router with auth context
 function App() {
   const auth = useAuth()
   
+  // Create router with auth context, memoized to prevent recreation
+  const router = useMemo(() => createAppRouter(auth), [auth.isAuthenticated, auth.isLoading])
+  
   return (
     <TanStackQueryProvider.Provider>
-      <RouterProvider router={router} context={{ auth }} />
+      <RouterProvider router={router} />
     </TanStackQueryProvider.Provider>
   )
 }

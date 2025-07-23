@@ -18,6 +18,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { useAuth } from '@/lib/auth'
+import AuthService from '@/lib/services/api/auth/auth-service'
 
 const UserNav: React.FC = () => {
   const { isMobile } = useSidebar()
@@ -57,11 +58,16 @@ const UserNav: React.FC = () => {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={profile.profileImage} alt={profile.displayName} />
+                  <AvatarImage
+                    src={profile.profileImage}
+                    alt={profile.displayName}
+                  />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{profile.displayName}</span>
+                  <span className="truncate font-medium">
+                    {profile.displayName}
+                  </span>
                   <span className="text-muted-foreground truncate text-xs">
                     {profile.username}
                   </span>
@@ -84,7 +90,10 @@ const UserNav: React.FC = () => {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => await AuthService.logout('/')}
+              className="cursor-pointer"
+            >
               <Icons.logout />
               Log out
             </DropdownMenuItem>
