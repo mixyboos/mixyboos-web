@@ -3,10 +3,11 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Icons } from '@/components/icons'
+import { ModeToggle } from '@/components/theme/mode-toggle'
 
 export function AppTopbar() {
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2  transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-16">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator
@@ -29,6 +30,7 @@ export function AppTopbar() {
           </Button>
         </h1>
         <div className="ml-auto flex items-center gap-0">
+          <ModeToggle />
           <a href="https://github.com/mixyboos" className="p-2" target="_blank">
             <Icons.github className="h-4 w-4" />
           </a>
