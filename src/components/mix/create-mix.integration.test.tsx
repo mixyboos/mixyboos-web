@@ -79,12 +79,14 @@ describe('CreateMixComponent Integration Tests', () => {
       
       // Mock successful upload with progress
       mockUploadAudio.mockImplementation(async (mixId, formData, progressCallback) => {
-        // Simulate progress updates
-        setTimeout(() => progressCallback(1000, 250), 10)
-        setTimeout(() => progressCallback(1000, 500), 20)
-        setTimeout(() => progressCallback(1000, 750), 30)
-        setTimeout(() => progressCallback(1000, 1000), 40)
-        return true
+        // Simulate progress updates with delays
+        return new Promise((resolve) => {
+          setTimeout(() => progressCallback(1000, 250), 10)
+          setTimeout(() => progressCallback(1000, 500), 20)
+          setTimeout(() => progressCallback(1000, 750), 30)
+          setTimeout(() => progressCallback(1000, 1000), 40)
+          setTimeout(() => resolve(true), 100) // Resolve after 100ms
+        })
       })
 
       render(<CreateMixComponent />)
