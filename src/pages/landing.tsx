@@ -10,12 +10,9 @@ const LandingPage = () => {
         {/* Hero Section */}
         <div className="w-full max-w-4xl mx-auto">
           <div className="text-center space-y-12 w-full">
-            {/* Logo and Title */}
             <div>
               <div className="mb-6 flex justify-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center shadow-lg">
-                  <Icons.mixyboos className="w-12 h-12 text-white" />
-                </div>
+                <Icons.mixyboos className="w-12 h-12 " />
               </div>
 
               <h1 className="text-5xl lg:text-7xl font-bold text-foreground mb-4">
