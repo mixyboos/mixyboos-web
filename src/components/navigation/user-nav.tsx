@@ -69,7 +69,7 @@ const UserNav: React.FC = () => {
                     {profile.displayName}
                   </span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {profile.username}
+                    {profile.displayName}
                   </span>
                 </div>
               </div>

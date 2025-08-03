@@ -24,6 +24,8 @@ import { Card } from '@/components/ui/card'
 import { uploadImage } from '@/lib/services/api/upload/upload-service'
 import { createMix } from '@/lib/services/api/mix-service'
 import logger from '@/lib/logger'
+import { useAuth } from '@/lib/auth'
+import NotLoggedIn from '@/components/widgets/not-logged-in'
 
 const MAX_IMAGE_SIZE = 5242880
 const ACCEPTED_IMAGE_TYPES = [
@@ -43,7 +45,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
   onMixCreated,
 }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false)
-
+  const { profile } = useAuth()
   const formSchema = z.object({
     title: z
       .string()
@@ -64,6 +66,10 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         'Only .jpg, .jpeg, .png and .webp formats are supported.',
       ),
   })
+
+  if (!profile) {
+    return <NotLoggedIn />
+  }
 
   type FormValues = z.infer<typeof formSchema>
 
@@ -88,6 +94,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         title: values.title,
         description: values.description,
         isProcessed: false,
+        user: profile,
       })
       await uploadImage(mix.id, values.mixImage, 'mixes', '')
       onMixCreated(result)

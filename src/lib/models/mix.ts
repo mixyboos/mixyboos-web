@@ -5,6 +5,7 @@ export type CreateMixModel = {
   title: string
   description: string
   isProcessed: boolean
+  user: ProfileModel
 }
 export type MixModel = CreateMixModel & {
   slug: string
@@ -15,7 +16,6 @@ export type MixModel = CreateMixModel & {
   playCount: number
   shareCount: number
   downloadCount: number
-  user: ProfileModel
   audioUrl: string
   pcmUrl: string
   isLiked: boolean

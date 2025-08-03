@@ -6,7 +6,7 @@ import * as TanStackQueryProvider from './integrations/tanstack-query/root-provi
 
 import { routeTree } from './routeTree.gen'
 
-import './styles.css'
+import './styles/main.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { AuthProvider, useAuth } from '@/lib/auth.tsx'
 
@@ -33,10 +33,13 @@ function createAppRouter(auth: ReturnType<typeof useAuth>) {
 // Component that creates router with auth context
 function App() {
   const auth = useAuth()
-  
+
   // Create router with auth context, memoized to prevent recreation
-  const router = useMemo(() => createAppRouter(auth), [auth.isAuthenticated, auth.isLoading])
-  
+  const router = useMemo(
+    () => createAppRouter(auth),
+    [auth.isAuthenticated, auth.isLoading],
+  )
+
   return (
     <TanStackQueryProvider.Provider>
       <RouterProvider router={router} />

@@ -1,328 +1,243 @@
-Welcome to your new TanStack app! 
+<div align="center">
 
-# Getting Started
+# 🎵 Mixyboos
 
-To run this application:
+**Your Ultimate Music Mixing Platform**
+
+*Create, share, and discover AI-powered music mixes with crystal-clear audio quality*
+
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TanStack Router](https://img.shields.io/badge/TanStack-Router-FF6B35?style=for-the-badge&logo=react&logoColor=white)](https://tanstack.com/router)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+
+[🚀 Live Demo](https://mixyboos.com) • [📖 Documentation](#documentation) • [🐛 Report Bug](https://github.com/mixyboos/mixyboos-web/issues) • [✨ Request Feature](https://github.com/mixyboos/mixyboos-web/issues)
+
+</div>
+
+---
+
+## ✨ Features
+
+### 🎧 **AI-Powered Mixing**
+- Intelligent audio analysis and seamless mixing
+- Personalized mix recommendations based on your taste
+- Advanced audio processing with crystal-clear quality
+
+### 🎵 **Audio Experience**
+- High-quality audio streaming with HLS support
+- Interactive waveform visualization
+- Real-time audio processing and progress tracking
+- Support for various audio formats
+
+### 📱 **Modern UI/UX**
+- Responsive design that works on all devices
+- Dark/Light theme toggle with system preference detection
+- Beautiful animations and transitions
+- Accessible components with shadcn/ui
+
+### 🔄 **Real-time Features**
+- Live streaming capabilities
+- Real-time mix processing status
+- Instant audio playback and controls
+- Progress tracking for uploads and processing
+
+### 🎛️ **Creator Tools**
+- Drag-and-drop audio file uploads
+- Mix metadata management (title, description, artwork)
+- Audio processing pipeline with progress indicators
+- Mix editing and management dashboard
+
+### 👥 **Social Features**
+- User profiles and mix collections
+- Like, share, and download functionality
+- Personal mix libraries and discovery feeds
+- User authentication and authorization
+
+---
+
+## 🛠️ Tech Stack
+
+### **Frontend Framework**
+- **React 18** - Modern React with hooks and concurrent features
+- **TypeScript** - Type-safe development experience
+- **Vite** - Lightning-fast build tool and dev server
+
+### **Routing & State**
+- **TanStack Router** - Type-safe file-based routing
+- **TanStack Query** - Powerful data synchronization
+- **Zustand** - Lightweight state management for audio context
+
+### **UI & Styling**
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Beautiful, accessible component library
+- **Lucide React** - Consistent icon system
+- **Framer Motion** - Smooth animations (if used)
+
+### **Audio Processing**
+- **HLS.js** - HTTP Live Streaming support
+- **Web Audio API** - Advanced audio manipulation
+- **Custom waveform visualization** - Interactive audio timeline
+
+### **Development Tools**
+- **ESLint** - Code linting with TanStack config
+- **Prettier** - Code formatting
+- **Vitest** - Fast unit testing
+- **Bun** - Fast package manager and runtime
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Bun** (recommended) or **Node.js 18+**
+- **Git**
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/mixyboos/mixyboos-web.git
+cd mixyboos-web
+
+# Install dependencies
 bun install
-bunx --bun run start  
+
+# Start development server
+bun run start
 ```
 
-# Building For Production
+The application will be available at `http://localhost:3000`
 
-To build this application for production:
+### Building for Production
 
 ```bash
-bunx --bun run build
+# Build the application
+bun run build
+
+# Preview the production build
+bun run preview
 ```
 
-## Testing
+---
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+## 📁 Project Structure
 
-```bash
-bunx --bun run test
+```
+src/
+├── components/           # Reusable UI components
+│   ├── mix/             # Mix-specific components
+│   ├── widgets/         # Audio players and controls
+│   ├── ui/              # shadcn/ui components
+│   └── layouts/         # Page layouts
+├── pages/               # Page components
+├── routes/              # TanStack Router routes
+├── lib/                 # Utilities and services
+│   ├── contexts/        # React contexts
+│   ├── services/        # API services
+│   ├── models/          # TypeScript types
+│   └── utils/           # Helper functions
+└── styles/              # Global styles
 ```
 
-## Styling
+---
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+## 🔧 Development
 
-
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+### Available Scripts
 
 ```bash
-bunx --bun run lint
-bunx --bun run format
-bunx --bun run check
+# Development
+bun run start          # Start dev server
+bun run build          # Build for production
+bun run preview        # Preview production build
+
+# Code Quality
+bun run lint           # Lint code
+bun run format         # Format code
+bun run check          # Type check + lint
+
+# Testing
+bun run test           # Run tests
+bun run test:watch     # Run tests in watch mode
 ```
 
+### Adding New Components
 
-## Shadcn
-
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
+Use shadcn/ui to add new components:
 
 ```bash
+# Add a new UI component
 pnpx shadcn@latest add button
+pnpx shadcn@latest add dialog
 ```
 
+### Environment Variables
 
-## T3Env
+Create a `.env.local` file:
 
-- You can use T3Env to add type safety to your environment variables.
-- Add Environment variables to the `src/env.mjs` file.
-- Use the environment variables in your code.
-
-### Usage
-
-```ts
-import { env } from "@/env";
-
-console.log(env.VITE_APP_TITLE);
+```env
+VITE_API_URL=your_api_url
+VITE_APP_TITLE=Mixyboos
 ```
 
+---
 
+## 🎯 Key Features Implementation
 
+### Audio Management
+- **Multi-format support** - Handles various audio file formats
+- **Streaming optimization** - HLS streaming for efficient audio delivery
+- **Real-time processing** - Background audio processing with progress tracking
 
+### User Experience
+- **Responsive design** - Mobile-first approach with desktop optimization
+- **Accessibility** - WCAG compliant components and keyboard navigation
+- **Performance** - Optimized with React 18 features and Vite bundling
 
+### Developer Experience
+- **Type safety** - Full TypeScript coverage
+- **Modern tooling** - Latest development tools and practices
+- **Testing** - Comprehensive test suite with Vitest
 
-## Routing
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
+---
 
-### Adding A Route
+## 🤝 Contributing
 
-To add a new route to your application just add another a new file in the `./src/routes` directory.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-TanStack will automatically generate the content of the route file for you.
+### Development Workflow
 
-Now that you have two routes you can use a `Link` component to navigate between them.
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes
+4. Run tests: `bun run test`
+5. Commit your changes: `git commit -m 'Add amazing feature'`
+6. Push to the branch: `git push origin feature/amazing-feature`
+7. Open a Pull Request
 
-### Adding Links
+---
 
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
+## 📄 License
 
-```tsx
-import { Link } from "@tanstack/react-router";
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Then anywhere in your JSX you can use it like so:
+---
 
-```tsx
-<Link to="/about">About</Link>
-```
+## 🙏 Acknowledgments
 
-This will create a link that will navigate to the `/about` route.
+- **shadcn/ui** - For the beautiful component library
+- **TanStack** - For the excellent router and query tools
+- **Tailwind CSS** - For the utility-first CSS framework
+- **React Community** - For the amazing ecosystem
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+---
 
-### Using A Layout
+<div align="center">
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
+**Built with ❤️ by the Mixyboos team**
 
-Here is an example layout that includes a header:
+*Transform your music experience with AI-powered mixing*
 
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
-import { Link } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
-
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
-
-```bash
-bun install @tanstack/react-query @tanstack/react-query-devtools
-```
-
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
-
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// ...
-
-const queryClient = new QueryClient();
-
-// ...
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-}
-```
-
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-import "./App.css";
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
-
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default App;
-```
-
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
-
-## State Management
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
-
-```bash
-bun install @tanstack/store
-```
-
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
-
-export default App;
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
-
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
-
-export default App;
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+</div>

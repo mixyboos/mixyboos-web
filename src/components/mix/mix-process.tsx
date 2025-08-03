@@ -54,11 +54,11 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
               <AvatarImage
-                src={mix.user?.profileImage}
-                alt={mix.user?.username}
+                src={mix.user.profileImage}
+                alt={mix.user.displayName}
               />
               <AvatarFallback>
-                {mix.user?.username[0]?.toUpperCase() || 'U'}
+                {mix.user.displayName[0].toUpperCase() || 'U'}
               </AvatarFallback>
             </Avatar>
             <h3 className="font-semibold text-base">{mix.title}</h3>

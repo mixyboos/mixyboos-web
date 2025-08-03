@@ -28,7 +28,7 @@ export function ModeToggle() {
   // Initialize theme on mount
   React.useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
-    
+
     // Default to dark mode if no saved preference
     const shouldBeDark = savedTheme === 'dark' || savedTheme === null
 
