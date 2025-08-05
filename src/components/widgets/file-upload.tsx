@@ -57,9 +57,23 @@ const FileUpload = ({
       <span className="mt-2 text-base leading-normal">gimme a file</span>
       <input
         type="file"
-        accept=".mp3,audio/*"
+        accept=".mp3,.wav"
         className="hidden"
         onChange={(e) => {
+          if (!e.currentTarget.files?.[0]) return
+          const file = e.currentTarget.files[0]
+          const fileName = file.name.toLowerCase()
+          const acceptedExtensions = e.currentTarget.accept
+            .split(',')
+            .map((ext) => ext.trim())
+          const hasValidExtension = acceptedExtensions.some((ext) =>
+            fileName.endsWith(ext.replace('.', '')),
+          )
+
+          if (!hasValidExtension) {
+            onError('Please select a valid audio file (mp3 or wav)')
+            return
+          }
           startUpload(e).catch((err) => {
             console.error('FileUpload', 'Error starting upload', err)
           })

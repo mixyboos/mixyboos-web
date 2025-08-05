@@ -67,8 +67,9 @@ const MixCreateComponent = () => {
               onUploadComplete={() => {
                 setUploadState(UploadState.done)
               }}
-              onUploadStart={(fileName) => {
-                setFilename(fileName)
+              onUploadStart={(file: string) => {
+                setCreateState(CreateState.new)
+                setFilename(file)
                 setUploadState(UploadState.uploading)
               }}
               onUploadProgress={(total, loaded) => {
