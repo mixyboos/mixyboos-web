@@ -32,15 +32,15 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
               disabled={!mix.isProcessed}
               mix={mix}
               onPlayStart={() => {
-                logger.debug('large-audio-player', 'onPlayStart')
+                logger.debugLog('large-audio-player', 'onPlayStart')
               }}
             />
           </div>
           <div className="grow justify-center">
-            <Link to={`/${mix.user!.slug}/${mix.slug!}`}>
+            <Link to={`/${mix.user.slug}/${mix.slug}` as '/$user/$mix'}>
               <h1 className="text-xl font-bold md:text-3xl">{mix.title}</h1>
               <h2 className="text-md text-muted-foreground">
-                By: {mix.user?.displayName}
+                By: {mix.user.displayName}
               </h2>
             </Link>
           </div>
@@ -49,7 +49,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
       {mix.isProcessed && mix.pcmUrl ? (
         <WaveformComponent
           id={mix.id}
-          audioUrl={mix.audioUrl as string}
+          audioUrl={mix.audioUrl}
           pcmUrl={mix.pcmUrl}
           playState={PlayState.stopped}
           duration={mix.duration || 0}
@@ -58,6 +58,9 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
       ) : (
         <div className="relative h-[150px] w-full cursor-pointer">
           <div className="rounded-lg border p-4 flex flex-col items-center justify-center space-y-4 bg-secondary/30">
+            <pre className="text-xs overflow-auto max-h-32 w-full">
+              {JSON.stringify(mix, null, 2)}
+            </pre>
             <Button onClick={() => window.location.reload()} className="gap-2">
               <Icons.refresh className="mr-1" />
               Known bug - click me.

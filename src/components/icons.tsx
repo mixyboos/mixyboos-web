@@ -84,7 +84,6 @@ import {
   X,
 } from 'lucide-react'
 import type { LucideIcon, LucideProps } from 'lucide-react'
-import Logo from '@/logo.svg'
 
 export type Icon = LucideIcon
 
