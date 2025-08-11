@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import * as z from 'zod'
-import type { MixModel } from '@/lib/models/mix'
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+import type { MixModel } from "@/lib/models/mix";
 import {
   Form,
   FormControl,
@@ -13,81 +13,81 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Icons } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
-import { Textarea } from '@/components/ui/textarea'
-import ImageUpload from '@/components/widgets/image-upload'
-import { Card } from '@/components/ui/card'
-import { uploadImage } from '@/lib/services/api/upload/upload-service'
-import { createMix } from '@/lib/services/api/mix-service'
-import logger from '@/lib/logger'
-import { useAuth } from '@/lib/auth'
-import NotLoggedIn from '@/components/widgets/not-logged-in'
+} from "@/components/ui/form";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import ImageUpload from "@/components/widgets/image-upload";
+import { Card } from "@/components/ui/card";
+import { uploadImage } from "@/lib/services/api/upload/upload-service";
+import { createMix } from "@/lib/services/api/mix-service";
+import logger from "@/lib/logger";
+import { useAuth } from "@/lib/auth/auth-context";
+import NotLoggedIn from "@/components/widgets/not-logged-in";
 
-const MAX_IMAGE_SIZE = 5242880
+const MAX_IMAGE_SIZE = 5242880;
 const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-]
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 type CreateMixDetailsProps = {
-  mix: MixModel
-  onMixCreated: (mix: MixModel | undefined, error?: string) => void
-}
+  mix: MixModel;
+  onMixCreated: (mix: MixModel | undefined, error?: string) => void;
+};
 
 const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
   mix,
   onMixCreated,
 }) => {
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const { profile } = useAuth()
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { profile } = useAuth();
   const formSchema = z.object({
     title: z
       .string()
-      .min(5, { message: 'must be at least 5 characters' })
+      .min(5, { message: "must be at least 5 characters" })
       .max(100, { message: "can't be more than 100 characters" }),
     description: z
       .string()
-      .min(5, { message: 'must be at least 5 characters' })
+      .min(5, { message: "must be at least 5 characters" })
       .max(2000, { message: "can't be more than 2000 characters" }),
     mixImage: z
       .instanceof(File)
       .refine((file: File) => {
-        const ret = file.size <= MAX_IMAGE_SIZE
-        return ret
+        const ret = file.size <= MAX_IMAGE_SIZE;
+        return ret;
       }, `Max image size is 5MB.`)
       .refine(
         (file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-        'Only .jpg, .jpeg, .png and .webp formats are supported.',
+        "Only .jpg, .jpeg, .png and .webp formats are supported."
       ),
-  })
+  });
 
   if (!profile) {
-    return <NotLoggedIn />
+    return <NotLoggedIn />;
   }
 
-  type FormValues = z.infer<typeof formSchema>
+  type FormValues = z.infer<typeof formSchema>;
 
   const defaultValues: Partial<FormValues> = {
     title: mix.title,
     description:
-      'Hexagon pour-over hella, pop-up bespoke tote bag sus forage umami godard cred gentrify crucifix. Chillwave craft beer farm-to-table kogi portland jianbing PBR&B grailed meh bruh. Mustache lo-fi intelligentsia blue bottle godard microdosing. Hammock neutral milk hotel letterpress af, prism sartorial skateboard. Tofu chambray health goth copper mug. Listicle kogi knausgaard, cred bespoke master cleanse polaroid.',
+      "Hexagon pour-over hella, pop-up bespoke tote bag sus forage umami godard cred gentrify crucifix. Chillwave craft beer farm-to-table kogi portland jianbing PBR&B grailed meh bruh. Mustache lo-fi intelligentsia blue bottle godard microdosing. Hammock neutral milk hotel letterpress af, prism sartorial skateboard. Tofu chambray health goth copper mug. Listicle kogi knausgaard, cred bespoke master cleanse polaroid.",
     mixImage: undefined,
-  }
+  };
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
-    mode: 'onChange',
-  })
+    mode: "onChange",
+  });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       const result = await createMix({
         id: mix.id,
@@ -95,15 +95,15 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         description: values.description,
         isProcessed: false,
         user: profile,
-      })
-      await uploadImage(mix.id, values.mixImage, 'mixes', '')
-      onMixCreated(result)
+      });
+      await uploadImage(mix.id, values.mixImage, "mixes", "");
+      onMixCreated(result);
     } catch (err) {
-      logger.errorLog('CreateMixDetails', 'Error creating mix', err)
+      logger.errorLog("CreateMixDetails", "Error creating mix", err);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <Card className="w-full rounded-lg shadow-sm">
@@ -176,7 +176,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
                       <FormLabel className="text-base">Cover Image</FormLabel>
                       <Controller
                         control={form.control}
-                        name={'mixImage'}
+                        name={"mixImage"}
                         render={({ field: { value, onChange, ...field } }) => {
                           return (
                             <div className="flex flex-col items-start">
@@ -185,11 +185,11 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
                                 className="h-64 w-64 rounded-md border border-input"
                                 imageUrl={value && value.name}
                                 onImageChanged={(image) => {
-                                  onChange(image)
+                                  onChange(image);
                                 }}
                               />
                             </div>
-                          )
+                          );
                         }}
                       />
                       <FormDescription className="text-left">
@@ -229,7 +229,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         </Form>
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default CreateMixDetails
+export default CreateMixDetails;

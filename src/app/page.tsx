@@ -1,13 +1,9 @@
-import { useAuth } from "@/lib/auth";
 import LoggedInPage from "@/pages/logged-in";
 import LandingPage from "@/pages/landing";
+import { getServerAuth } from "@/lib/auth/server-auth";
 
-export default function App() {
-  const { isLoading, isAuthenticated } = useAuth();
-
-  if (isLoading) {
-    return <div className="text-center">Loading...</div>;
-  }
+export default async function App() {
+  const { isAuthenticated } = await getServerAuth();
 
   return (
     <div className="text-center">

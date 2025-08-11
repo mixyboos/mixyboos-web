@@ -17,7 +17,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { useAuth } from '@/lib/auth'
+import { useAuth } from '@/lib/auth/auth-context'
 import AuthService from '@/lib/services/api/auth/auth-service'
 
 const UserNav: React.FC = () => {

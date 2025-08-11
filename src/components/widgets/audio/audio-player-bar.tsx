@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { useToggleMixLike } from '@/lib/queries/mix'
-import { useAuth } from '@/lib/auth'
+import { useAuth } from '@/lib/auth/auth-context'
 
 type AudioPlayerBarProps = {
   mix: MixModel

@@ -105,12 +105,12 @@ const LandingPage = () => {
             {/* Social Links */}
             <div className="flex justify-center space-x-6 text-muted-foreground">
               <a
-                href={siteConfig.links.twitter}
+                href={siteConfig.links.reddit}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full hover:bg-accent hover:text-accent-foreground transition-colors"
               >
-                <Icons.twitter className="w-5 h-5" />
+                <Icons.reddit className="w-5 h-5" />
               </a>
               <a
                 href={siteConfig.links.github}
