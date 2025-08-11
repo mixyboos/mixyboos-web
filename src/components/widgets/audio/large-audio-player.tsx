@@ -8,6 +8,7 @@ import WaveformComponent from '@/components/widgets/audio/waveform'
 import { Button } from '@/components/ui/button'
 import { Icons } from '@/components/icons'
 import PlayPauseButton from '@/components/widgets/buttons/play-pause-button'
+import useAudioProcessingStatus from '@/lib/hooks/audio-processing-hook'
 
 type LargeAudioPlayerProps = {
   mix: MixModel
@@ -17,11 +18,17 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
   mix,
 }: LargeAudioPlayerProps) => {
   const { position, setDuration } = useAudioStore()
+  const { isProcessed } = useAudioProcessingStatus()
   React.useEffect(() => {
     if (mix.duration) {
       setDuration(mix.duration)
     }
   }, [mix])
+  React.useEffect(() => {
+    if (isProcessed) {
+      mix.isProcessed = true
+    }
+  }, [isProcessed])
 
   return (
     <div className="space-x-4">
@@ -46,7 +53,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
           </div>
         </div>
       </div>
-      {mix.isProcessed && mix.pcmUrl ? (
+      {mix.pcmUrl ? (
         <WaveformComponent
           id={mix.id}
           audioUrl={mix.audioUrl}
