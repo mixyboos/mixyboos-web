@@ -36,7 +36,7 @@ const LandingPage = () => {
                     Get Started
                   </Button>
                 </Link>
-                <Link to="/" className="w-full sm:w-auto">
+                <Link href="/" className="w-full sm:w-auto">
                   <Button
                     variant="outline"
                     size="default"

@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react'
 import type { ProfileModel } from '@/lib/models/profile'
 import AuthService from '@/lib/services/api/auth/auth-service'
