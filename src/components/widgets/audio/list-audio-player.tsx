@@ -28,12 +28,17 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
             <PlayPauseButton
               mix={mix}
               onPlayStart={() =>
-                logger.debug('list-audio-player', 'onPlayStart')
+                logger.debugLog('list-audio-player', 'onPlayStart')
               }
             />
             <div>
               <h3 className="text-lg font-semibold">
-                <Link to={`/${mix.user.slug}/${mix.slug}`}>{mix.title}</Link>
+                <Link
+                  to={'/$user/$mix'}
+                  params={{ user: mix.user.slug, mix: mix.slug }}
+                >
+                  {mix.title}
+                </Link>
               </h3>
               <p className="text-muted-foreground text-sm">
                 {mix.user.displayName}

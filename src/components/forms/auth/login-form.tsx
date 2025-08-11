@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { EyeIcon, EyeOffIcon, LoaderIcon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -22,9 +22,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { useAuth } from '@/lib/auth'
-import { cn } from '@/lib/utils'
 import { Icons } from '@/components/icons'
-import { Label } from '@/components/ui/label'
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -39,14 +37,10 @@ interface LoginFormProps {
   onError?: (error: string) => void
 }
 
-export default function LoginForm({
-  className,
-  onSuccess,
-  onError,
-}: LoginFormProps) {
+export default function LoginForm({ onSuccess, onError }: LoginFormProps) {
   const { login, isLoading } = useAuth()
   const [showPassword, setShowPassword] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
+  const [_, setError] = React.useState<string | null>(null)
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),

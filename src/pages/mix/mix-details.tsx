@@ -40,7 +40,7 @@ const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
             <p
               className="p-4"
               dangerouslySetInnerHTML={{
-                __html: mix.description?.replace(/\n/g, '<br />') as string,
+                __html: mix.description.replace(/\n/g, '<br />'),
               }}
             />
           </CardContent>
@@ -48,7 +48,15 @@ const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
       </div>
     </div>
   ) : (
-    <ProcessingMix mix={mix} />
+    <ProcessingMix
+      mix={mix}
+      // onProcessed={(success, state) => {
+      //   mix.isProcessed = success
+      //   if (!success) {
+      //     setError(state)
+      //   }
+      // }}
+    />
   )
 }
 

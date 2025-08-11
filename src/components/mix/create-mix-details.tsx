@@ -99,7 +99,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
       await uploadImage(mix.id, values.mixImage, 'mixes', '')
       onMixCreated(result)
     } catch (err) {
-      logger.error('CreateMixDetails', 'Error creating mix', err)
+      logger.errorLog('CreateMixDetails', 'Error creating mix', err)
     } finally {
       setIsSubmitting(false)
     }
@@ -171,7 +171,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
                 <FormField
                   control={form.control}
                   name="mixImage"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel className="text-base">Cover Image</FormLabel>
                       <Controller

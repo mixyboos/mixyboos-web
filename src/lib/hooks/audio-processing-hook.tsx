@@ -11,27 +11,39 @@ const useAudioProcessingStatus = () => {
     const connection = createSignalRConnection('updates')
     connection.start().then(() => {
       logger.debug(
-        'Signalr',
-        'useAudioProcessingStatus',
+        { context: 'Signalr', action: 'useAudioProcessingStatus', connection },
         'Connected',
-        connection,
       )
       connection.on('ConversionStarted', (showId: string) => {
-        logger.debug('Signalr', 'ConversionStarted', showId)
+        logger.debug(
+          { context: 'Signalr', action: 'ConversionStarted' },
+          showId,
+        )
         setProcessStatus('Converting audio...')
       })
       connection.on('ConversionProgress', (showId: string, value: number) => {
-        logger.debug('Signalr', 'ConversionProgress', showId, value)
+        logger.debug(
+          { context: 'Signalr', action: 'ConversionProgress', showId: showId },
+          value.toString(16),
+        )
         setProcessPercentage(value)
         setProcessStatus('Converting audio...')
       })
       connection.on('ConversionFinished', (showId: string) => {
-        logger.debug('Signalr', 'ConversionFinished', showId)
+        logger.debug({
+          context: 'Signalr',
+          action: 'ConversionFinished',
+          showId: showId,
+        })
         setIsProcessed(true)
         setProcessStatus('Processing finished...')
       })
       connection.on('ConversionFailed', (showId: string) => {
-        logger.debug('Signalr', 'ConversionFailed', showId)
+        logger.debug({
+          context: 'Signalr',
+          action: 'ConversionFailed',
+          showId: showId,
+        })
         setProcessStatus('Processing failed...')
         setIsFailed(true)
       })
