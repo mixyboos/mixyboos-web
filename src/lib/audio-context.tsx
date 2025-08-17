@@ -48,7 +48,7 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   setPosition: (position: number) => {
     logger.debug("audio-context", "setPosition", position);
     const progressPercentage = (position / get().duration) * 100;
-    set({position, progressPercentage});
+    set({ position, progressPercentage });
 
     // TODO: refactor this out to a service
     // update local storage with the positions of all items
@@ -57,34 +57,36 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
     if (currentItem) {
       currentItem.position = position;
     } else {
-      positions.push({id: get().nowPlayingId, position});
+      positions.push({ id: get().nowPlayingId, position });
     }
     localStorage.setItem("_p", JSON.stringify(positions));
     // TODO: end
   },
-  setSeekPosition: (seekPosition: number) => set(() => ({seekPosition})),
-  setDuration: (duration: number) => set(() => ({duration})),
+  setSeekPosition: (seekPosition: number) => set(() => ({ seekPosition })),
+  setDuration: (duration: number) => set(() => ({ duration })),
   clearNowPlaying: () =>
-    set({nowPlaying: undefined, nowPlayingUrl: "", nowPlayingId: ""}),
+    set({ nowPlaying: undefined, nowPlayingUrl: "", nowPlayingId: "" }),
   setNowPlaying: (mix: MixModel, url: string, id: string) =>
-    set(() => ({nowPlaying: mix, nowPlayingUrl: url, nowPlayingId: id})),
+    set(() => ({ nowPlaying: mix, nowPlayingUrl: url, nowPlayingId: id })),
   setPlayState: (playState: PlayState) => {
     if (get().playState !== playState) {
-      set({playState});
+      set({ playState });
     }
   },
   togglePlayState: () =>
     set((state) => {
       return {
         playState:
-          state.playState === PlayState.playing ? PlayState.paused : PlayState.playing,
+          state.playState === PlayState.playing
+            ? PlayState.paused
+            : PlayState.playing,
       };
     }),
-  setVolume: (volume: number) => set({currentVolume: volume}),
-  setMuted: (muted: boolean) => set({muted}),
-  toggleMuted: () => set((state) => ({muted: !state.muted})),
+  setVolume: (volume: number) => set({ currentVolume: volume }),
+  setMuted: (muted: boolean) => set({ muted }),
+  toggleMuted: () => set((state) => ({ muted: !state.muted })),
 }));
 
-export type {IAudioState};
-export {PlayState};
+export type { IAudioState };
+export { PlayState };
 export default useAudioStore;

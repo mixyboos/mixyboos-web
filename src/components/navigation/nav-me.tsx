@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import type { SidebarItemProps } from '@/components/navigation/app-sidebar'
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -10,6 +9,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { Icons } from '@/components/icons'
+import Link from 'next/link'
 
 const items: Array<SidebarItemProps> = [
   {
@@ -45,7 +45,7 @@ export function NavMe() {
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
               asChild
             >
-              <Link to="/upload" className="flex items-center gap-2">
+              <Link href="/upload" className="flex items-center gap-2">
                 <Icons.upload />
                 <span>Upload Mix</span>
               </Link>
@@ -55,7 +55,7 @@ export function NavMe() {
               className="size-8 group-data-[collapsible=icon]:opacity-0"
               variant="outline"
             >
-              <Link to="/upload" className="flex items-center gap-2">
+              <Link href="/upload" className="flex items-center gap-2">
                 <Icons.upload />
               </Link>
               <span className="sr-only">Upload</span>
@@ -66,7 +66,7 @@ export function NavMe() {
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title} asChild>
-                <Link to={item.link}>
+                <Link href={item.link}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>
