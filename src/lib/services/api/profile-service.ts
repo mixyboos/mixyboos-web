@@ -1,68 +1,68 @@
-import { AxiosError } from 'axios'
-import type { ApiKeyModel } from '@/lib/models/api-key'
-import type { ProfileModel } from '@/lib/models/profile'
-import api from '@/lib/services/api/api-client'
-import logger from '@/lib/logger'
+import { AxiosError } from "axios";
+import type { ApiKeyModel } from "@/lib/models/api-key";
+import type { ProfileModel } from "@/lib/models/profile";
+import api from "@/lib/services/api/api-client";
+import logger from "@/lib/logger";
 
 const ProfileService = {
   getStreamKey: async (): Promise<ApiKeyModel | undefined> => {
     try {
-      const results = await api.get('/profile/apikey')
+      const results = await api.get("/profile/apikey");
       if (results.status === 200) {
-        return results.data
+        return results.data;
       }
     } catch (err) {
       logger.error(
-        'profile-service.ts',
+        "profile-service.ts",
         "Unable to get user's stream key.",
-        err,
-      )
+        err
+      );
     }
-    return undefined
+    return undefined;
   },
   getProfile: async (): Promise<ProfileModel | undefined> => {
     try {
-      const result = await api.get('/profile')
+      const result = await api.get("/profile");
       if (result?.status === 200) {
-        return result.data
+        return result.data;
       }
     } catch (err) {
-      console.log('profile-service', 'ERROR', err)
+      console.log("profile-service", "ERROR", err);
       if (err instanceof AxiosError) {
-        console.log('authService', 'getProfile_error', err)
+        console.log("authService", "getProfile_error", err);
         if (![401, 400].includes(err.status as number))
-          throw new Error(err.message)
+          throw new Error(err.message);
       }
     }
-    return undefined
+    return undefined;
   },
 
   getProfileBySlug: async (slug: string): Promise<ProfileModel | undefined> => {
     try {
-      const results = await api.get(`/profile?slug=${slug}`)
+      const results = await api.get(`/profile?slug=${slug}`);
       if (results.status === 200) {
-        return results.data
+        return results.data;
       }
     } catch {}
-    return undefined
+    return undefined;
   },
 
   toggleFollow: async (slug: string): Promise<boolean> => {
-    const result = await api.post(`/profile/togglefollow?slug=${slug}`)
-    return result.status === 200
+    const result = await api.post(`/profile/togglefollow?slug=${slug}`);
+    return result.status === 200;
   },
 
   updateProfile: async (
-    profile: ProfileModel,
+    profile: ProfileModel
   ): Promise<ProfileModel | undefined> => {
     try {
-      const result = await api.post(`/profile`, profile)
+      const result = await api.post(`/profile`, profile);
 
-      return result.data as ProfileModel
+      return result.data as ProfileModel;
     } catch (err) {
-      logger.error('profile-service', 'updateProfile', profile, err)
+      logger.error("profile-service", "updateProfile", profile, err);
     }
-    return undefined
+    return undefined;
   },
-}
-export default ProfileService
+};
+export default ProfileService;

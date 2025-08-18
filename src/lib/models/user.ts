@@ -1,7 +1,2 @@
-export type User = {
-  slug: string
-  email: string
-  id: string
-  displayName: string
-  username: string
-}
+import { _User } from "@/lib/models/_user";
+export type UserModel = {} & _User;

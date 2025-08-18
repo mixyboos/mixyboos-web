@@ -1,9 +1,7 @@
-import type { User } from '@/lib/models/user'
+import type { _User } from "@/lib/models/_user";
 
 export type ProfileModel = {
-  title: string | null
-  biography: string | null
-  profileImage: string
-  headerImage: string
-  urls: Array<string> | null
-} & User
+  id: string;
+  email: string;
+  username: string;
+} & _User;

@@ -1,40 +1,41 @@
-import type { SidebarItemProps } from '@/components/navigation/app-sidebar'
-import type { LucideIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import type { SidebarItemProps } from "@/components/navigation/app-sidebar";
+import type { LucideIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar'
-import { Icons } from '@/components/icons'
-import Link from 'next/link'
-
-const items: Array<SidebarItemProps> = [
-  {
-    title: 'My Shows',
-    icon: Icons.liveStream as LucideIcon,
-    link: '/dashboard/shows',
-  },
-  {
-    title: 'My Mixes',
-    icon: Icons.mix as LucideIcon,
-    link: '/dashboard/mixes',
-  },
-  {
-    title: 'My Profile',
-    icon: Icons.user as LucideIcon,
-    link: '/dashboard/profile',
-  },
-  {
-    title: 'Stats',
-    icon: Icons.graph as LucideIcon,
-    link: '/dashboard/stats',
-  },
-]
+} from "@/components/ui/sidebar";
+import { Icons } from "@/components/icons";
+import Link from "next/link";
+import { useAuth } from "@/lib/auth/auth-context";
 
 export function NavMe() {
+  const { profile } = useAuth();
+  const items: Array<SidebarItemProps> = [
+    {
+      title: "My Shows",
+      icon: Icons.liveStream as LucideIcon,
+      link: "/dashboard/shows",
+    },
+    {
+      title: "My Mixes",
+      icon: Icons.mix as LucideIcon,
+      link: "/dashboard/mixes",
+    },
+    {
+      title: "My Profile",
+      icon: Icons.user as LucideIcon,
+      link: `/${profile?.slug}`,
+    },
+    {
+      title: "Stats",
+      icon: Icons.graph as LucideIcon,
+      link: "/dashboard/stats",
+    },
+  ];
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -76,5 +77,5 @@ export function NavMe() {
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }
