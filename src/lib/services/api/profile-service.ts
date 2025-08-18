@@ -12,7 +12,7 @@ const ProfileService = {
         return results.data;
       }
     } catch (err) {
-      logger.error(
+      logger.errorLog(
         "profile-service.ts",
         "Unable to get user's stream key.",
         err
@@ -60,7 +60,7 @@ const ProfileService = {
 
       return result.data as ProfileModel;
     } catch (err) {
-      logger.error("profile-service", "updateProfile", profile, err);
+      logger.errorLog("profile-service", "updateProfile", profile, err);
     }
     return undefined;
   },

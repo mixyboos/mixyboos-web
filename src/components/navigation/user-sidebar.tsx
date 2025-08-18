@@ -1,4 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useAuth } from '@/lib/auth/auth-context'
 import { Icons } from '@/components/icons'
 import {
   Sidebar,
@@ -13,6 +16,12 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import UserImage from '@/components/widgets/user-image'
+
+type SidebarItem = {
+  name: string
+  icon: LucideIcon
+  link: string
+}
 
 const items = {
   me: [
@@ -37,11 +46,12 @@ const items = {
       link: '/dashboard/stats',
     },
   ],
-  feed: [],
+  feed: [] as SidebarItem[],
 }
 // TODO: https://x.com/KaraBharat/status/1901883428494274901
 const UserSidebar = () => {
   const { profile } = useAuth()
+  const pathname = usePathname()
   return (
     <Sidebar variant="inset" collapsible="icon" className="mt-16 pb-16">
       <SidebarHeader>
@@ -78,7 +88,7 @@ const UserSidebar = () => {
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
                     asChild
-                    isActive={item.name === location.pathname}
+                    isActive={pathname === item.link}
                   >
                     <Link href={item.link}>
                       <item.icon />
@@ -98,7 +108,7 @@ const UserSidebar = () => {
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
                     asChild
-                    isActive={item.name === location.pathname}
+                    isActive={pathname === item.link}
                   >
                     <Link href={item.link}>
                       <item.icon />

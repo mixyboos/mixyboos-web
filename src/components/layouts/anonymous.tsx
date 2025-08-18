@@ -1,9 +1,11 @@
-import { Outlet } from '@tanstack/react-router'
+interface AnonymousLayoutProps {
+  children: React.ReactNode
+}
 
-const AnonymousLayout = () => {
+const AnonymousLayout = ({ children }: AnonymousLayoutProps) => {
   return (
     <div className="w-full h-full">
-      <Outlet />
+      {children}
     </div>
   )
 }

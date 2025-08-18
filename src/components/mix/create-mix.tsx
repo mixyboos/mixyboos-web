@@ -1,6 +1,6 @@
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { useRouter } from '@tanstack/react-router'
+import { useRouter } from 'next/navigation'
 import type { MixModel } from '@/lib/models/mix'
 import { Progress } from '@/components/ui/progress'
 import { Icons } from '@/components/icons'
@@ -84,7 +84,7 @@ const MixCreateComponent = () => {
             onMixCreated={(mix, error) => {
               setCreateState(error ? CreateState.error : CreateState.done)
               if (mix && mix.user) {
-                router.navigate({ to: `/${mix.user.slug}/${mix.slug}` })
+                router.push(`/${mix.user.slug}/${mix.slug}`)
               }
             }}
           />

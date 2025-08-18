@@ -29,50 +29,50 @@ const logger = {
   fatal: pinoLogger.fatal.bind(pinoLogger),
 
   // Console-compatible methods that accept multiple arguments
-  log: (...args: Array<any>) => {
+  log: (...args: Array<unknown>) => {
     if (args.length === 1) {
       pinoLogger.info(args[0])
     } else {
       const [first, ...rest] = args
-      pinoLogger.info({ data: rest }, first)
+      pinoLogger.info({ data: rest }, String(first))
     }
   },
 
   // Alternative debug that handles multiple arguments like console.log
-  debugLog: (...args: Array<any>) => {
+  debugLog: (...args: Array<unknown>) => {
     if (args.length === 1) {
       pinoLogger.debug(args[0])
     } else {
       const [first, ...rest] = args
-      pinoLogger.debug({ data: rest }, first)
+      pinoLogger.debug({ data: rest }, String(first))
     }
   },
 
   // Alternative methods that handle multiple arguments
-  infoLog: (...args: Array<any>) => {
+  infoLog: (...args: Array<unknown>) => {
     if (args.length === 1) {
       pinoLogger.info(args[0])
     } else {
       const [first, ...rest] = args
-      pinoLogger.info({ data: rest }, first)
+      pinoLogger.info({ data: rest }, String(first))
     }
   },
 
-  warnLog: (...args: Array<any>) => {
+  warnLog: (...args: Array<unknown>) => {
     if (args.length === 1) {
       pinoLogger.warn(args[0])
     } else {
       const [first, ...rest] = args
-      pinoLogger.warn({ data: rest }, first)
+      pinoLogger.warn({ data: rest }, String(first))
     }
   },
 
-  errorLog: (...args: Array<any>) => {
+  errorLog: (...args: Array<unknown>) => {
     if (args.length === 1) {
       pinoLogger.error(args[0])
     } else {
       const [first, ...rest] = args
-      pinoLogger.error({ data: rest }, first)
+      pinoLogger.error({ data: rest }, String(first))
     }
   },
 }

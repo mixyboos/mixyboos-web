@@ -40,7 +40,7 @@ export const useToggleMixLike = (mix: MixModel) => {
         const response = await toggleLike(mix)
         return response
       } catch (err) {
-        logger.error('tan-mix-service', 'toggle-mix-like', err)
+        logger.errorLog('tan-mix-service', 'toggle-mix-like', err)
       }
     },
   })

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from '@tanstack/react-router'
+import Link from 'next/link'
 import type { MixModel } from '@/lib/models/mix'
 import { Card, CardContent } from '@/components/ui/card'
 import PlayPauseButton from '@/components/widgets/buttons/play-pause-button'
@@ -34,8 +34,7 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
             <div>
               <h3 className="text-lg font-semibold">
                 <Link
-                  to={'/$user/$mix'}
-                  params={{ user: mix.user.slug, mix: mix.slug }}
+                  href={`/${mix.user.slug}/${mix.slug}`}
                 >
                   {mix.title}
                 </Link>

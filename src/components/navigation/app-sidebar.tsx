@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils'
 
 export type SidebarItemProps = {
   title: string
-  icon?: any
+  icon?: React.ComponentType
   link: string
 }
 

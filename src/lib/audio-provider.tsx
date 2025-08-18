@@ -47,13 +47,13 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
             setDuration(player.duration || 0);
             setPlayState(PlayState.playing);
           } catch (err) {
-            logger.error("audio-provider", "Error playing url", err);
+            logger.errorLog("audio-provider", "Error playing url", err);
             console.log("Unable to autoplay prior to user interaction with the dom.");
           }
         });
       });
       hls.on(Hls.Events.ERROR, function (_event, data) {
-        logger.error("AudioProvider", "Unable to initialise audio player", data);
+        logger.errorLog("AudioProvider", "Unable to initialise audio player", data);
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
@@ -87,7 +87,7 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
     } else if (playState === PlayState.playing) {
       __player.current
         .play()
-        .catch((err) => logger.error("audio-provider", "error resuming", err));
+        .catch((err) => logger.errorLog("audio-provider", "error resuming", err));
     }
   }, [playState, __player]);
 

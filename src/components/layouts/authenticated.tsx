@@ -1,9 +1,12 @@
-import { Outlet } from '@tanstack/react-router'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppTopbar } from '@/components/navigation/app-topbar'
 import { AppSidebar } from '@/components/navigation/app-sidebar'
 
-const AuthenticatedLayout = () => {
+interface AuthenticatedLayoutProps {
+  children: React.ReactNode
+}
+
+const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
   const defaultOpen = true
 
   return (
@@ -21,7 +24,7 @@ const AuthenticatedLayout = () => {
           <SidebarInset className="flex flex-col flex-grow max-w-full m-0 p-0 rounded-none shadow-none">
             <AppTopbar />
             <main className="w-full overflow-auto p-4">
-              <Outlet />
+              {children}
             </main>
           </SidebarInset>
         </div>

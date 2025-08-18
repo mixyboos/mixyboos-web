@@ -47,7 +47,7 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   progressPercentage: 0,
 
   setPosition: (position: number) => {
-    logger.debug('audio-context', 'setPosition', position)
+    logger.debugLog('audio-context', 'setPosition', position)
     const progressPercentage = (position / get().duration) * 100
     set({ position, progressPercentage })
 

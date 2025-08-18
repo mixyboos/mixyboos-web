@@ -33,11 +33,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     const initializeAuth = async () => {
       try {
-        logger.debug('auth', 'initializeAuth')
+        logger.debug('initializeAuth')
         const p = await AuthService.getProfile()
         if (!p) {
           logger.warn(
-            'auth',
             'No user profile found, user may not be authenticated.',
           )
           setProfile(null)

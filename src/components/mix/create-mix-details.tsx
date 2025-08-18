@@ -67,10 +67,6 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
       ),
   });
 
-  if (!profile) {
-    return <NotLoggedIn />;
-  }
-
   type FormValues = z.infer<typeof formSchema>;
 
   const defaultValues: Partial<FormValues> = {
@@ -85,6 +81,10 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
     defaultValues,
     mode: "onChange",
   });
+
+  if (!profile) {
+    return <NotLoggedIn />;
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);

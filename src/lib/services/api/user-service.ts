@@ -10,7 +10,7 @@ const UserService = {
         return results.data;
       }
     } catch (err) {
-      logger.error(
+      logger.errorLog(
         "profile-service.ts",
         "Unable to get user's stream key.",
         err

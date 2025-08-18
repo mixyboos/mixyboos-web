@@ -8,7 +8,7 @@ const requeProcessMixJob = async (mixId: string): Promise<boolean> => {
 
     return result.status === StatusCodes.ACCEPTED
   } catch (err) {
-    logger.error('Unable to resubmit mix for processing', err)
+    logger.errorLog('Unable to resubmit mix for processing', err)
   }
   return false
 }

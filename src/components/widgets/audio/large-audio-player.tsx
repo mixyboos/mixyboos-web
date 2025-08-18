@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Link } from '@tanstack/react-router'
+import Link from 'next/link'
 
 import type { MixModel } from '@/lib/models/mix'
 import useAudioStore, { PlayState } from '@/lib/contexts/audio-context'
@@ -45,7 +45,7 @@ const LargeAudioPlayer: React.FC<LargeAudioPlayerProps> = ({
             />
           </div>
           <div className="grow justify-center">
-            <Link to={`/(mix)/${mix.user.slug}/${mix.slug}`}>
+            <Link href={`/${mix.user.slug}/${mix.slug}`}>
               <h1 className="text-xl font-bold md:text-3xl">{mix.title}</h1>
               <h2 className="text-md text-muted-foreground">
                 By: {mix.user.displayName}

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
+import { useRouter } from 'next/navigation'
 import type { MixModel } from '@/lib/models/mix'
 import { Icons } from '@/components/icons'
 import ActionButton from '@/components/widgets/buttons/action-button'
@@ -41,7 +41,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
     const result = await deleteMix(mix)
     if (result) {
       await queryClient.invalidateQueries({ queryKey: ['user-mixes'] })
-      router.navigate({ to: '/dashboard/mixes' })
+      router.push('/dashboard/mixes')
     }
     setIsDeleteDialogOpen(false)
   }
@@ -128,7 +128,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             count={mix.downloadCount}
             title="Download"
             onClick={async () => {
-              logger.debug('audio-player-bar', 'download-mix', mix)
+              logger.debugLog('audio-player-bar', 'download-mix', mix)
               return Promise.resolve({
                 newCount: mix.downloadCount,
                 newIsActioned: false,
