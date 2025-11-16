@@ -41,12 +41,14 @@ interface UseMixUploadOptions {
   mixId: string
   onComplete?: (mixId: string) => void
   onError?: (error: UploadError) => void
+  onUploadComplete?: (mixId: string) => void
 }
 
 export const useMixUpload = ({
   mixId,
   onComplete,
   onError,
+  onUploadComplete,
 }: UseMixUploadOptions) => {
   const [state, setState] = useState<UploadState>({
     phase: UploadPhase.IDLE,
@@ -218,6 +220,8 @@ export const useMixUpload = ({
             uploadProgress: 100,
             processingStage: ProcessingStage.STARTING,
           }))
+          // Call onUploadComplete when file upload finishes but before processing
+          onUploadComplete?.(mixId)
         } else {
           throw new Error('Upload failed - server returned false')
         }

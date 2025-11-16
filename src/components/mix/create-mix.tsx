@@ -19,12 +19,16 @@ const MixCreateComponent = () => {
     startUpload,
     retry,
     isCompleted,
+    isProcessing,
     overallProgress,
   } = useMixUpload({
     mixId,
-    onComplete: () => {
-      // Automatically show the details form when upload completes
+    onUploadComplete: () => {
+      // Show details form immediately after upload completes (before processing finishes)
       setShowDetails(true)
+    },
+    onComplete: () => {
+      // Processing complete - handled in create-mix-details component
     },
     onError: (error) => {
       console.error('Upload error:', error)
@@ -90,8 +94,8 @@ const MixCreateComponent = () => {
           </div>
         )}
 
-        {/* Progress Display - Show during upload and processing */}
-        {(state.phase === UploadPhase.UPLOADING || state.phase === UploadPhase.PROCESSING) && (
+        {/* Progress Display - Show during upload and processing, but hide once details form is shown */}
+        {(state.phase === UploadPhase.UPLOADING || state.phase === UploadPhase.PROCESSING) && !showDetails && (
           <div className="mx-auto my-8 w-full max-w-2xl">
             <UploadProgress
               state={state}
@@ -102,9 +106,13 @@ const MixCreateComponent = () => {
         )}
 
         {/* Mix Details Form - Show after upload completes */}
-        {(isCompleted || showDetails) && (
+        {showDetails && (
           <CreateMixDetails
             mix={{ id: mixId, title: state.fileName || 'New Mix' } as MixModel}
+            isProcessing={isProcessing}
+            isProcessingComplete={isCompleted}
+            processingState={state}
+            overallProgress={overallProgress}
             onMixCreated={(mix, error) => {
               if (error) {
                 console.error('Error creating mix:', error)
