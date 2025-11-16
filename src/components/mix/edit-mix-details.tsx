@@ -3,9 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useRouter } from '@tanstack/react-router'
 import * as z from 'zod'
 import type { MixModel } from '@/lib/models/mix'
-import type { UploadState } from '@/lib/hooks/use-mix-upload'
 import {
   Form,
   FormControl,
@@ -23,11 +23,11 @@ import { Textarea } from '@/components/ui/textarea'
 import ImageUpload from '@/components/widgets/image-upload'
 import { Card } from '@/components/ui/card'
 import { uploadImage } from '@/lib/services/api/upload/upload-service'
-import { createMix } from '@/lib/services/api/mix-service'
+import { updateMix } from '@/lib/services/api/mix-service'
 import logger from '@/lib/logger'
 import { useAuth } from '@/lib/auth'
 import NotLoggedIn from '@/components/widgets/not-logged-in'
-import UploadProgress from '@/components/mix/upload-progress'
+import { toast } from 'sonner'
 
 const MAX_IMAGE_SIZE = 5242880
 const ACCEPTED_IMAGE_TYPES = [
@@ -37,30 +37,15 @@ const ACCEPTED_IMAGE_TYPES = [
   'image/webp',
 ]
 
-type CreateMixDetailsProps = {
+type EditMixDetailsProps = {
   mix: MixModel
-  isProcessing?: boolean
-  isProcessingComplete?: boolean
-  processingState?: UploadState
-  overallProgress?: number
-  onMixCreated: (mix: MixModel | undefined, error?: string) => void
 }
 
-const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
-  mix,
-  isProcessing = false,
-  isProcessingComplete = false,
-  processingState,
-  overallProgress = 0,
-  onMixCreated,
-}) => {
+const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
+  const router = useRouter()
   const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [detailsSaved, setDetailsSaved] = React.useState(false)
-  const [savedMix, setSavedMix] = React.useState<MixModel | undefined>(
-    undefined,
-  )
-  const [isRedirecting, setIsRedirecting] = React.useState(false)
   const { profile } = useAuth()
+  
   const formSchema = z.object({
     title: z
       .string()
@@ -87,12 +72,25 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
     return <NotLoggedIn />
   }
 
+  // Check if user owns the mix
+  if (profile.id !== mix.user.id) {
+    return (
+      <Card className="w-full rounded-lg shadow-sm">
+        <div className="p-6 text-center">
+          <h2 className="text-2xl font-semibold mb-4">Access Denied</h2>
+          <p className="text-muted-foreground">
+            You don't have permission to edit this mix.
+          </p>
+        </div>
+      </Card>
+    )
+  }
+
   type FormValues = z.infer<typeof formSchema>
 
   const defaultValues: Partial<FormValues> = {
     title: mix.title,
-    description:
-      'Hexagon pour-over hella, pop-up bespoke tote bag sus forage umami godard cred gentrify crucifix. Chillwave craft beer farm-to-table kogi portland jianbing PBR&B grailed meh bruh. Mustache lo-fi intelligentsia blue bottle godard microdosing. Hammock neutral milk hotel letterpress af, prism sartorial skateboard. Tofu chambray health goth copper mug. Listicle kogi knausgaard, cred bespoke master cleanse polaroid.',
+    description: mix.description,
     mixImage: undefined,
   }
 
@@ -105,82 +103,44 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true)
     try {
-      const result = await createMix({
-        id: mix.id,
+      const result = await updateMix({
+        ...mix,
         title: values.title,
         description: values.description,
-        isProcessed: false,
-        user: profile,
       })
+      
       if (values.mixImage) {
         await uploadImage(mix.id, values.mixImage, 'mixes', '')
       }
-      setSavedMix(result)
-      setDetailsSaved(true)
-
-      if (isProcessingComplete) {
-        onMixCreated(result)
-      }
+      
+      toast.success('Mix updated successfully!')
+      
+      // Navigate back to mix details page
+      router.navigate({ 
+        to: '/$user/$mix', 
+        params: { user: mix.user.slug, mix: mix.slug } 
+      })
     } catch (err) {
-      logger.errorLog('CreateMixDetails', 'Error creating mix', err)
+      logger.errorLog('EditMixDetails', 'Error updating mix', err)
+      toast.error('Failed to update mix')
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  // Auto-redirect when processing completes after details are saved
-  React.useEffect(() => {
-    if (detailsSaved && isProcessingComplete && savedMix) {
-      setIsRedirecting(true)
-      // Brief delay for smooth transition
-      const timer = setTimeout(() => {
-        onMixCreated({ ...savedMix, isProcessed: true })
-      }, 500)
-      return () => clearTimeout(timer)
-    }
-  }, [detailsSaved, isProcessingComplete, savedMix, onMixCreated])
-
-  // Handle case where processing completes before details are saved
-  // In this case, redirect immediately when they save
-  React.useEffect(() => {
-    if (isProcessingComplete && !detailsSaved) {
-      logger.debug(
-        { context: 'CreateMixDetails', mixId: mix.id },
-        'Processing completed before details saved - will redirect on save',
-      )
-    }
-  }, [isProcessingComplete, detailsSaved, mix.id])
-
   return (
     <Card className="w-full rounded-lg shadow-sm">
       <div className="p-6">
-        {!detailsSaved && (
-          <>
-            <h2 className="text-2xl font-semibold mb-4">Mix details</h2>
-            <p className="text-muted-foreground mb-6">
-              Complete your mix information so others can find and enjoy your music.
-              {isProcessing &&
-                ' You can fill in the details while your mix is being processed.'}
-            </p>
-          </>
-        )}
+        <h2 className="text-2xl font-semibold mb-4">Edit mix details</h2>
+        <p className="text-muted-foreground mb-6">
+          Update your mix information to keep it fresh and engaging.
+        </p>
 
-        {detailsSaved && isProcessing && (
-          <div className="text-center py-8">
-            <h2 className="text-2xl font-semibold mb-4">Processing your mix</h2>
-            <p className="text-muted-foreground">
-              Your mix details have been saved. We're finishing up the processing...
-            </p>
-          </div>
-        )}
-
-        {!detailsSaved && (
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-6 transition-opacity duration-300"
-              style={{ opacity: isRedirecting ? 0.5 : 1 }}
-            >
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+          >
             <div className="grid gap-12 md:grid-cols-2">
               <div className="space-y-4">
                 <FormField
@@ -249,7 +209,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
                               <ImageUpload
                                 {...field}
                                 className="h-64 w-64 rounded-md border border-input"
-                                imageUrl={value?.name}
+                                imageUrl={value?.name || mix.image}
                                 onImageChanged={(image) => {
                                   onChange(image)
                                 }}
@@ -270,12 +230,25 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
 
             <Separator className="my-6" />
 
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                onClick={() => {
+                  router.navigate({ 
+                    to: '/$user/$mix', 
+                    params: { user: mix.user.slug, mix: mix.slug } 
+                  })
+                }}
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 variant="default"
                 size="lg"
-                disabled={isSubmitting || detailsSaved}
+                disabled={isSubmitting}
                 className="min-w-32"
               >
                 {isSubmitting ? (
@@ -283,25 +256,19 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
                     <Icons.loading className="mr-2 h-4 w-4 animate-spin" />
                     Saving...
                   </>
-                ) : detailsSaved ? (
-                  <>
-                    <Icons.check className="mr-2 h-4 w-4" />
-                    {isProcessing ? 'Saved - Processing...' : 'Saved!'}
-                  </>
                 ) : (
                   <>
                     <Icons.save className="mr-2 h-4 w-4" />
-                    Save mix
+                    Save changes
                   </>
                 )}
               </Button>
             </div>
           </form>
         </Form>
-        )}
       </div>
     </Card>
   )
 }
 
-export default CreateMixDetails
+export default EditMixDetails

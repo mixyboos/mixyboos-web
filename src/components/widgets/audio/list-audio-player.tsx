@@ -9,9 +9,10 @@ import AudioPlayerBar from '@/components/widgets/audio/audio-player-bar'
 
 type ListAudioPlayerProps = {
   mix: MixModel
+  onDeleteStart?: () => void
 }
 
-const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
+const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix, onDeleteStart }) => {
   return (
     <Card className="w-full">
       <CardContent className="p-4 flex gap-4">
@@ -47,7 +48,7 @@ const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix }) => {
           </div>
 
           <Separator className="my-2" />
-          <AudioPlayerBar mix={mix} />
+          <AudioPlayerBar mix={mix} onDeleteStart={onDeleteStart} />
         </div>
       </CardContent>
     </Card>

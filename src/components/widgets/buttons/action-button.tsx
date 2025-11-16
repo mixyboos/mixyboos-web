@@ -24,9 +24,9 @@ const ActionButton: React.FC<IActionButtonProps> = ({
 }) => {
   const buttonClass = cn(
     variant === 'accent' && 'text-accent hover:bg-accent/10',
-    variant === 'destructive' && 'text-destructive hover:bg-destructive/10'
+    variant === 'destructive' && 'text-destructive hover:bg-destructive/10',
   )
-  
+
   return (
     <Button
       variant={'ghost'}

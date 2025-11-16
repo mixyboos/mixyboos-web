@@ -9,6 +9,7 @@ import AuthenticatedLayout from '@/components/layouts/authenticated.tsx'
 import AnonymousLayout from '@/components/layouts/anonymous.tsx'
 import AudioProvider from '@/lib/audio-provider.tsx'
 import FooterComponent from '@/components/footer.tsx'
+import { Toaster } from '@/components/ui/sonner'
 
 interface RouterContext {
   queryClient: QueryClient
@@ -27,7 +28,7 @@ const protectedRoutes = [
     path: '/signup',
     method: 'POST',
   },
-];
+]
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => {
@@ -37,7 +38,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     }
     return (
       <>
-      <BotIdClient protect={protectedRoutes} />
+        <BotIdClient protect={protectedRoutes} />
         <AudioProvider>
           <div className="flex flex-col h-screen w-full">
             <div className="flex w-full flex-1 overflow-hidden">
@@ -49,6 +50,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           </div>
           <TanStackRouterDevtools />
           <TanStackQueryLayout />
+          <Toaster position="top-center" richColors />
         </AudioProvider>
       </>
     )

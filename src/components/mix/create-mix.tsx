@@ -94,8 +94,8 @@ const MixCreateComponent = () => {
           </div>
         )}
 
-        {/* Progress Display - Show during upload and processing, but hide once details form is shown */}
-        {(state.phase === UploadPhase.UPLOADING || state.phase === UploadPhase.PROCESSING) && !showDetails && (
+        {/* Progress Display - Show during upload and processing */}
+        {(state.phase === UploadPhase.UPLOADING || state.phase === UploadPhase.PROCESSING) && (
           <div className="mx-auto my-8 w-full max-w-2xl">
             <UploadProgress
               state={state}

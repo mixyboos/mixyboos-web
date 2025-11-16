@@ -18,6 +18,7 @@ import { Route as AuthenticatedMixIdRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedLiveCreateRouteImport } from './routes/_authenticated/live/create'
 import { Route as AuthenticatedDashboardMixesIndexRouteImport } from './routes/_authenticated/dashboard/mixes/index'
 import { Route as mixUserMixIndexRouteImport } from './routes/(mix)/$user/$mix/index'
+import { Route as mixUserMixEditIndexRouteImport } from './routes/(mix)/$user/$mix/edit/index'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -64,6 +65,11 @@ const mixUserMixIndexRoute = mixUserMixIndexRouteImport.update({
   path: '/$user/$mix/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const mixUserMixEditIndexRoute = mixUserMixEditIndexRouteImport.update({
+  id: '/(mix)/$user/$mix/edit/',
+  path: '/$user/$mix/edit/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/mix/$id': typeof AuthenticatedMixIdRoute
   '/$user/$mix': typeof mixUserMixIndexRoute
   '/dashboard/mixes': typeof AuthenticatedDashboardMixesIndexRoute
+  '/$user/$mix/edit': typeof mixUserMixEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/mix/$id': typeof AuthenticatedMixIdRoute
   '/$user/$mix': typeof mixUserMixIndexRoute
   '/dashboard/mixes': typeof AuthenticatedDashboardMixesIndexRoute
+  '/$user/$mix/edit': typeof mixUserMixEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/_authenticated/mix/$id': typeof AuthenticatedMixIdRoute
   '/(mix)/$user/$mix/': typeof mixUserMixIndexRoute
   '/_authenticated/dashboard/mixes/': typeof AuthenticatedDashboardMixesIndexRoute
+  '/(mix)/$user/$mix/edit/': typeof mixUserMixEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/mix/$id'
     | '/$user/$mix'
     | '/dashboard/mixes'
+    | '/$user/$mix/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/mix/$id'
     | '/$user/$mix'
     | '/dashboard/mixes'
+    | '/$user/$mix/edit'
   id:
     | '__root__'
     | '/'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/_authenticated/mix/$id'
     | '/(mix)/$user/$mix/'
     | '/_authenticated/dashboard/mixes/'
+    | '/(mix)/$user/$mix/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -138,6 +150,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   mixUploadRoute: typeof mixUploadRoute
   mixUserMixIndexRoute: typeof mixUserMixIndexRoute
+  mixUserMixEditIndexRoute: typeof mixUserMixEditIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof mixUserMixIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(mix)/$user/$mix/edit/': {
+      id: '/(mix)/$user/$mix/edit/'
+      path: '/$user/$mix/edit'
+      fullPath: '/$user/$mix/edit'
+      preLoaderRoute: typeof mixUserMixEditIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -231,6 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   mixUploadRoute: mixUploadRoute,
   mixUserMixIndexRoute: mixUserMixIndexRoute,
+  mixUserMixEditIndexRoute: mixUserMixEditIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

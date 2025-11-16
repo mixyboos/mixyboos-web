@@ -22,9 +22,10 @@ import { useAuth } from '@/lib/auth'
 
 type AudioPlayerBarProps = {
   mix: MixModel
+  onDeleteStart?: () => void
 }
 
-const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
+const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix, onDeleteStart }) => {
   const toggleLike = useToggleMixLike(mix)
   const queryClient = useQueryClient()
   const { profile } = useAuth()
@@ -32,12 +33,23 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   const handleDeleteConfirmed = async () => {
+    setIsDeleteDialogOpen(false)
+    
+    // Trigger animation before deletion
+    onDeleteStart?.()
+    
+    // Wait for animation to complete
+    await new Promise(resolve => setTimeout(resolve, 300))
+    
     const result = await deleteMix(mix)
     if (result) {
       await queryClient.invalidateQueries({ queryKey: ['user-mixes'] })
-      router.navigate({ to: '/dashboard/mixes' })
+      
+      // Only navigate if we're on the detail page
+      if (window.location.pathname.includes(`/${mix.user.slug}/${mix.slug}`)) {
+        router.navigate({ to: '/dashboard/mixes' })
+      }
     }
-    setIsDeleteDialogOpen(false)
   }
 
   return (

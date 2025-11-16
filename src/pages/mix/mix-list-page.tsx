@@ -7,17 +7,37 @@ type MixListPageProps = {
   mixes: Array<MixModel> | undefined
 }
 const MixListPage: React.FC<MixListPageProps> = ({ mixes }) => {
+  const [deletingIds, setDeletingIds] = React.useState<Set<string>>(new Set())
+
   if (!mixes || mixes.length === 0) {
     return <div className="text-center">No mixes found for this user...</div>
   }
+
+  const handleDeleteStart = (mixId: string) => {
+    setDeletingIds(prev => new Set(prev).add(mixId))
+  }
+
   return (
     <div>
       {mixes.map((mix) => (
-        <div className="py-1" key={mix.id}>
+        <div 
+          key={mix.id}
+          className={`py-1 transition-all duration-300 ${
+            deletingIds.has(mix.id) 
+              ? 'opacity-0 scale-95 -translate-x-4' 
+              : 'opacity-100 scale-100 translate-x-0'
+          }`}
+        >
           {mix.isProcessed ? (
-            <ListAudioPlayer key={mix.id} mix={mix} />
+            <ListAudioPlayer 
+              mix={mix} 
+              onDeleteStart={() => handleDeleteStart(mix.id)}
+            />
           ) : (
-            <ProcessingMix mix={mix} />
+            <ProcessingMix 
+              mix={mix} 
+              onDeleteStart={() => handleDeleteStart(mix.id)}
+            />
           )}
         </div>
       ))}

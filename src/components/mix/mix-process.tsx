@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Clock, RefreshCcw } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
+import { Clock, RefreshCcw, AlertCircle } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { MixModel } from '@/lib/models/mix'
 import { Progress } from '@/components/ui/progress'
@@ -10,11 +10,29 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { Icons } from '@/components/icons'
 import useAudioProcessingStatus from '@/lib/hooks/audio-processing-hook'
+import { useAuth } from '@/lib/auth'
+import { deleteMix } from '@/lib/services/api/mix-service'
 
 // Component for mixes that aren't processed yet
-const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
+type ProcessingMixProps = {
+  mix: MixModel
+  onDeleteStart?: () => void
+}
+
+const ProcessingMix: React.FC<ProcessingMixProps> = ({
+  mix,
+  onDeleteStart,
+}) => {
+  const { profile } = useAuth()
+  const queryClient = useQueryClient()
   const { isProcessed, processPercentage, processStatus, isFailed } =
     useAudioProcessingStatus()
+
+  // Check if mix has been stuck for too long (likely failed)
+  const uploadDate = new Date(mix.dateUploaded)
+  const minutesSinceUpload = (Date.now() - uploadDate.getTime()) / 1000 / 60
+  const isStuckOrFailed =
+    isFailed || (processPercentage === 0 && minutesSinceUpload > 10)
 
   useEffect(() => {
     if (isProcessed) {
@@ -43,12 +61,41 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
     },
   })
 
+  const deleteAndRetryMutation = useMutation({
+    mutationFn: async () => {
+      onDeleteStart?.()
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      await deleteMix(mix)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-mixes'] })
+      toast.success('Mix deleted. You can upload it again.')
+    },
+    onError: () => {
+      toast.error('Failed to delete mix')
+    },
+  })
+
   const handleReprocess = () => {
-    reprocess()
+    toast.warning('Retry Feature Not Available', {
+      description:
+        "We haven't implemented automatic retry yet. Please delete this mix and re-upload it instead. Sorry for the inconvenience!",
+    })
+  }
+
+  const handleDeleteAndRetry = () => {
+    deleteAndRetryMutation.mutate()
+  }
+
+  // If processing failed and user doesn't own it, don't show
+  if (isStuckOrFailed && profile?.id !== mix.user?.id) {
+    return null
   }
 
   return (
-    <Card className="overflow-hidden">
+    <Card
+      className={cn('overflow-hidden', isStuckOrFailed && 'border-destructive')}
+    >
       <CardHeader className="p-4 pb-2 space-y-1">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -63,10 +110,17 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
             </Avatar>
             <h3 className="font-semibold text-base">{mix.title}</h3>
           </div>
-          <div className="flex items-center gap-2 text-xs font-medium bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200 px-2 py-0.5 rounded-full">
-            <Clock className="h-3.5 w-3.5" />
-            <span>Processing</span>
-          </div>
+          {isStuckOrFailed ? (
+            <div className="flex items-center gap-2 text-xs font-medium bg-destructive/10 text-destructive px-2 py-0.5 rounded-full">
+              <AlertCircle className="h-3.5 w-3.5" />
+              <span>Processing Failed</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-xs font-medium bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200 px-2 py-0.5 rounded-full">
+              <Clock className="h-3.5 w-3.5" />
+              <span>Processing</span>
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-0">
@@ -89,34 +143,49 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
               {mix.description || 'No description provided'}
             </p>
 
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-medium">{processStatus}</span>
-                <span
-                  className={cn(
-                    'font-medium',
-                    processPercentage < 30
-                      ? 'text-red-500'
-                      : processPercentage < 70
-                        ? 'text-amber-500'
-                        : 'text-green-500',
-                  )}
-                >
-                  {processPercentage}%
-                </span>
+            {isStuckOrFailed ? (
+              <div className="space-y-2">
+                <div className="flex items-start gap-2 text-sm text-destructive bg-destructive/10 p-2 rounded">
+                  <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Processing failed</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      The audio file could not be processed. This may be due to
+                      file corruption, unsupported format, or server issues.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <Progress
-                value={processPercentage}
-                className="h-1.5 transition-all"
-                color={
-                  processPercentage < 30
-                    ? 'bg-red-500'
-                    : processPercentage < 70
-                      ? 'bg-amber-500'
-                      : 'bg-green-500'
-                }
-              />
-            </div>
+            ) : (
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-medium">{processStatus}</span>
+                  <span
+                    className={cn(
+                      'font-medium',
+                      processPercentage < 30
+                        ? 'text-red-500'
+                        : processPercentage < 70
+                          ? 'text-amber-500'
+                          : 'text-green-500',
+                    )}
+                  >
+                    {processPercentage}%
+                  </span>
+                </div>
+                <Progress
+                  value={processPercentage}
+                  className="h-1.5 transition-all"
+                  color={
+                    processPercentage < 30
+                      ? 'bg-red-500'
+                      : processPercentage < 70
+                        ? 'bg-amber-500'
+                        : 'bg-green-500'
+                  }
+                />
+              </div>
+            )}
           </div>
         </div>
       </CardContent>
@@ -128,12 +197,28 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
             Uploaded {new Date(mix.dateUploaded || Date()).toLocaleDateString()}
           </span>
 
-          {/* Right side - processing message and button */}
-          {isFailed && (
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">
-                Processing will take a minute or two...
-              </span>
+          {/* Right side - processing message or action buttons */}
+          {isStuckOrFailed ? (
+            <div className="flex gap-2">
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDeleteAndRetry}
+                disabled={deleteAndRetryMutation.isPending}
+                className="h-7 px-2 py-0 text-xs"
+              >
+                {deleteAndRetryMutation.isPending ? (
+                  <>
+                    <Icons.loading className="mr-1 h-3 w-3" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Icons.trash className="mr-1 h-3 w-3" />
+                    Delete
+                  </>
+                )}
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -149,11 +234,15 @@ const ProcessingMix: React.FC<{ mix: MixModel }> = ({ mix }) => {
                 ) : (
                   <div className="flex items-center">
                     <Icons.refresh className="mr-1 h-3 w-3" />
-                    <span>Reprocess</span>
+                    <span>Retry</span>
                   </div>
                 )}
               </Button>
             </div>
+          ) : (
+            <span className="text-muted-foreground">
+              Processing will take a minute or two...
+            </span>
           )}
         </div>
       </CardFooter>
