@@ -1,11 +1,9 @@
 import React from 'react'
-import { uploadAudio } from '@/lib/services/api/upload/upload-service'
-import { getFilename } from '@/lib/utils/file-utils'
 
 interface IFileUploadProps {
   mixId: string
   onError: (error: string) => void
-  onUploadStart: (fileName: string) => void
+  onUploadStart: (file: File) => void
   onUploadComplete: () => void
   onUploadProgress: (total: number, loaded: number) => void
 }
@@ -20,19 +18,11 @@ const FileUpload = ({
   const startUpload = async (event: React.FormEvent<HTMLInputElement>) => {
     if (!event.currentTarget.files) return
 
-    const formData = new FormData()
-
-    formData.append('file', event.currentTarget.files[0])
+    const file = event.currentTarget.files[0]
+    
     try {
-      onUploadStart(getFilename(event.currentTarget.files[0].name))
-      const result = await uploadAudio(mixId, formData, onUploadProgress)
-      if (result) {
-        onUploadComplete()
-      } else {
-        onError(
-          'Error uploading file, please refresh your browser and try again!',
-        )
-      }
+      // Notify parent that upload is starting with the File object
+      onUploadStart(file)
     } catch (err) {
       console.error('Upload', 'Error', err)
       onError(
