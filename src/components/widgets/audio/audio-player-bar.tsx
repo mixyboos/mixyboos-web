@@ -6,12 +6,6 @@ import type { MixModel } from '@/lib/models/mix'
 import { Icons } from '@/components/icons'
 import ActionButton from '@/components/widgets/buttons/action-button'
 import logger from '@/lib/logger'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { deleteMix } from '@/lib/services/api/mix-service'
 import {
@@ -52,24 +46,27 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
         <div className="flex space-x-3">
           {profile?.id === mix.user?.id && (
             <>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <span className="sr-only">Open menu</span>
-                    <Icons.verticalDots />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <Icons.pencil className="size-4 me-2" />
-                    Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
-                    <Icons.delete className="size-4 me-2" />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button
+                variant="ghost"
+                size="icon"
+                title="Edit"
+                onClick={() => {
+                  router.navigate({
+                    to: '/$user/$mix/edit',
+                    params: { user: mix.user.slug, mix: mix.slug },
+                  })
+                }}
+              >
+                <Icons.pencil />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                title="Delete"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <Icons.delete />
+              </Button>
 
               <Dialog
                 open={isDeleteDialogOpen}
