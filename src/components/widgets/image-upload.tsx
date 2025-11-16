@@ -24,6 +24,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       }}
       maxFiles={1}
       ref={dropzoneRef}
+      noClick={true}
       onDrop={(acceptedFiles) => {
         if (acceptedFiles.length !== 0 && acceptedFiles[0]) {
           onImageChanged(acceptedFiles[0])
@@ -64,8 +65,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               ) : (
                 <div id="drop">
                   <label
-                    htmlFor="dropzone-file"
                     className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-muted text-foreground  hover:bg-accent hover:text-accent-foreground"
+                    onClick={() => open()}
                   >
                     <div className="flex flex-col items-center justify-center pb-6 pt-5">
                       <svg

@@ -5,6 +5,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import type { MixModel } from '@/lib/models/mix'
+import type { UploadState } from '@/lib/hooks/use-mix-upload'
 import {
   Form,
   FormControl,
@@ -26,7 +27,6 @@ import { createMix } from '@/lib/services/api/mix-service'
 import logger from '@/lib/logger'
 import { useAuth } from '@/lib/auth'
 import NotLoggedIn from '@/components/widgets/not-logged-in'
-import type { UploadState } from '@/lib/hooks/use-mix-upload'
 import UploadProgress from '@/components/mix/upload-progress'
 
 const MAX_IMAGE_SIZE = 5242880
@@ -56,7 +56,9 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [detailsSaved, setDetailsSaved] = React.useState(false)
-  const [savedMix, setSavedMix] = React.useState<MixModel | undefined>(undefined)
+  const [savedMix, setSavedMix] = React.useState<MixModel | undefined>(
+    undefined,
+  )
   const [isRedirecting, setIsRedirecting] = React.useState(false)
   const { profile } = useAuth()
   const formSchema = z.object({
@@ -77,7 +79,8 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
       .refine(
         (file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type),
         'Only .jpg, .jpeg, .png and .webp formats are supported.',
-      ),
+      )
+      .optional(),
   })
 
   if (!profile) {
@@ -109,15 +112,15 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         isProcessed: false,
         user: profile,
       })
-      await uploadImage(mix.id, values.mixImage, 'mixes', '')
+      if (values.mixImage) {
+        await uploadImage(mix.id, values.mixImage, 'mixes', '')
+      }
       setSavedMix(result)
       setDetailsSaved(true)
-      
-      // If processing is already complete, redirect immediately
+
       if (isProcessingComplete) {
         onMixCreated(result)
       }
-      // Otherwise, wait for processing to complete (handled by useEffect below)
     } catch (err) {
       logger.errorLog('CreateMixDetails', 'Error creating mix', err)
     } finally {
@@ -143,7 +146,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
     if (isProcessingComplete && !detailsSaved) {
       logger.debug(
         { context: 'CreateMixDetails', mixId: mix.id },
-        'Processing completed before details saved - will redirect on save'
+        'Processing completed before details saved - will redirect on save',
       )
     }
   }, [isProcessingComplete, detailsSaved, mix.id])
@@ -154,12 +157,16 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         <h2 className="text-2xl font-semibold mb-4">Mix details</h2>
         <p className="text-muted-foreground mb-6">
           Complete your mix information so others can find and enjoy your music.
-          {isProcessing && !detailsSaved && ' You can fill in the details while your mix is being processed.'}
+          {isProcessing &&
+            !detailsSaved &&
+            ' You can fill in the details while your mix is being processed.'}
         </p>
 
-        {/* Show processing progress if still processing and details saved */}
         {isProcessing && detailsSaved && processingState && (
-          <div className="mb-6 transition-opacity duration-300" style={{ opacity: isRedirecting ? 0.5 : 1 }}>
+          <div
+            className="mb-6 transition-opacity duration-300"
+            style={{ opacity: isRedirecting ? 0.5 : 1 }}
+          >
             <UploadProgress
               state={processingState}
               overallProgress={overallProgress}
@@ -168,7 +175,11 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         )}
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 transition-opacity duration-300" style={{ opacity: isRedirecting ? 0.5 : 1 }}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6 transition-opacity duration-300"
+            style={{ opacity: isRedirecting ? 0.5 : 1 }}
+          >
             <div className="grid gap-12 md:grid-cols-2">
               <div className="space-y-4">
                 <FormField
@@ -237,7 +248,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
                               <ImageUpload
                                 {...field}
                                 className="h-64 w-64 rounded-md border border-input"
-                                imageUrl={value && value.name}
+                                imageUrl={value?.name}
                                 onImageChanged={(image) => {
                                   onChange(image)
                                 }}
