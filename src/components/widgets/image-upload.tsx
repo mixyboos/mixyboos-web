@@ -34,7 +34,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       {({ getRootProps, getInputProps, open, acceptedFiles }) => {
         return (
           <div className={cn('h-64 w-64', className)}>
-            <div {...getRootProps({ className: 'dropzone' })}>
+            <div {...getRootProps({ className: 'dropzone h-full' })}>
               <input
                 {...getInputProps()}
                 id="dropzone-file"
@@ -44,7 +44,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               {acceptedFiles?.length || imageUrl ? (
                 <div
                   id="preview"
-                  className="flex h-56 w-3/4"
+                  className="flex h-full w-full"
                   onClick={(e) => {
                     e.stopPropagation()
                     open()
@@ -52,7 +52,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 >
                   {
                     <img
-                      className="rounded-md  border-2 border-muted object-cover"
+                      className="rounded-md border-2 border-muted object-cover w-full h-full cursor-pointer"
                       src={
                         acceptedFiles[0]
                           ? URL.createObjectURL(acceptedFiles[0])

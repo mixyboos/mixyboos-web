@@ -132,9 +132,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
     <Card className="w-full rounded-lg shadow-sm">
       <div className="p-6">
         <h2 className="text-2xl font-semibold mb-4">Edit mix details</h2>
-        <p className="text-muted-foreground mb-6">
-          Update your mix information to keep it fresh and engaging.
-        </p>
+        <Separator className="mb-6" />
 
         <Form {...form}>
           <form
