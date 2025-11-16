@@ -43,62 +43,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <div className="flex space-x-3">
-          {profile?.id === mix.user?.id && (
-            <>
-              <Button
-                variant="ghost"
-                size="icon"
-                title="Edit"
-                onClick={() => {
-                  router.navigate({
-                    to: '/$user/$mix/edit',
-                    params: { user: mix.user.slug, mix: mix.slug },
-                  })
-                }}
-              >
-                <Icons.pencil />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                title="Delete"
-                onClick={() => setIsDeleteDialogOpen(true)}
-              >
-                <Icons.delete />
-              </Button>
-
-              <Dialog
-                open={isDeleteDialogOpen}
-                onOpenChange={setIsDeleteDialogOpen}
-              >
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Delete Mix</DialogTitle>
-                    <DialogDescription>
-                      Are you sure you want to delete &quot;{mix.title}&quot;?
-                      This action cannot be undone.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsDeleteDialogOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={handleDeleteConfirmed}
-                    >
-                      Delete
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </>
-          )}
-
+        <div className="flex gap-1.5">
           <ActionButton
             count={mix.likeCount}
             title="Like"
@@ -134,6 +79,70 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix }) => {
             isActioned={false}
             icon={Icons.download}
           ></ActionButton>
+
+          {profile?.id === mix.user?.id && (
+            <>
+              <div className="w-4" />
+              <ActionButton
+                title="Edit"
+                onClick={async () => {
+                  router.navigate({
+                    to: '/$user/$mix/edit',
+                    params: { user: mix.user.slug, mix: mix.slug },
+                  })
+                  return Promise.resolve({
+                    newCount: 0,
+                    newIsActioned: false,
+                  })
+                }}
+                isActioned={false}
+                icon={Icons.pencil}
+                variant="accent"
+              />
+              <ActionButton
+                title="Delete"
+                onClick={async () => {
+                  setIsDeleteDialogOpen(true)
+                  return Promise.resolve({
+                    newCount: 0,
+                    newIsActioned: false,
+                  })
+                }}
+                isActioned={false}
+                icon={Icons.delete}
+                variant="destructive"
+              />
+
+              <Dialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+              >
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Delete Mix</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to delete &quot;{mix.title}&quot;?
+                      This action cannot be undone.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsDeleteDialogOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={handleDeleteConfirmed}
+                    >
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
         </div>
         <div className="ml-auto flex gap-2">
           <Badge variant="secondary">Pop</Badge>
