@@ -19,4 +19,5 @@ export type MixModel = CreateMixModel & {
   audioUrl: string
   pcmUrl: string
   isLiked: boolean
+  tags: Array<string>
 }

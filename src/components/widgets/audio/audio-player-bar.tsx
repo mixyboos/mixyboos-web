@@ -25,7 +25,10 @@ type AudioPlayerBarProps = {
   onDeleteStart?: () => void
 }
 
-const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix, onDeleteStart }) => {
+const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({
+  mix,
+  onDeleteStart,
+}) => {
   const toggleLike = useToggleMixLike(mix)
   const queryClient = useQueryClient()
   const { profile } = useAuth()
@@ -34,17 +37,17 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix, onDeleteStart }) =
 
   const handleDeleteConfirmed = async () => {
     setIsDeleteDialogOpen(false)
-    
+
     // Trigger animation before deletion
     onDeleteStart?.()
-    
+
     // Wait for animation to complete
-    await new Promise(resolve => setTimeout(resolve, 300))
-    
+    await new Promise((resolve) => setTimeout(resolve, 300))
+
     const result = await deleteMix(mix)
     if (result) {
       await queryClient.invalidateQueries({ queryKey: ['user-mixes'] })
-      
+
       // Only navigate if we're on the detail page
       if (window.location.pathname.includes(`/${mix.user.slug}/${mix.slug}`)) {
         router.navigate({ to: '/dashboard/mixes' })
@@ -61,7 +64,11 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix, onDeleteStart }) =
             title="Like"
             onClick={async () => {
               const result = await toggleLike.mutateAsync()
-              await queryClient.invalidateQueries({ queryKey: ['user-mixes'] })
+              if (result) {
+                await queryClient.invalidateQueries({
+                  queryKey: ['user-mixes'],
+                })
+              }
             }}
             icon={Icons.heart}
             isActioned={mix.isLiked}
@@ -92,7 +99,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix, onDeleteStart }) =
             icon={Icons.download}
           ></ActionButton>
 
-          {profile?.id === mix.user?.id && (
+          {profile?.id === mix.user.id && (
             <>
               <div className="w-4" />
               <ActionButton
@@ -157,9 +164,11 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({ mix, onDeleteStart }) =
           )}
         </div>
         <div className="ml-auto flex gap-2">
-          <Badge variant="secondary">Pop</Badge>
-          <Badge variant="secondary">2024</Badge>
-          <Badge variant="secondary">English</Badge>
+          {mix.tags.map((tag) => (
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
         </div>
       </div>
     </div>
