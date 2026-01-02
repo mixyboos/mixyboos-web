@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import type { MixModel } from '@/lib/models/mix'
@@ -16,6 +16,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Badge } from '@/components/ui/badge'
 import { useToggleMixLike } from '@/lib/queries/mix'
 import { useAuth } from '@/lib/auth'
@@ -57,8 +63,8 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <div className="flex gap-1.5">
+      <div className="flex items-center gap-4">
+        <div className="flex gap-1.5 shrink-0">
           <ActionButton
             count={mix.likeCount}
             title="Like"
@@ -163,15 +169,135 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({
             </>
           )}
         </div>
-        <div className="ml-auto flex gap-2">
-          {mix.tags.map((tag) => (
-            <Badge key={tag} variant="secondary">
-              {tag}
-            </Badge>
-          ))}
-        </div>
+        <TagList tags={mix.tags} />
       </div>
     </div>
+  )
+}
+
+type TagListProps = {
+  tags: Array<string>
+}
+
+const TagList: React.FC<TagListProps> = ({ tags }) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const measureRef = useRef<HTMLDivElement>(null)
+  const [visibleCount, setVisibleCount] = useState(tags.length)
+
+  const calculateVisibleTags = useCallback(() => {
+    const container = containerRef.current
+    const measureContainer = measureRef.current
+    if (!container || !measureContainer || tags.length === 0) return
+
+    const containerWidth = container.offsetWidth
+    if (containerWidth === 0) return
+
+    const gap = 8 // gap-2
+    const badges = measureContainer.querySelectorAll('[data-measure-tag]')
+    const moreBtn = measureContainer.querySelector('[data-measure-more]')
+    const moreBtnWidth = moreBtn instanceof HTMLElement ? moreBtn.offsetWidth : 70
+
+    // Calculate tag widths
+    const tagWidths: Array<number> = []
+    badges.forEach((badge) => {
+      tagWidths.push((badge as HTMLElement).offsetWidth)
+    })
+
+    // Find how many tags fit
+    let usedWidth = 0
+    let count = 0
+
+    for (let i = 0; i < tagWidths.length; i++) {
+      const tagWidth = tagWidths[i]
+      const isLast = i === tagWidths.length - 1
+      const needsMoreBtn = !isLast
+      const spaceNeeded = tagWidth + (needsMoreBtn ? gap + moreBtnWidth : 0)
+
+      if (usedWidth + tagWidth <= containerWidth) {
+        // This tag fits, but do we have room for more button if needed?
+        if (isLast || usedWidth + spaceNeeded <= containerWidth) {
+          usedWidth += tagWidth + gap
+          count++
+        } else {
+          // Tag fits but not with more button - stop here
+          break
+        }
+      } else {
+        break
+      }
+    }
+
+    setVisibleCount(Math.max(1, count))
+  }, [tags])
+
+  useLayoutEffect(() => {
+    calculateVisibleTags()
+
+    const resizeObserver = new ResizeObserver(() => {
+      calculateVisibleTags()
+    })
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current)
+    }
+
+    return () => resizeObserver.disconnect()
+  }, [calculateVisibleTags])
+
+  if (tags.length === 0) return null
+
+  const visibleTags = tags.slice(0, visibleCount)
+  const overflowTags = tags.slice(visibleCount)
+
+  return (
+    <>
+      {/* Hidden measurement container - positioned off-screen */}
+      <div
+        ref={measureRef}
+        className="fixed -left-[9999px] flex gap-2"
+        aria-hidden="true"
+      >
+        {tags.map((tag) => (
+          <Badge key={tag} variant="secondary" data-measure-tag>
+            {tag}
+          </Badge>
+        ))}
+        <Badge variant="secondary" data-measure-more>
+          +{Math.max(1, tags.length - 1)} more
+        </Badge>
+      </div>
+
+      {/* Visible tags container */}
+      <div
+        ref={containerRef}
+        className="flex-1 min-w-0 flex gap-2 items-center justify-end overflow-hidden"
+      >
+        {visibleTags.map((tag) => (
+          <Badge key={tag} variant="secondary" className="shrink-0">
+            {tag}
+          </Badge>
+        ))}
+        {overflowTags.length > 0 && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Badge
+                variant="secondary"
+                className="cursor-pointer hover:bg-secondary/80 shrink-0"
+              >
+                +{overflowTags.length} more
+              </Badge>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {overflowTags.map((tag) => (
+                <DropdownMenuItem key={tag} className="cursor-default">
+                  {tag}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+      </div>
+    </>
   )
 }
 

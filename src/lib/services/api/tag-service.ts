@@ -1,10 +1,9 @@
 import { AxiosError } from 'axios'
-import type { TagModel } from '@/lib/models/tag'
 import api from '@/lib/services/api/api-client'
 import logger from '@/lib/logger'
 
 const TagService = {
-  searchTags: async (query: string): Promise<Array<TagModel>> => {
+  searchTags: async (query: string): Promise<Array<string>> => {
     try {
       const result = await api.get(`/tag/search?query=${encodeURIComponent(query)}`)
       if (result.status === 200) {

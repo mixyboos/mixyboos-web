@@ -48,15 +48,7 @@ const MixDetailsComponent: React.FC<MixDetailsComponentProps> = ({
       </div>
     </div>
   ) : (
-    <ProcessingMix
-      mix={mix}
-      // onProcessed={(success, state) => {
-      //   mix.isProcessed = success
-      //   if (!success) {
-      //     setError(state)
-      //   }
-      // }}
-    />
+    <ProcessingMix mix={mix} />
   )
 }
 

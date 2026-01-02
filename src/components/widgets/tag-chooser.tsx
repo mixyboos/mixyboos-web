@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
-import type { TagModel } from '@/lib/models/tag'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -23,7 +22,7 @@ const TagChooser: React.FC<TagChooserProps> = ({
   className = '',
 }) => {
   const [inputValue, setInputValue] = useState('')
-  const [suggestions, setSuggestions] = useState<Array<TagModel>>([])
+  const [suggestions, setSuggestions] = useState<Array<string>>([])
   const [isLoading, setIsLoading] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(false)
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -64,7 +63,7 @@ const TagChooser: React.FC<TagChooserProps> = ({
         const results = await TagService.searchTags(inputValue.trim())
         // Filter out tags that are already selected
         const filteredResults = results.filter(
-          (tag) => !value.includes(tag.name),
+          (tag) => !value.includes(tag),
         )
         setSuggestions(filteredResults)
         setShowSuggestions(true)
@@ -165,13 +164,13 @@ const TagChooser: React.FC<TagChooserProps> = ({
             ) : (
               <ul className="py-1">
                 {suggestions.map((tag, index) => (
-                  <li key={`${tag.id}-${index}`} className="list-none">
+                  <li key={`${tag}-${index}`} className="list-none">
                     <button
                       type="button"
                       className="w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
-                      onClick={() => handleSuggestionClick(tag.name)}
+                      onClick={() => handleSuggestionClick(tag)}
                     >
-                      {tag.name}
+                      {tag}
                     </button>
                   </li>
                 ))}
