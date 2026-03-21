@@ -13,7 +13,7 @@ const MixCreateComponent = () => {
   const router = useRouter()
   const [mixId] = React.useState(uuidv4())
   const [showDetails, setShowDetails] = React.useState(false)
-  
+
   const {
     state,
     startUpload,
@@ -64,38 +64,41 @@ const MixCreateComponent = () => {
         )}
 
         {/* File Upload - Show when idle or failed */}
-        {(state.phase === UploadPhase.IDLE || state.phase === UploadPhase.FAILED) && !showDetails && (
-          <div className="mx-auto my-8 w-3/5">
-            <FileUpload
-              mixId={mixId}
-              onError={(errorMessage) => {
-                console.error('FileUpload error:', errorMessage)
-              }}
-              onUploadComplete={() => {
-                // Handled by useMixUpload hook
-              }}
-              onUploadStart={(file: File) => {
-                startUpload(file)
-              }}
-              onUploadProgress={() => {
-                // Progress handled by useMixUpload hook
-              }}
-            />
-            {state.phase === UploadPhase.FAILED && state.error?.retryable && (
-              <div className="mt-4 text-center">
-                <button
-                  onClick={retry}
-                  className="text-sm text-primary hover:underline"
-                >
-                  Try uploading again
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+        {(state.phase === UploadPhase.IDLE ||
+          state.phase === UploadPhase.FAILED) &&
+          !showDetails && (
+            <div className="mx-auto my-8 w-3/5">
+              <FileUpload
+                mixId={mixId}
+                onError={(errorMessage) => {
+                  console.error('FileUpload error:', errorMessage)
+                }}
+                onUploadComplete={() => {
+                  // Handled by useMixUpload hook
+                }}
+                onUploadStart={(file: File) => {
+                  startUpload(file)
+                }}
+                onUploadProgress={() => {
+                  // Progress handled by useMixUpload hook
+                }}
+              />
+              {state.phase === UploadPhase.FAILED && state.error?.retryable && (
+                <div className="mt-4 text-center">
+                  <button
+                    onClick={retry}
+                    className="text-sm text-primary hover:underline"
+                  >
+                    Try uploading again
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
         {/* Progress Display - Show during upload and processing */}
-        {(state.phase === UploadPhase.UPLOADING || state.phase === UploadPhase.PROCESSING) && (
+        {(state.phase === UploadPhase.UPLOADING ||
+          state.phase === UploadPhase.PROCESSING) && (
           <div className="mx-auto my-8 w-full max-w-2xl">
             <UploadProgress
               state={state}

@@ -25,6 +25,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { useToggleMixLike } from '@/lib/queries/mix'
 import { useAuth } from '@/lib/auth'
+import TagBar from '@/components/widgets/tags/tag-bar'
 
 type AudioPlayerBarProps = {
   mix: MixModel
@@ -176,7 +177,7 @@ const AudioPlayerBar: React.FC<AudioPlayerBarProps> = ({
 }
 
 type TagListProps = {
-  tags: Array<string>
+  tags: Array<{ name: string; slug: string }>
 }
 
 const TagList: React.FC<TagListProps> = ({ tags }) => {
@@ -195,7 +196,8 @@ const TagList: React.FC<TagListProps> = ({ tags }) => {
     const gap = 8 // gap-2
     const badges = measureContainer.querySelectorAll('[data-measure-tag]')
     const moreBtn = measureContainer.querySelector('[data-measure-more]')
-    const moreBtnWidth = moreBtn instanceof HTMLElement ? moreBtn.offsetWidth : 70
+    const moreBtnWidth =
+      moreBtn instanceof HTMLElement ? moreBtn.offsetWidth : 70
 
     // Calculate tag widths
     const tagWidths: Array<number> = []
@@ -258,8 +260,8 @@ const TagList: React.FC<TagListProps> = ({ tags }) => {
         aria-hidden="true"
       >
         {tags.map((tag) => (
-          <Badge key={tag} variant="secondary" data-measure-tag>
-            {tag}
+          <Badge key={tag.slug} variant="secondary" data-measure-tag>
+            {tag.name}
           </Badge>
         ))}
         <Badge variant="secondary" data-measure-more>
@@ -272,30 +274,7 @@ const TagList: React.FC<TagListProps> = ({ tags }) => {
         ref={containerRef}
         className="flex-1 min-w-0 flex gap-2 items-center justify-end overflow-hidden"
       >
-        {visibleTags.map((tag) => (
-          <Badge key={tag} variant="secondary" className="shrink-0">
-            {tag}
-          </Badge>
-        ))}
-        {overflowTags.length > 0 && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Badge
-                variant="secondary"
-                className="cursor-pointer hover:bg-secondary/80 shrink-0"
-              >
-                +{overflowTags.length} more
-              </Badge>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {overflowTags.map((tag) => (
-                <DropdownMenuItem key={tag} className="cursor-default">
-                  {tag}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+        <TagBar visibleTags={visibleTags} overflowTags={overflowTags} />
       </div>
     </>
   )

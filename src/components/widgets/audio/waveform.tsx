@@ -28,9 +28,13 @@ const WaveformComponent = ({
     useAudioStore()
 
   const waveform = React.useRef<Wavesurfer | null>(null)
+  const isSeeking = React.useRef(false)
 
   React.useEffect(() => {
     if (id !== nowPlayingId) {
+      return
+    }
+    if (isSeeking.current) {
       return
     }
     if (playState === PlayState.playing) {
@@ -38,13 +42,6 @@ const WaveformComponent = ({
     }
   }, [progressPercentage])
 
-  React.useEffect(() => {
-    if (playState === PlayState.playing) {
-      waveform.current?.play()
-    } else {
-      waveform.current?.pause()
-    }
-  }, [playState])
 
   React.useEffect(() => {
     if (!waveform.current && pcmUrl) {
@@ -71,9 +68,16 @@ const WaveformComponent = ({
             // empty mp3 file
             'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjM2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU2LjQxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASDs90hvAAAAAAAAAAAAAAAAAAAA//MUZAAAAAGkAAAAAAAAA0gAAAAATEFN//MUZAMAAAGkAAAAAAAAA0gAAAAARTMu//MUZAYAAAGkAAAAAAAAA0gAAAAAOTku//MUZAkAAAGkAAAAAAAAA0gAAAAANVVV',
             peaks,
+            duration,
           )
           waveform.current.on('click', (e) => {
+            isSeeking.current = true
+            waveform.current?.seekTo(e)
             setSeekPosition(e * duration)
+            // suppress progressPercentage updates until audio catches up
+            setTimeout(() => {
+              isSeeking.current = false
+            }, 2000)
           })
         }
       }

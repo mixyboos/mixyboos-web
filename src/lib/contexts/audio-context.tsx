@@ -1,7 +1,10 @@
 import { create } from 'zustand'
 import type { MixModel } from '@/lib/models/mix'
 import logger from '@/lib/logger'
-import { getStoredPosition, setStoredPosition } from '@/lib/services/playback-position-service'
+import {
+  getStoredPosition,
+  setStoredPosition,
+} from '@/lib/services/playback-position-service'
 
 enum PlayState {
   stopped = 1,
@@ -64,14 +67,16 @@ const useAudioStore = create<IAudioState>()((set, get) => ({
   setNowPlaying: (mix: MixModel, url: string, id: string) => {
     // Get stored playback position for this track
     const storedPosition = getStoredPosition(id)
-    
-    set(() => ({ 
-      nowPlaying: mix, 
-      nowPlayingUrl: url, 
+
+    set(() => ({
+      nowPlaying: mix,
+      nowPlayingUrl: url,
       nowPlayingId: id,
       // Set position to stored value or 0 if no stored position
       position: storedPosition || 0,
-      progressPercentage: storedPosition ? (storedPosition / get().duration) * 100 : 0
+      progressPercentage: storedPosition
+        ? (storedPosition / get().duration) * 100
+        : 0,
     }))
   },
   setPlayState: (playState: PlayState) => {

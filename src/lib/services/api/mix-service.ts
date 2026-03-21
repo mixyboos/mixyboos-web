@@ -14,7 +14,7 @@ const getMixes = async (): Promise<Array<MixModel>> => {
     console.log('mix-service.ts', 'getMixes_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number))
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
     }
   }
   throw new Error('Unable to load mixes')
@@ -30,7 +30,7 @@ const getMixesFeed = async (): Promise<Array<MixModel>> => {
     console.log('userService', 'getMixes_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number))
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
     }
   }
   throw new Error('Unable to load mixes')
@@ -49,7 +49,7 @@ const getMyMixes = async (): Promise<Array<MixModel>> => {
     console.log('userService', 'getMixes_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number))
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
     }
   }
   throw new Error('Unable to load mixes')
@@ -67,7 +67,7 @@ const getUserMixes = async (user: string): Promise<Array<MixModel>> => {
     console.log('userService', 'getMixes_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number))
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
     }
   }
   throw new Error('Unable to load mixes')
@@ -93,7 +93,7 @@ const getByUserAndSlug = async (
           err.status as number,
         )
       )
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
     }
   }
   throw new Error('Unable to load mixes')
@@ -109,7 +109,7 @@ const createMix = async (mix: CreateMixModel): Promise<MixModel> => {
     console.log('userService', 'createMix_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number))
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
     }
   }
   throw new Error('Unable to create mix')
@@ -125,7 +125,7 @@ const updateMix = async (mix: MixModel): Promise<MixModel> => {
     console.log('userService', 'updateMix_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number)) {
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
       }
     }
   }
@@ -145,7 +145,7 @@ const deleteMix = async (mix: MixModel): Promise<boolean> => {
     console.log('userService', 'deleteMix_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number)) {
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
       }
     }
   }
@@ -160,7 +160,7 @@ const getMixAudioUrl = async (mix: MixModel): Promise<string> => {
     console.log('userService', 'getMixAudioUrl_error', err)
     if (err instanceof AxiosError) {
       if (![401, 400].includes(err.status as number)) {
-        throw new Error(err.message)
+        throw new Error(err.message, { cause: err })
       }
     }
   }

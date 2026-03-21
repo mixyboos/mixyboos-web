@@ -25,9 +25,9 @@ function RouteComponent() {
           {/* Page Header */}
           <div className="text-center space-y-4">
             <div className="flex justify-center mb-4">
-              <img 
-                src={Logo} 
-                alt={`${siteConfig.name} logo`} 
+              <img
+                src={Logo}
+                alt={`${siteConfig.name} logo`}
                 className="h-16 w-auto"
               />
             </div>

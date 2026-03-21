@@ -29,12 +29,12 @@ import { useAuth } from '@/lib/auth'
 import NotLoggedIn from '@/components/widgets/not-logged-in'
 
 const MAX_IMAGE_SIZE = 5242880
-const ACCEPTED_IMAGE_TYPES = [
+const ACCEPTED_IMAGE_TYPES = new Set([
   'image/jpeg',
   'image/jpg',
   'image/png',
   'image/webp',
-]
+])
 
 type CreateMixDetailsProps = {
   mix: MixModel
@@ -76,7 +76,7 @@ const CreateMixDetails: React.FC<CreateMixDetailsProps> = ({
         return ret
       }, `Max image size is 5MB.`)
       .refine(
-        (file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+        (file: File) => ACCEPTED_IMAGE_TYPES.has(file.type),
         'Only .jpg, .jpeg, .png and .webp formats are supported.',
       )
       .optional(),

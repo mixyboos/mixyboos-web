@@ -31,12 +31,12 @@ import NotLoggedIn from '@/components/widgets/not-logged-in'
 import TagChooser from '@/components/widgets/tag-chooser'
 
 const MAX_IMAGE_SIZE = 5242880
-const ACCEPTED_IMAGE_TYPES = [
+const ACCEPTED_IMAGE_TYPES = new Set([
   'image/jpeg',
   'image/jpg',
   'image/png',
   'image/webp',
-]
+])
 
 type EditMixDetailsProps = {
   mix: MixModel
@@ -56,7 +56,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
       .string()
       .min(5, { message: 'must be at least 5 characters' })
       .max(2000, { message: "can't be more than 2000 characters" }),
-    tags: z.array(z.string()),
+    tags: z.array(z.string()).default([]),
     mixImage: z
       .instanceof(File)
       .refine((file: File) => {
@@ -64,7 +64,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
         return ret
       }, `Max image size is 5MB.`)
       .refine(
-        (file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+        (file: File) => ACCEPTED_IMAGE_TYPES.has(file.type),
         'Only .jpg, .jpeg, .png and .webp formats are supported.',
       )
       .optional(),
@@ -93,7 +93,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
   const defaultValues: Partial<FormValues> = {
     title: mix.title,
     description: mix.description,
-    tags: mix.tags,
+    tags: mix.tags.map((t) => t.name),
     mixImage: undefined,
   }
 
@@ -110,7 +110,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
         ...mix,
         title: values.title,
         description: values.description,
-        tags: values.tags,
+        tags: values.tags.map((name) => ({ name, slug: name.toLowerCase().replace(/\s+/g, '-') })),
       })
 
       if (values.mixImage) {

@@ -4,7 +4,7 @@
 
 **Your Ultimate Music Mixing Platform**
 
-*Create, share, and discover AI-powered music mixes with crystal-clear audio quality*
+_Create, share, and discover AI-powered music mixes with crystal-clear audio quality_
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -21,35 +21,41 @@
 ## ✨ Features
 
 ### 🎧 **AI-Powered Mixing**
+
 - Intelligent audio analysis and seamless mixing
 - Personalized mix recommendations based on your taste
 - Advanced audio processing with crystal-clear quality
 
 ### 🎵 **Audio Experience**
+
 - High-quality audio streaming with HLS support
 - Interactive waveform visualization
 - Real-time audio processing and progress tracking
 - Support for various audio formats
 
 ### 📱 **Modern UI/UX**
+
 - Responsive design that works on all devices
 - Dark/Light theme toggle with system preference detection
 - Beautiful animations and transitions
 - Accessible components with shadcn/ui
 
 ### 🔄 **Real-time Features**
+
 - Live streaming capabilities
 - Real-time mix processing status
 - Instant audio playback and controls
 - Progress tracking for uploads and processing
 
 ### 🎛️ **Creator Tools**
+
 - Drag-and-drop audio file uploads
 - Mix metadata management (title, description, artwork)
 - Audio processing pipeline with progress indicators
 - Mix editing and management dashboard
 
 ### 👥 **Social Features**
+
 - User profiles and mix collections
 - Like, share, and download functionality
 - Personal mix libraries and discovery feeds
@@ -60,27 +66,32 @@
 ## 🛠️ Tech Stack
 
 ### **Frontend Framework**
+
 - **React 18** - Modern React with hooks and concurrent features
 - **TypeScript** - Type-safe development experience
 - **Vite** - Lightning-fast build tool and dev server
 
 ### **Routing & State**
+
 - **TanStack Router** - Type-safe file-based routing
 - **TanStack Query** - Powerful data synchronization
 - **Zustand** - Lightweight state management for audio context
 
 ### **UI & Styling**
+
 - **Tailwind CSS** - Utility-first CSS framework
 - **shadcn/ui** - Beautiful, accessible component library
 - **Lucide React** - Consistent icon system
 - **Framer Motion** - Smooth animations (if used)
 
 ### **Audio Processing**
+
 - **HLS.js** - HTTP Live Streaming support
 - **Web Audio API** - Advanced audio manipulation
 - **Custom waveform visualization** - Interactive audio timeline
 
 ### **Development Tools**
+
 - **ESLint** - Code linting with TanStack config
 - **Prettier** - Code formatting
 - **Vitest** - Fast unit testing
@@ -91,6 +102,7 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Bun** (recommended) or **Node.js 18+**
 - **Git**
 
@@ -187,16 +199,19 @@ VITE_APP_TITLE=Mixyboos
 ## 🎯 Key Features Implementation
 
 ### Audio Management
+
 - **Multi-format support** - Handles various audio file formats
 - **Streaming optimization** - HLS streaming for efficient audio delivery
 - **Real-time processing** - Background audio processing with progress tracking
 
 ### User Experience
+
 - **Responsive design** - Mobile-first approach with desktop optimization
 - **Accessibility** - WCAG compliant components and keyboard navigation
 - **Performance** - Optimized with React 18 features and Vite bundling
 
 ### Developer Experience
+
 - **Type safety** - Full TypeScript coverage
 - **Modern tooling** - Latest development tools and practices
 - **Testing** - Comprehensive test suite with Vitest
@@ -238,6 +253,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ by the Mixyboos team**
 
-*Transform your music experience with AI-powered mixing*
+_Transform your music experience with AI-powered mixing_
 
 </div>

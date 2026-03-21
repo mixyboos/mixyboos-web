@@ -62,9 +62,7 @@ const TagChooser: React.FC<TagChooserProps> = ({
       try {
         const results = await TagService.searchTags(inputValue.trim())
         // Filter out tags that are already selected
-        const filteredResults = results.filter(
-          (tag) => !value.includes(tag),
-        )
+        const filteredResults = results.filter((tag) => !value.includes(tag))
         setSuggestions(filteredResults)
         setShowSuggestions(true)
       } catch (err) {

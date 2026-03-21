@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       )}
       style={{
         // Adjust height when mini player is visible
-        ...(props.style || {}),
+        ...props.style,
         height: isMiniPlayerVisible ? 'calc(100vh - 64px)' : '100vh',
       }}
     >

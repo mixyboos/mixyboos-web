@@ -19,7 +19,7 @@ const FileUpload = ({
     if (!event.currentTarget.files) return
 
     const file = event.currentTarget.files[0]
-    
+
     try {
       // Notify parent that upload is starting with the File object
       onUploadStart(file)
