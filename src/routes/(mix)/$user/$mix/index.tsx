@@ -28,5 +28,8 @@ function RouteComponent() {
     return <div>Error loading mix: {error.message}</div>
   }
 
+  if (!data) {
+    return <div>Mix not found</div>
+  }
   return <MixDetailsComponent mix={data} />
 }

@@ -14,28 +14,28 @@ const MixListPage: React.FC<MixListPageProps> = ({ mixes }) => {
   }
 
   const handleDeleteStart = (mixId: string) => {
-    setDeletingIds(prev => new Set(prev).add(mixId))
+    setDeletingIds((prev) => new Set(prev).add(mixId))
   }
 
   return (
     <div>
       {mixes.map((mix) => (
-        <div 
+        <div
           key={mix.id}
           className={`py-1 transition-all duration-300 ${
-            deletingIds.has(mix.id) 
-              ? 'opacity-0 scale-95 -translate-x-4' 
+            deletingIds.has(mix.id)
+              ? 'opacity-0 scale-95 -translate-x-4'
               : 'opacity-100 scale-100 translate-x-0'
           }`}
         >
           {mix.isProcessed ? (
-            <ListAudioPlayer 
-              mix={mix} 
+            <ListAudioPlayer
+              mix={mix}
               onDeleteStart={() => handleDeleteStart(mix.id)}
             />
           ) : (
-            <ProcessingMix 
-              mix={mix} 
+            <ProcessingMix
+              mix={mix}
               onDeleteStart={() => handleDeleteStart(mix.id)}
             />
           )}

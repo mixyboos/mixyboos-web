@@ -1,57 +1,59 @@
-import { AxiosError } from "axios";
-import api from "@/lib/services/api/api-client";
+import { AxiosError } from 'axios'
+import api from '@/lib/services/api/api-client'
 
 const uploadAudio = async (
   mixId: string,
   formData: FormData,
-  callback: (total: number, loaded: number) => void
+  callback: (total: number, loaded: number) => void,
 ): Promise<boolean> => {
   try {
     const result = await api.post(`/upload/${mixId}`, formData, {
       onUploadProgress: (e) => {
-        callback(e.total ?? 0, e.loaded);
+        callback(e.total ?? 0, e.loaded)
       },
       headers: {
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
-    });
-    return result?.status === 201;
+    })
+    return result?.status === 201
   } catch (err) {
-    console.log("uploadService", "uploadAudio_error", err);
+    console.log('uploadService', 'uploadAudio_error', err)
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
+      if (![401, 400].includes(err.status as number))
+        throw new Error(err.message, { cause: err })
     }
   }
-  return false;
-};
+  return false
+}
 
 const uploadImage = async (
   userId: string,
   file: File,
-  imageSource: "mixes" | "shows" | "users",
-  imageType: "headers" | "avatars" | ""
+  imageSource: 'mixes' | 'shows' | 'users',
+  imageType: 'headers' | 'avatars' | '',
 ): Promise<boolean> => {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
-    const it = imageType ? `&imageType=${imageType}` : "";
+    const formData = new FormData()
+    formData.append('file', file)
+    const it = imageType ? `&imageType=${imageType}` : ''
     const result = await api.post(
       `/upload/image/${userId}?imageSource=${imageSource}${it}`,
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
-      }
-    );
-    return result?.status === 201;
+      },
+    )
+    return result?.status === 201
   } catch (err) {
-    console.log("uploadService", "uploadAudio_error", err);
+    console.log('uploadService', 'uploadAudio_error', err)
     if (err instanceof AxiosError) {
-      if (![401, 400].includes(err.status as number)) throw new Error(err.message);
+      if (![401, 400].includes(err.status as number))
+        throw new Error(err.message, { cause: err })
     }
   }
-  return false;
-};
+  return false
+}
 
-export { uploadAudio, uploadImage };
+export { uploadAudio, uploadImage }

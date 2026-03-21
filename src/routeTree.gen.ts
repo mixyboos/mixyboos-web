@@ -78,9 +78,9 @@ export interface FileRoutesByFullPath {
   '/upload': typeof mixUploadRoute
   '/live/create': typeof AuthenticatedLiveCreateRoute
   '/mix/$id': typeof AuthenticatedMixIdRoute
-  '/$user/$mix': typeof mixUserMixIndexRoute
-  '/dashboard/mixes': typeof AuthenticatedDashboardMixesIndexRoute
-  '/$user/$mix/edit': typeof mixUserMixEditIndexRoute
+  '/$user/$mix/': typeof mixUserMixIndexRoute
+  '/dashboard/mixes/': typeof AuthenticatedDashboardMixesIndexRoute
+  '/$user/$mix/edit/': typeof mixUserMixEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -115,9 +115,9 @@ export interface FileRouteTypes {
     | '/upload'
     | '/live/create'
     | '/mix/$id'
-    | '/$user/$mix'
-    | '/dashboard/mixes'
-    | '/$user/$mix/edit'
+    | '/$user/$mix/'
+    | '/dashboard/mixes/'
+    | '/$user/$mix/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -172,7 +172,7 @@ declare module '@tanstack/react-router' {
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -207,21 +207,21 @@ declare module '@tanstack/react-router' {
     '/_authenticated/dashboard/mixes/': {
       id: '/_authenticated/dashboard/mixes/'
       path: '/dashboard/mixes'
-      fullPath: '/dashboard/mixes'
+      fullPath: '/dashboard/mixes/'
       preLoaderRoute: typeof AuthenticatedDashboardMixesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/(mix)/$user/$mix/': {
       id: '/(mix)/$user/$mix/'
       path: '/$user/$mix'
-      fullPath: '/$user/$mix'
+      fullPath: '/$user/$mix/'
       preLoaderRoute: typeof mixUserMixIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(mix)/$user/$mix/edit/': {
       id: '/(mix)/$user/$mix/edit/'
       path: '/$user/$mix/edit'
-      fullPath: '/$user/$mix/edit'
+      fullPath: '/$user/$mix/edit/'
       preLoaderRoute: typeof mixUserMixEditIndexRouteImport
       parentRoute: typeof rootRouteImport
     }

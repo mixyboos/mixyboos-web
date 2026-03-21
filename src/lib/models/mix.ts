@@ -1,5 +1,10 @@
 import type { ProfileModel } from '@/lib/models/profile'
 
+export type TagModel = {
+  name: string
+  slug: string
+}
+
 export type CreateMixModel = {
   id: string
   title: string
@@ -19,4 +24,5 @@ export type MixModel = CreateMixModel & {
   audioUrl: string
   pcmUrl: string
   isLiked: boolean
+  tags: Array<TagModel>
 }

@@ -12,7 +12,10 @@ type ListAudioPlayerProps = {
   onDeleteStart?: () => void
 }
 
-const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({ mix, onDeleteStart }) => {
+const ListAudioPlayer: React.FC<ListAudioPlayerProps> = ({
+  mix,
+  onDeleteStart,
+}) => {
   return (
     <Card className="w-full">
       <CardContent className="p-4 flex gap-4">

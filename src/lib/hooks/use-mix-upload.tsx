@@ -63,13 +63,13 @@ export const useMixUpload = ({
   // Initialize SignalR connection
   useEffect(() => {
     const newConnection = createSignalRConnection('updates')
-    
+
     newConnection
       .start()
       .then(() => {
         logger.debug(
           { context: 'useMixUpload', action: 'connected', mixId },
-          'SignalR connected'
+          'SignalR connected',
         )
 
         // Register event handlers filtered by mixId
@@ -77,7 +77,7 @@ export const useMixUpload = ({
           if (receivedMixId === mixId) {
             logger.debug(
               { context: 'useMixUpload', action: 'ConversionStarted', mixId },
-              'Processing started'
+              'Processing started',
             )
             setState((prev) => ({
               ...prev,
@@ -99,7 +99,7 @@ export const useMixUpload = ({
                   mixId,
                   percentage,
                 },
-                'Processing progress'
+                'Processing progress',
               )
               setState((prev) => ({
                 ...prev,
@@ -112,14 +112,14 @@ export const useMixUpload = ({
                       : ProcessingStage.FINALIZING,
               }))
             }
-          }
+          },
         )
 
         newConnection.on('ConversionFinished', (receivedMixId: string) => {
           if (receivedMixId === mixId) {
             logger.debug(
               { context: 'useMixUpload', action: 'ConversionFinished', mixId },
-              'Processing complete'
+              'Processing complete',
             )
             setState((prev) => ({
               ...prev,
@@ -142,7 +142,7 @@ export const useMixUpload = ({
                   mixId,
                   errorMessage,
                 },
-                'Processing failed'
+                'Processing failed',
               )
               const error: UploadError = {
                 phase: UploadPhase.PROCESSING,
@@ -158,13 +158,13 @@ export const useMixUpload = ({
               }))
               onError?.(error)
             }
-          }
+          },
         )
       })
       .catch((err) => {
         logger.error(
           { context: 'useMixUpload', action: 'connectionError', error: err },
-          'Failed to connect to SignalR'
+          'Failed to connect to SignalR',
         )
       })
 
@@ -172,7 +172,7 @@ export const useMixUpload = ({
       newConnection.stop().catch((err) => {
         logger.error(
           { context: 'useMixUpload', action: 'disconnectError', error: err },
-          'Error disconnecting'
+          'Error disconnecting',
         )
       })
     }
@@ -190,8 +190,13 @@ export const useMixUpload = ({
         }))
 
         logger.debug(
-          { context: 'useMixUpload', action: 'startUpload', mixId, fileName: file.name },
-          'Starting upload'
+          {
+            context: 'useMixUpload',
+            action: 'startUpload',
+            mixId,
+            fileName: file.name,
+          },
+          'Starting upload',
         )
 
         const formData = new FormData()
@@ -206,13 +211,13 @@ export const useMixUpload = ({
               ...prev,
               uploadProgress: percentage,
             }))
-          }
+          },
         )
 
         if (result) {
           logger.debug(
             { context: 'useMixUpload', action: 'uploadComplete', mixId },
-            'Upload complete, waiting for processing'
+            'Upload complete, waiting for processing',
           )
           setState((prev) => ({
             ...prev,
@@ -228,14 +233,13 @@ export const useMixUpload = ({
       } catch (err) {
         logger.error(
           { context: 'useMixUpload', action: 'uploadError', error: err },
-          'Upload error'
+          'Upload error',
         )
 
         const error: UploadError = {
           phase: UploadPhase.UPLOADING,
           message: 'Failed to upload file',
-          details:
-            err instanceof Error ? err.message : 'Unknown upload error',
+          details: err instanceof Error ? err.message : 'Unknown upload error',
           retryable: true,
         }
 
@@ -248,7 +252,7 @@ export const useMixUpload = ({
         onError?.(error)
       }
     },
-    [mixId, onError]
+    [mixId, onError],
   )
 
   const retry = useCallback(() => {

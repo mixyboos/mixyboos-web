@@ -31,7 +31,7 @@ const ProfileService = {
       if (err instanceof AxiosError) {
         console.log('authService', 'getProfile_error', err)
         if (![401, 400].includes(err.status as number))
-          throw new Error(err.message)
+          throw new Error(err.message, { cause: err })
       }
     }
     return undefined

@@ -7,8 +7,7 @@ import { Icons } from '@/components/icons'
 import useAudioStore, { PlayState } from '@/lib/contexts/audio-context'
 import { getMixAudioUrl } from '@/lib/services/api/mix-service'
 
-interface IPlayPauseButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface IPlayPauseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   mix: MixModel
   onPlayStart: () => void
 }

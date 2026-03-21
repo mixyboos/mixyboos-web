@@ -1,10 +1,13 @@
 import React from 'react'
-import { AlertCircle, AudioWaveform, CheckCircle2, Loader2, Upload } from 'lucide-react'
+import {
+  AlertCircle,
+  AudioWaveform,
+  CheckCircle2,
+  Loader2,
+  Upload,
+} from 'lucide-react'
 import type { UploadError, UploadState } from '@/lib/hooks/use-mix-upload'
-import { 
-  ProcessingStage,
-  UploadPhase
-} from '@/lib/hooks/use-mix-upload'
+import { ProcessingStage, UploadPhase } from '@/lib/hooks/use-mix-upload'
 import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -68,24 +71,17 @@ const getProgressColor = (progress: number, phase: UploadPhase): string => {
   return 'bg-green-500'
 }
 
-const ErrorDisplay: React.FC<{ error: UploadError; onRetry?: () => void }> = ({ 
-  error, 
-  onRetry 
+const ErrorDisplay: React.FC<{ error: UploadError; onRetry?: () => void }> = ({
+  error,
+  onRetry,
 }) => (
   <Alert variant="destructive" className="mt-4">
     <AlertCircle className="h-4 w-4" />
     <AlertTitle>{error.message}</AlertTitle>
     <AlertDescription className="mt-2 space-y-2">
-      {error.details && (
-        <p className="text-sm">{error.details}</p>
-      )}
+      {error.details && <p className="text-sm">{error.details}</p>}
       {error.retryable && onRetry && (
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={onRetry}
-          className="mt-2"
-        >
+        <Button variant="outline" size="sm" onClick={onRetry} className="mt-2">
           Try Again
         </Button>
       )}
@@ -103,7 +99,7 @@ const DetailedProgress: React.FC<{ state: UploadState }> = ({ state }) => {
         icon: <Upload className="inline h-4 w-4 mr-1 animate-pulse" />,
       }
     }
-    
+
     if (state.phase === UploadPhase.PROCESSING) {
       switch (state.processingStage) {
         case ProcessingStage.STARTING:
@@ -116,7 +112,9 @@ const DetailedProgress: React.FC<{ state: UploadState }> = ({ state }) => {
           return {
             label: 'Generating waveform',
             progress: state.processingProgress,
-            icon: <AudioWaveform className="inline h-4 w-4 mr-1 animate-pulse" />,
+            icon: (
+              <AudioWaveform className="inline h-4 w-4 mr-1 animate-pulse" />
+            ),
           }
         case ProcessingStage.CONVERTING_AUDIO:
           return {
@@ -134,7 +132,9 @@ const DetailedProgress: React.FC<{ state: UploadState }> = ({ state }) => {
           return {
             label: 'Processing complete',
             progress: 100,
-            icon: <CheckCircle2 className="inline h-4 w-4 mr-1 text-green-600 dark:text-green-400" />,
+            icon: (
+              <CheckCircle2 className="inline h-4 w-4 mr-1 text-green-600 dark:text-green-400" />
+            ),
           }
       }
     }
@@ -143,7 +143,9 @@ const DetailedProgress: React.FC<{ state: UploadState }> = ({ state }) => {
       return {
         label: 'Complete',
         progress: 100,
-        icon: <CheckCircle2 className="inline h-4 w-4 mr-1 text-green-600 dark:text-green-400" />,
+        icon: (
+          <CheckCircle2 className="inline h-4 w-4 mr-1 text-green-600 dark:text-green-400" />
+        ),
       }
     }
 
@@ -167,16 +169,13 @@ const DetailedProgress: React.FC<{ state: UploadState }> = ({ state }) => {
           {Math.round(currentStage.progress)}%
         </span>
       </div>
-      <Progress 
-        value={currentStage.progress} 
-        className="h-2 transition-all"
-      />
+      <Progress value={currentStage.progress} className="h-2 transition-all" />
     </div>
   )
 }
 
-export const UploadProgress: React.FC<UploadProgressProps> = ({ 
-  state, 
+export const UploadProgress: React.FC<UploadProgressProps> = ({
+  state,
   overallProgress,
   onRetry,
   onCancel,
@@ -201,28 +200,28 @@ export const UploadProgress: React.FC<UploadProgressProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">Overall Progress</span>
-            <span className="text-muted-foreground">{Math.round(overallProgress)}%</span>
+            <span className="text-muted-foreground">
+              {Math.round(overallProgress)}%
+            </span>
           </div>
-          <Progress 
-            value={overallProgress} 
+          <Progress
+            value={overallProgress}
             className={cn(
-              "h-3 transition-all",
-              getProgressColor(overallProgress, state.phase)
+              'h-3 transition-all',
+              getProgressColor(overallProgress, state.phase),
             )}
           />
         </div>
 
         {/* Detailed Step Progress */}
-        {(state.phase === UploadPhase.UPLOADING || 
-          state.phase === UploadPhase.PROCESSING || 
+        {(state.phase === UploadPhase.UPLOADING ||
+          state.phase === UploadPhase.PROCESSING ||
           state.phase === UploadPhase.COMPLETED) && (
           <DetailedProgress state={state} />
         )}
 
         {/* Error Display */}
-        {state.error && (
-          <ErrorDisplay error={state.error} onRetry={onRetry} />
-        )}
+        {state.error && <ErrorDisplay error={state.error} onRetry={onRetry} />}
 
         {/* Action Buttons */}
         {state.phase === UploadPhase.UPLOADING && onCancel && (
@@ -236,7 +235,9 @@ export const UploadProgress: React.FC<UploadProgressProps> = ({
         {state.phase === UploadPhase.COMPLETED && (
           <Alert className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
             <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-            <AlertTitle className="text-green-800 dark:text-green-200">Success!</AlertTitle>
+            <AlertTitle className="text-green-800 dark:text-green-200">
+              Success!
+            </AlertTitle>
             <AlertDescription className="text-green-700 dark:text-green-300">
               Your mix has been uploaded and processed successfully.
             </AlertDescription>

@@ -1,4 +1,4 @@
 export type ApiKeyModel = {
-  userId: string;
-  apiKey: string;
-};
+  userId: string
+  apiKey: string
+}

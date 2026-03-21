@@ -20,6 +20,13 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
     playState,
   } = useAudioStore()
 
+  const initialPositionRef = React.useRef(position)
+
+  React.useEffect(() => {
+    initialPositionRef.current = position
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nowPlayingUrl])
+
   React.useEffect(() => {
     if (!nowPlayingUrl) return
     let hls: Hls | undefined
@@ -41,17 +48,12 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
           player.ontimeupdate = () => {
             setPosition(player.currentTime)
           }
-          if (hls) {
-            hls.on(Hls.Events.FRAG_CHANGED, (_event, data) => {
-              setPosition(data.frag.start)
-            })
-          }
-          
+
           // Set the player to the stored position before playing
-          if (position > 0) {
-            player.currentTime = position
+          if (initialPositionRef.current > 0) {
+            player.currentTime = initialPositionRef.current
           }
-          
+
           try {
             await player.play()
             setDuration(player.duration || 0)
@@ -90,7 +92,7 @@ const AudioProvider = ({ children }: PropsWithChildren) => {
     return () => {
       hls?.destroy()
     }
-  }, [nowPlayingUrl, position])
+  }, [nowPlayingUrl])
 
   React.useEffect(() => {
     if (!__player.current) return

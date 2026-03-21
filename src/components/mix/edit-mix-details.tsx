@@ -5,6 +5,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from '@tanstack/react-router'
 import * as z from 'zod'
+import { toast } from 'sonner'
 import type { MixModel } from '@/lib/models/mix'
 import {
   Form,
@@ -27,15 +28,15 @@ import { updateMix } from '@/lib/services/api/mix-service'
 import logger from '@/lib/logger'
 import { useAuth } from '@/lib/auth'
 import NotLoggedIn from '@/components/widgets/not-logged-in'
-import { toast } from 'sonner'
+import TagChooser from '@/components/widgets/tag-chooser'
 
 const MAX_IMAGE_SIZE = 5242880
-const ACCEPTED_IMAGE_TYPES = [
+const ACCEPTED_IMAGE_TYPES = new Set([
   'image/jpeg',
   'image/jpg',
   'image/png',
   'image/webp',
-]
+])
 
 type EditMixDetailsProps = {
   mix: MixModel
@@ -45,7 +46,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const { profile } = useAuth()
-  
+
   const formSchema = z.object({
     title: z
       .string()
@@ -55,6 +56,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
       .string()
       .min(5, { message: 'must be at least 5 characters' })
       .max(2000, { message: "can't be more than 2000 characters" }),
+    tags: z.array(z.string()).default([]),
     mixImage: z
       .instanceof(File)
       .refine((file: File) => {
@@ -62,7 +64,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
         return ret
       }, `Max image size is 5MB.`)
       .refine(
-        (file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+        (file: File) => ACCEPTED_IMAGE_TYPES.has(file.type),
         'Only .jpg, .jpeg, .png and .webp formats are supported.',
       )
       .optional(),
@@ -91,6 +93,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
   const defaultValues: Partial<FormValues> = {
     title: mix.title,
     description: mix.description,
+    tags: mix.tags.map((t) => t.name),
     mixImage: undefined,
   }
 
@@ -107,18 +110,19 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
         ...mix,
         title: values.title,
         description: values.description,
+        tags: values.tags.map((name) => ({ name, slug: name.toLowerCase().replace(/\s+/g, '-') })),
       })
-      
+
       if (values.mixImage) {
         await uploadImage(mix.id, values.mixImage, 'mixes', '')
       }
-      
+
       toast.success('Mix updated successfully!')
-      
+
       // Navigate back to mix details page
-      router.navigate({ 
-        to: '/$user/$mix', 
-        params: { user: mix.user.slug, mix: mix.slug } 
+      router.navigate({
+        to: '/$user/$mix',
+        params: { user: mix.user.slug, mix: mix.slug },
       })
     } catch (err) {
       logger.errorLog('EditMixDetails', 'Error updating mix', err)
@@ -135,10 +139,7 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
         <Separator className="mb-6" />
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid gap-12 md:grid-cols-2">
               <div className="space-y-4">
                 <FormField
@@ -189,6 +190,27 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
                     </FormItem>
                   )}
                 />
+
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-base">Tags</FormLabel>
+                      <FormControl>
+                        <TagChooser
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Type to search or add tags..."
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Add tags to help others discover your mix
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <div className="text-center">
@@ -234,9 +256,9 @@ const EditMixDetails: React.FC<EditMixDetailsProps> = ({ mix }) => {
                 variant="outline"
                 size="lg"
                 onClick={() => {
-                  router.navigate({ 
-                    to: '/$user/$mix', 
-                    params: { user: mix.user.slug, mix: mix.slug } 
+                  router.navigate({
+                    to: '/$user/$mix',
+                    params: { user: mix.user.slug, mix: mix.slug },
                   })
                 }}
               >
